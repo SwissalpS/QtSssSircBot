@@ -485,6 +485,9 @@ void IRCclient::sendLine(const QString &sLine) {
 
 	// RFC2812 2.3 Messages SHALL NOT be longer than 512 including CRLF
 	QString sOut = sLine.mid(0, 510);
+	if (sOut.count() < sLine.count()) {
+		this->onDebugMessage("OO:truncated line before sending");
+	}
 
 	this->onDebugMessage("sending: " + sOut);
 	Q_EMIT this->rawOutgoingLine(sOut);
