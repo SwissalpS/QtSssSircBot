@@ -365,13 +365,13 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 
 			} else if(IRCcommand::PrivateMessage == sCommand) {
 
-				if (ircServerMessage.parameter(0).startsWith("#")) {
-
-					this->handleChannelMessage(ircServerMessage);
-
-				} else if (0 == ircServerMessage.parameter(0).compare(this->sNick)) {
+				if (0 == ircServerMessage.parameter(0).compare(this->sNick)) {
 
 					this->handleDirectMessage(ircServerMessage);
+
+				} else if (0 == ircServerMessage.parameter(0).indexOf(QRegExp("^[#&+!]"))) {
+
+					this->handleChannelMessage(ircServerMessage);
 
 				} else {
 
