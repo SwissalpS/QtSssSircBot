@@ -387,9 +387,8 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 
 			} else if(IRCcommand::Ping == sCommand) {
 
-				this->onDebugMessage("got ping, giving pong");
 				this->sendIRCCommand(IRCcommand::Pong,
-									 QStringList(ircServerMessage.parameter(0)));// this->sNick));
+									 QStringList(ircServerMessage.parameter(0)));
 				Q_EMIT this->ping(ircServerMessage.parameter(0));
 
 			} else if(IRCcommand::Error == sCommand) {
