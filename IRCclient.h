@@ -28,6 +28,7 @@ protected:
 	bool bConnected;
 	bool bLoggedIn;
 
+	// send raw IRC formatted line
 	void sendLine(const QString &sLine);
 	void handleChannelMessage(IRCServerMessage oSM);
 	void handleDirectMessage(IRCServerMessage oSM);

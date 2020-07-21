@@ -135,12 +135,14 @@ void IRCclient::handleConnected() {
 2. Nick message                 2. Service message
 3. User message
 */
+	// 1. PASS <password>
 	this->sendIRCCommand(IRCcommand::Password, QStringList(this->sPassword));
 
+	// 2. NICK <nick>
 	this->sendNicknameChangeRequest(this->sNick);
 
 	// RFC2812 3.1.3
-	// USER <user> <mode> <unused> <realname>
+	// 3. USER <user> <mode> <unused> <realname>
 	this->sendIRCCommand(IRCcommand::User, QStringList() << this->sNick << "0"
 						 << "*" << this->sRealName);
 
