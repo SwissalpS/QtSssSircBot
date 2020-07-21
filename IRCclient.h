@@ -46,6 +46,7 @@ public:
 					   const QString &password = "", QObject *pParent = 0);
 	virtual ~IRCclient();
 
+	static QStringList wordWrap(const QString &sMessage, const quint8 &ubWidth);
 
 public slots:
 	virtual void connectEncrypted();

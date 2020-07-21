@@ -6,6 +6,7 @@
 #include "foreign/QtIRC/ircerror.h"
 
 #include <QHostInfo>
+#include <QRegExp>
 
 
 
@@ -503,8 +504,19 @@ void IRCclient::sendNicknameChangeRequest(const QString &sNickname) {
 void IRCclient::sendPrivateMessage(const QString &sRecipient,
 								   const QString &sMessage) {
 
-	this->sendIRCCommand(IRCcommand::PrivateMessage, QStringList()
-						 << sRecipient << sMessage);
+	// PRIVMSG <recipient> :<mesg> => 7 + 1 + 1 + 1 + <recipient>.len
+	quint8 ubLenHead = 10u + sRecipient.count();
+	quint8 ubLenPortion = 150u - ubLenHead;
+
+	// split message into safe sized portions, split at words preferably
+	QStringList aLines = IRCclient::wordWrap(sMessage, ubLenPortion);
+
+	for (int iPos = 0; iPos < aLines.count(); ++iPos) {
+
+		this->sendIRCCommand(IRCcommand::PrivateMessage, QStringList()
+							 << sRecipient << aLines.at(iPos));
+
+	} // loop lines
 
 } // sendPrivateMessage
 
@@ -514,6 +526,77 @@ void IRCclient::sendQuit() {
 	this->sendIRCCommand(IRCcommand::Quit, QStringList());
 
 } // sendQuit
+
+
+QStringList IRCclient::wordWrap(const QString &sMessage, const quint8 &ubWidth) {
+
+	QStringList aLinesOut;
+
+	// first split by IRC-lines, as these would mess with us anyway
+	QStringList aLinesIn = sMessage.split("\r\n", QString::SkipEmptyParts,
+										  Qt::CaseInsensitive);
+
+	QString sLineIn, sLineInCR, sLineInLF, sHard;
+	QStringList aLinesInCR;
+	QStringList aLinesInLF;
+	int iBreak;
+	for (int iLine = 0; iLine < aLinesIn.count(); ++iLine) {
+
+		sLineIn = aLinesIn.at(iLine);
+
+		aLinesInCR = sLineIn.split("\r", QString::SkipEmptyParts,
+								   Qt::CaseInsensitive);
+
+		for (int iLineCR = 0; iLineCR < aLinesInCR.count(); ++iLineCR) {
+
+			sLineInCR = aLinesInCR.at(iLineCR);
+
+			aLinesInLF = sLineIn.split("\n", QString::SkipEmptyParts,
+									   Qt::CaseInsensitive);
+
+			for (int iLineLF = 0; iLineLF < aLinesInLF.count(); ++iLineLF) {
+
+				sLineInLF = aLinesInLF.at(iLineLF);
+
+				while (sLineInLF.count()) {
+
+					if (ubWidth >= sLineInLF.count()) {
+
+						aLinesOut.append(sLineInLF);
+						sLineInLF.clear();
+
+					} else {
+
+						// hard break
+						sHard = sLineInLF.mid(0, ubWidth);
+						// find the nearest breakpoint
+						iBreak = sHard.lastIndexOf(QRegExp("\\s"));
+						if (0 > iBreak) {
+
+							// none found -> cut in middle of word
+							aLinesOut.append(sHard);
+							sLineInLF = sLineInLF.mid(ubWidth);
+
+						} else {
+
+							aLinesOut.append(sLineInLF.mid(0, iBreak + 1));
+							sLineInLF = sLineInLF.mid(iBreak + 1);
+
+						}
+
+					} // if need to cut line at all
+
+				} // loop sLineInLF.count()
+
+			} // loop lf lines
+
+		} // loop cr lines
+
+	} // loop crlf lines
+
+	return aLinesOut;
+
+} // wordWrap
 
 
 
