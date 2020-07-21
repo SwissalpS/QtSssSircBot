@@ -46,8 +46,6 @@ public:
 					   const QString &password = "", QObject *pParent = 0);
 	virtual ~IRCclient();
 
-	void sendIRCCommand(const QString &sCommand,
-						const QStringList &aArguments);
 
 public slots:
 	virtual void connectEncrypted();
@@ -58,6 +56,8 @@ public slots:
 
 	virtual void reconnect();
 
+	void sendIRCCommand(const QString &sCommand,
+						const QStringList &aArguments);
 	// join a channel, channel names generally begin with #
 	virtual void sendJoin(const QString &sChannel);
 	void sendNicknameChangeRequest(const QString &sNickname);
