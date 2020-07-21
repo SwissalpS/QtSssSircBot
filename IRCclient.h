@@ -77,6 +77,11 @@ signals:
 	// connect to this for listening for direct commands
 	void directMessage(const QString &sFromNick,
 					   const QString &sMessage) const;
+	// emited when socket connection disconnected
+	// currently followed by a quit-signal
+	void disconnected() const;
+	// emited whenever a server sends ping (after pong is sent back)
+	void ping(const QString &sMessage) const;
 	// general debug messages, mute output or don't connect for release
 	void debugMessage(const QString &sMessage) const;
 	// emited when ... has joined a channel
@@ -89,6 +94,8 @@ signals:
 	void quit(const qint16 iR) const;
 	// connect to this signal to debug all incoming lines as received
 	void rawIncomingLine(const QString &sLine) const;
+	// connect to this signal to debug all outgoing lines as sent
+	void rawOutgoingLine(const QString &sLine) const;
 
 }; // IRCclient
 

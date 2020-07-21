@@ -151,6 +151,7 @@ void IRCclient::handleConnected() {
 void IRCclient::handleDisconnected() {
 
 	this->onDebugMessage("disconnected");
+	Q_EMIT this->disconnected();
 	Q_EMIT this->quit(0);
 
 } // handleDisconnected
@@ -386,6 +387,7 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 				this->onDebugMessage("got ping, giving pong");
 				this->sendIRCCommand(IRCcommand::Pong,
 									 QStringList(ircServerMessage.parameter(0)));// this->sNick));
+				Q_EMIT this->ping(ircServerMessage.parameter(0));
 
 			} else if(IRCcommand::Error == sCommand) {
 
@@ -484,6 +486,7 @@ void IRCclient::sendLine(const QString &sLine) {
 	QString sOut = sLine.mid(0, 510);
 
 	this->onDebugMessage("sending: " + sOut);
+	Q_EMIT this->rawOutgoingLine(sOut);
 
 	this->pSocket->write((sOut + "\r\n").toUtf8());
 
