@@ -69,6 +69,7 @@ public slots:
 	virtual void sendQuit();
 
 signals:
+	// emited when socket connects
 	void connected(const QString &sIP) const;
 	// emited when privmsg is received on channel
 	// connect to this if you want your bot to monitor channels, gather statistics
