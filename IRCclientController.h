@@ -33,10 +33,11 @@ public:
 
 signals:
 	void debugMessage(const QString &sMessage) const;
+	void newEvent(const QStringList &aEvent) const;
 
 public slots:
 	void onConnected(const QString &sIP);
-	void onChannelMessage(const QString &sChannel,
+	void onChannelMessage(const QString &sChannel, const QString &sFromNick,
 						  const QString &sMessage);
 
 	inline void onDebugMessage(const QString &sMessage) const {
