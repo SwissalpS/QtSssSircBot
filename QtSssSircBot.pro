@@ -54,6 +54,7 @@ HEADERS += \
 	AppController.h \
 	AppSettings.h \
 	IRCclient.h \
+	IRCclientController.h \
 	IRCcommand.h \
 	foreign/QtIRC/ircerror.h \
 	foreign/QtIRC/ircreply.h \
@@ -63,4 +64,5 @@ SOURCES += main.cpp \
 	AppController.cpp \
 	AppSettings.cpp \
 	IRCclient.cpp \
+	IRCclientController.cpp \
 	foreign/QtIRC/ircservermessage.cpp
