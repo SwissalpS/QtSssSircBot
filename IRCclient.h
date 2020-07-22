@@ -82,8 +82,6 @@ signals:
 	// emited when socket connection disconnected
 	// currently followed by a quit-signal
 	void disconnected() const;
-	// emited whenever a server sends ping (after pong is sent back)
-	void ping(const QString &sMessage) const;
 	// general debug messages, mute output or don't connect for release
 	void debugMessage(const QString &sMessage) const;
 	// emited when ... has joined a channel
@@ -92,6 +90,8 @@ signals:
 	void loggedIn(const QString &sNick) const;
 	// emited when receiving list of nicks for channel
 	void nicklist(const QString &sChannel, const QStringList &aNicks) const;
+	// emited whenever a server sends ping (after pong is sent back)
+	void ping(const QString &sMessage) const;
 	// emited when needs to abort: TODO: define return value - = don't restart + = restart in x seconds ?
 	void quit(const qint16 iR) const;
 	// connect to this signal to debug all incoming lines as received
