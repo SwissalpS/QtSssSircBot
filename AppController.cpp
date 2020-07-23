@@ -154,27 +154,6 @@ void AppController::initSettings() {
 } // initSettings
 
 
-//void AppController::onIRCclientLoggedIn(const QString &sNick) {
-//	Q_UNUSED(sNick)
-
-//	const QStringList aChannels = this->pAS->getChannels();
-//	for (int i = 0; i < aChannels.count(); ++i) {
-
-//		this->pClient->sendJoin(aChannels.at(i));
-
-//	} // loop
-
-//} // onIRCclientLoggedIn
-
-
-//void AppController::onIRCclientQuit(const qint16 &iR) {
-//	Q_UNUSED(iR)
-
-//	this->quit();
-
-//} // onIRCclientQuit
-
-
 void AppController::quit() {
 
 	AppSettings::pAppSettings()->getSettings()->sync();
