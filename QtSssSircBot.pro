@@ -58,6 +58,7 @@ HEADERS += \
 	IRCcommand.h \
 	IRCeventCodes.h \
 	IRCeventPool.h \
+	LuaController.h \
 	foreign/QtIRC/ircerror.h \
 	foreign/QtIRC/ircreply.h \
 	foreign/QtIRC/ircservermessage.h \
@@ -95,7 +96,7 @@ SOURCES += main.cpp \
 	IRCclient.cpp \
 	IRCclientController.cpp \
 	IRCeventPool.cpp \
-	foreign/QtIRC/ircservermessage.cpp
+	LuaController.cpp \
 	foreign/QtIRC/ircservermessage.cpp \
 	foreign/lua52/lapi.c \
 	foreign/lua52/lauxlib.c \

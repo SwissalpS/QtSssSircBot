@@ -9,6 +9,7 @@
 #include "AppSettings.h"
 #include "IRCclientController.h"
 #include "IRCeventPool.h"
+#include "LuaController.h"
 
 
 
@@ -36,6 +37,7 @@ private:
 protected:
 	AppSettings *pAS;
 	IRCeventPool *pEP;
+	LuaController *pLC;
 	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
 	void initConnections();
@@ -50,6 +52,10 @@ public:
 	static void drop();
 	// public access to singelton instance
 	static AppController *pAppController();
+
+	inline IRCeventPool *getIRCeventPool() { return this->pEP; }
+
+	inline LuaController *getLuaController() { return this->pLC; }
 
 public slots:
 	virtual void debugMessage(const QString &sMessage);
