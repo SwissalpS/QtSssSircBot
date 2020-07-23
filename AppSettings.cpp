@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
+#include <QJsonDocument>
 #include <QMutex>
 #include <QStandardPaths>
 
@@ -13,6 +14,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 
 
 
+const QString AppSettings::sSettingIRCconfig = "sIRCconfigPath";
 const QString AppSettings::sSettingIRCremoteChannels = "sIRCremoteChannels";
 const QString AppSettings::sSettingIRCremoteHost = "sIRCremoteHost";
 const QString AppSettings::sSettingIRCremoteNick = "sIRCremoteNick";
@@ -24,6 +26,7 @@ const QString AppSettings::sSettingPIDpathFile = "sPathFilePID";
 const QString AppSettings::sSettingUseGUI = "bUseGUI";
 #endif
 
+const QString AppSettings::sSettingIRCconfigDefault = "";
 const QString AppSettings::sSettingIRCremoteChannelsDefault = "";
 const QString AppSettings::sSettingIRCremoteHostDefault = "0.0.0.0";
 const QString AppSettings::sSettingIRCremoteNickDefault = "QtSssSbot";
@@ -179,7 +182,11 @@ QVariant AppSettings::get(const QString sKey) const {
 	// return override value if exists
 	if (this->oJo.contains(sKey)) return this->oJo.value(sKey).toVariant();
 
-	if(sSettingIRCremoteChannels == sKey) {
+	if(sSettingIRCconfig == sKey) {
+
+		return pSettings->value(sKey, sSettingIRCconfigDefault);
+
+	} else if(sSettingIRCremoteChannels == sKey) {
 
 		return pSettings->value(sKey, sSettingIRCremoteChannelsDefault);
 
@@ -233,6 +240,60 @@ QVariant AppSettings::get(const QString sKey) const {
 	} // switch sKey
 
 } // get
+
+
+QJsonArray AppSettings::getConfigs() const {
+
+	const QString sPath = this->get(sSettingIRCconfig).toString();
+	QFile oFile(sPath);
+
+	if (oFile.isReadable()) {
+
+		if (oFile.open(QIODevice::ReadOnly)) {
+
+			QByteArray aJson = oFile.readAll();
+			oFile.close();
+			QJsonDocument oJdoc = QJsonDocument::fromJson(aJson);
+
+			if ((!oJdoc.isNull()) && oJdoc.isArray()) {
+
+				return oJdoc.array();
+
+			}
+
+		} // if opened
+
+	} // if readable
+
+	this->onDebugMessage("Falling back to one default connection.");
+
+	QJsonArray oOut;
+	QJsonObject oJo;
+
+	oJo.insert("sConnectionID", "unset");
+	oJo.insert(sSettingIRCremoteHost,
+			   this->get(sSettingIRCremoteHost).toString());
+	oJo.insert(sSettingIRCremoteNick,
+			   this->get(sSettingIRCremoteNick).toString());
+	oJo.insert(sSettingIRCremotePort,
+			   (double)this->get(sSettingIRCremotePort).toUInt());
+	oJo.insert(sSettingIRCremoteRealname,
+			   this->get(sSettingIRCremoteRealname).toString());
+	oJo.insert(sSettingIRCremotePassword,
+			   this->get(sSettingIRCremotePassword).toString());
+	QJsonArray oJa;
+	const QStringList aChannels = this->getChannels();
+	for (int i = 0; i < aChannels.count(); ++i) oJa.append(aChannels.at(i));
+	oJo.insert(sSettingIRCremoteChannels, oJa);
+
+	oJo.insert("sIRCrawPostLoginLines", QJsonArray());
+	oJo.insert("sIRCrawPreLoginLines", QJsonArray());
+
+	oOut.append(oJo);
+
+	return oOut;
+
+} // getConfigs
 
 
 QStringList AppSettings::getChannels() const {
@@ -298,6 +359,7 @@ void AppSettings::init() {
 
 	QSettings *pS = this->pSettings;
 
+	pS->setValue(sSettingIRCconfig, this->get(sSettingIRCconfig));
 	pS->setValue(sSettingIRCremoteChannels, this->get(sSettingIRCremoteChannels));
 	pS->setValue(sSettingIRCremoteHost, this->get(sSettingIRCremoteHost));
 	pS->setValue(sSettingIRCremoteNick, this->get(sSettingIRCremoteNick));
@@ -320,6 +382,10 @@ void AppSettings::init() {
 
 void AppSettings::initOverrides() {
 
+	QCommandLineOption oChannels("channels",
+								 "List of comma separated channels to join "
+								 "once logged in.",
+								 "channels");
 	QCommandLineOption oConfig("config",
 							   "Not Yet Implemented! Give path to configuration "
 							   "JSON-file to use instead of values from "
@@ -329,10 +395,6 @@ void AppSettings::initOverrides() {
 							   "additional authentication and mode changes. "
 							   "Maybe also plugins to load.",
 							   "configuration");
-	QCommandLineOption oChannels("channels",
-								 "List of comma separated channels to join "
-								 "once logged in.",
-								 "channels");
 	QCommandLineOption oHost("host", "Remote host to use.", "host");
 	QCommandLineOption oNick("nick", "Nick to use.", "nick");
 	QCommandLineOption oPass("pass", "Password to use.", "password");
@@ -349,6 +411,7 @@ void AppSettings::initOverrides() {
 	oCLP.addVersionOption();
 
 	oCLP.addOption(oChannels);
+	oCLP.addOption(oConfig);
 	oCLP.addOption(oHost);
 	oCLP.addOption(oNick);
 	oCLP.addOption(oPass);
@@ -362,6 +425,7 @@ void AppSettings::initOverrides() {
 	oCLP.process(*QCoreApplication::instance());
 
 	const QString sChannels = oCLP.value(oChannels);
+	const QString sConfig = oCLP.value(oConfig);
 	const QString sHost = oCLP.value(oHost);
 	const QString sNick = oCLP.value(oNick); // TODO: limit to 9 chars
 	const QString sPass = oCLP.value(oPass);
@@ -374,6 +438,11 @@ void AppSettings::initOverrides() {
 
 	if (oCLP.isSet(oChannels)) {
 		this->oJo.insert(sSettingIRCremoteChannels, sChannels);
+	}
+
+	if (oCLP.isSet(oConfig)) {
+		QFile oFile(sConfig);
+		if (oFile.isReadable()) this->oJo.insert(sSettingIRCconfig, sConfig);
 	}
 
 	if (oCLP.isSet(oHost)) {

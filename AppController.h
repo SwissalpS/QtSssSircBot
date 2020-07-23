@@ -1,12 +1,14 @@
 #ifndef SwissalpS_QtSssSircBot_APPCONTROLLER_H
 #define SwissalpS_QtSssSircBot_APPCONTROLLER_H
 
+#include <QHash>
 #include <QObject>
 #include <QTcpSocket>
 #include <QHostInfo>
 
 #include "AppSettings.h"
-#include "IRCclient.h"
+#include "IRCclientController.h"
+#include "IRCeventPool.h"
 
 
 
@@ -33,8 +35,10 @@ private:
 
 protected:
 	AppSettings *pAS;
-	IRCclient *pClient;
+	IRCeventPool *pEP;
+	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
+	void initConnections();
 	void initSettings();
 	void writePID();
 
@@ -49,8 +53,6 @@ public:
 
 public slots:
 	virtual void debugMessage(const QString &sMessage);
-	virtual void onIRCclientLoggedIn(const QString &sNick);
-	virtual void onIRCclientQuit(const qint16 &iR);
 	virtual void quit();
 	virtual void run();
 

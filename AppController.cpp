@@ -21,7 +21,9 @@ AppController *AppController::pSingelton = 0;
 
 AppController::AppController(QObject *pParent) :
 	QObject(pParent),
-	pClient(0) {
+	pEP(new IRCeventPool(this)) {
+
+	this->hConnections.clear();
 
 } // construct
 
@@ -86,6 +88,50 @@ void AppController::connectErrorMessages() {
 } // connectErrorMessages
 
 
+void AppController::initConnections() {
+
+	const QJsonArray oConfigs = this->pAS->getConfigs();
+
+	QString sID;
+	QJsonObject oConfig;
+	IRCclientController *pController;
+
+	for (int i = 0; i < oConfigs.count(); ++i) {
+
+		oConfig = oConfigs.at(i).toObject();
+		pController = new IRCclientController(oConfig, this);
+		sID = pController->getConnectionID();
+
+		if (this->hConnections.contains(sID)) {
+
+			this->debugMessage("AC:OO:Duplicate connection ID: <" + sID +
+								 "> found. Skipping. Make sure all your "
+								 "connections have unique identifiers.");
+
+			pController->deleteLater();
+
+		} else {
+
+			this->hConnections.insert(sID, pController);
+
+			connect(pController, SIGNAL(debugMessage(QString)),
+					this, SLOT(debugMessage(QString)));
+
+//			connect(pController, SIGNAL(abort(qint16)),
+//					this, SLOT(onAbort(qint16)));
+
+			connect(pController, SIGNAL(newEvent(QStringList)),
+					this->pEP, SLOT(onEvent(QStringList)));
+
+			pController->start();
+
+		}
+
+	} // loop all connections
+
+} // initConnections
+
+
 void AppController::debugMessage(const QString &sMessage) {
 
 	std::cout << sMessage.toStdString();
@@ -108,36 +154,42 @@ void AppController::initSettings() {
 } // initSettings
 
 
-void AppController::onIRCclientLoggedIn(const QString &sNick) {
-	Q_UNUSED(sNick)
+//void AppController::onIRCclientLoggedIn(const QString &sNick) {
+//	Q_UNUSED(sNick)
 
-	const QStringList aChannels = this->pAS->getChannels();
-	for (int i = 0; i < aChannels.count(); ++i) {
+//	const QStringList aChannels = this->pAS->getChannels();
+//	for (int i = 0; i < aChannels.count(); ++i) {
 
-		this->pClient->sendJoin(aChannels.at(i));
+//		this->pClient->sendJoin(aChannels.at(i));
 
-	} // loop
+//	} // loop
 
-} // onIRCclientLoggedIn
+//} // onIRCclientLoggedIn
 
 
-void AppController::onIRCclientQuit(const qint16 &iR) {
-	Q_UNUSED(iR)
+//void AppController::onIRCclientQuit(const qint16 &iR) {
+//	Q_UNUSED(iR)
 
-	this->quit();
+//	this->quit();
 
-} // onIRCclientQuit
+//} // onIRCclientQuit
 
 
 void AppController::quit() {
 
 	AppSettings::pAppSettings()->getSettings()->sync();
 
-	if (this->pClient) {
-		this->disconnect(this->pClient);
-		this->pClient->sendQuit();
-		this->pClient->disconnect();
-	}
+	QStringList aKeys = this->hConnections.keys();
+	IRCclientController *pCC;
+	for (int i = 0; i < aKeys.count(); ++i) {
+
+		pCC = this->hConnections.value(aKeys.at(i));
+		this->disconnect(pCC);
+		pCC->deleteLater();
+
+	} // loop
+
+	this->hConnections.clear();
 
 	qApp->quit();
 
@@ -145,8 +197,6 @@ void AppController::quit() {
 
 
 void AppController::run() {
-
-	if (this->pClient) return;
 
 	std::cout << "run" << std::endl;
 
@@ -158,23 +208,7 @@ void AppController::run() {
 	// init 'error' messaging system to route all through app controller
 	this->connectErrorMessages();
 
-	this->pClient = new IRCclient(this->pAS->get(AppSettings::sSettingIRCremoteHost).toString(),
-								  this->pAS->get(AppSettings::sSettingIRCremoteNick).toString(),
-								  this->pAS->get(AppSettings::sSettingIRCremotePort).toUInt(),
-								  this->pAS->get(AppSettings::sSettingIRCremoteRealname).toString(),
-								  this->pAS->get(AppSettings::sSettingIRCremotePassword).toString(),
-								  this);
-
-	connect(this->pClient, SIGNAL(debugMessage(QString)),
-			this, SLOT(debugMessage(QString)));
-
-	connect(this->pClient, SIGNAL(loggedIn(QString)),
-			this, SLOT(onIRCclientLoggedIn(QString)));
-
-	connect(this->pClient, SIGNAL(quit(qint16)),
-			this, SLOT(onIRCclientQuit(qint16)));
-
-	this->pClient->connectEncrypted();
+	this->initConnections();
 
 } // run
 

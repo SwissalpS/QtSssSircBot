@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QJsonArray>
 #include <QJsonObject>
 
 
@@ -37,6 +38,7 @@ protected:
 	void initPaths();
 
 public:
+	static const QString sSettingIRCconfig;
 	static const QString sSettingIRCremoteChannels;
 	static const QString sSettingIRCremoteHost;
 	static const QString sSettingIRCremoteNick;
@@ -48,6 +50,7 @@ public:
 	static const QString sSettingUseGUI;
 #endif
 
+	static const QString sSettingIRCconfigDefault;
 	static const QString sSettingIRCremoteChannelsDefault;
 	static const QString sSettingIRCremoteHostDefault;
 	static const QString sSettingIRCremoteNickDefault;
@@ -66,6 +69,8 @@ public:
 	virtual ~AppSettings();
 
 	QVariant get(const QString sKey) const;
+
+	QJsonArray getConfigs() const;
 
 	QStringList getChannels() const;
 	void setChannels(const QStringList aChannels);

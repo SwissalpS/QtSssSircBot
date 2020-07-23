@@ -1,6 +1,8 @@
 #include "IRCclientController.h"
 #include "IRCeventCodes.h"
+// TODO: make this class independant from AppSettings
 #include "AppSettings.h"
+
 #include <QJsonArray>
 
 
@@ -14,28 +16,9 @@ IRCclientController::IRCclientController(const QJsonObject &oConfig,
 	QObject(pParent),
 	pClient(nullptr) {
 
-	// TODO: should not need to know about AppSettings class at all
-	AppSettings *pAS = AppSettings::pAppSettings();
-	this->oJo = QJsonObject();
-	this->oJo.insert("sConnectionID", "unset");
-	this->oJo.insert(AppSettings::sSettingIRCremoteHost,
-					 pAS->get(AppSettings::sSettingIRCremoteHost).toString());
-	this->oJo.insert(AppSettings::sSettingIRCremoteNick,
-					 pAS->get(AppSettings::sSettingIRCremoteNick).toString());
-	this->oJo.insert(AppSettings::sSettingIRCremotePort,
-					 (double)pAS->get(AppSettings::sSettingIRCremotePort).toUInt());
-	this->oJo.insert(AppSettings::sSettingIRCremoteRealname,
-					 pAS->get(AppSettings::sSettingIRCremoteRealname).toString());
-	this->oJo.insert(AppSettings::sSettingIRCremotePassword,
-					 pAS->get(AppSettings::sSettingIRCremotePassword).toString());
-	QJsonArray oJa;
-	const QStringList aChannels = pAS->getChannels();
-	for (int i = 0; i < aChannels.count(); ++i) oJa.append(aChannels.at(i));
-	this->oJo.insert(AppSettings::sSettingIRCremoteChannels, oJa);
-
-	this->oJo.insert("sIRCrawPostLoginLines", QJsonArray());
-	this->oJo.insert("sIRCrawPreLoginLines", QJsonArray());
-
+	// TODO: make sure all keys are set with some value
+	this->oJo = QJsonObject(oConfig);
+/*
 	if (oConfig.contains(AppSettings::sSettingIRCremoteHost)) {
 		this->oJo.insert(AppSettings::sSettingIRCremoteHost,
 						 oConfig.value(AppSettings::sSettingIRCremoteHost));
@@ -68,11 +51,20 @@ IRCclientController::IRCclientController(const QJsonObject &oConfig,
 		this->oJo.insert("sIRCrawPreLoginLines",
 						 oConfig.value("sIRCrawPreLoginLines"));
 	}
-
+*/
 } // construct
 
 
 IRCclientController::~IRCclientController() {
+
+	if (this->pClient) {
+		this->disconnect(this->pClient);
+		this->pClient->sendQuit();
+		this->pClient->disconnect();
+		this->pClient->deleteLater();
+	}
+
+	this->pClient = nullptr;
 
 } // dealloc
 
