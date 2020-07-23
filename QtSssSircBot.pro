@@ -60,7 +60,34 @@ HEADERS += \
 	IRCeventPool.h \
 	foreign/QtIRC/ircerror.h \
 	foreign/QtIRC/ircreply.h \
-	foreign/QtIRC/ircservermessage.h
+	foreign/QtIRC/ircservermessage.h \
+	foreign/lua52/lapi.h \
+	foreign/lua52/lauxlib.h \
+	foreign/lua52/lcode.h \
+	foreign/lua52/lctype.h \
+	foreign/lua52/ldebug.h \
+	foreign/lua52/ldo.h \
+	foreign/lua52/lfunc.h \
+	foreign/lua52/lgc.h \
+	foreign/lua52/llex.h \
+	foreign/lua52/llimits.h \
+	foreign/lua52/lmem.h \
+	foreign/lua52/lobject.h \
+	foreign/lua52/lopcodes.h \
+	foreign/lua52/lparser.h \
+	foreign/lua52/lstate.h \
+	foreign/lua52/lstring.h \
+	foreign/lua52/ltable.h \
+	foreign/lua52/ltm.h \
+	foreign/lua52/lua.c_ \
+	foreign/lua52/lua.h \
+	foreign/lua52/lua.hpp \
+	foreign/lua52/luac.c_ \
+	foreign/lua52/luaconf.h \
+	foreign/lua52/lualib.h \
+	foreign/lua52/lundump.h \
+	foreign/lua52/lvm.h \
+	foreign/lua52/lzio.h \
 
 SOURCES += main.cpp \
 	AppController.cpp \
@@ -69,3 +96,36 @@ SOURCES += main.cpp \
 	IRCclientController.cpp \
 	IRCeventPool.cpp \
 	foreign/QtIRC/ircservermessage.cpp
+	foreign/QtIRC/ircservermessage.cpp \
+	foreign/lua52/lapi.c \
+	foreign/lua52/lauxlib.c \
+	foreign/lua52/lbaselib.c \
+	foreign/lua52/lbitlib.c \
+	foreign/lua52/lcode.c \
+	foreign/lua52/lcorolib.c \
+	foreign/lua52/lctype.c \
+	foreign/lua52/ldblib.c \
+	foreign/lua52/ldebug.c \
+	foreign/lua52/ldo.c \
+	foreign/lua52/ldump.c \
+	foreign/lua52/lfunc.c \
+	foreign/lua52/lgc.c \
+	foreign/lua52/linit.c \
+	foreign/lua52/liolib.c \
+	foreign/lua52/llex.c \
+	foreign/lua52/lmathlib.c \
+	foreign/lua52/lmem.c \
+	foreign/lua52/loadlib.c \
+	foreign/lua52/lobject.c \
+	foreign/lua52/lopcodes.c \
+	foreign/lua52/loslib.c \
+	foreign/lua52/lparser.c \
+	foreign/lua52/lstate.c \
+	foreign/lua52/lstring.c \
+	foreign/lua52/lstrlib.c \
+	foreign/lua52/ltable.c \
+	foreign/lua52/ltablib.c \
+	foreign/lua52/ltm.c \
+	foreign/lua52/lundump.c \
+	foreign/lua52/lvm.c \
+	foreign/lua52/lzio.c \
