@@ -182,6 +182,14 @@ void IRCclientController::onJoined(const QString &sNick,
 void IRCclientController::onLoggedIn(const QString &sNick) {
 	Q_UNUSED(sNick)
 
+	const QJsonArray aChannels = this->oJo.value(AppSettings::sSettingIRCremoteChannels).toArray();
+
+	for (int i = 0; i < aChannels.count(); ++i) {
+
+		this->pClient->sendJoin(aChannels.at(i).toString());
+
+	} // loop
+
 } // onLoggedIn
 
 
