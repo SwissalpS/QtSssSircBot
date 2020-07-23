@@ -2,6 +2,7 @@
 #define IRCEVENTPOOL_H
 
 #include <QObject>
+#include <QVector>
 
 
 
@@ -16,7 +17,7 @@ class IRCeventPool : public QObject {
 private:
 
 protected:
-	QVector<const QStringList>aEvents;
+	QVector<QStringList>aEvents;
 
 public:
 	explicit IRCeventPool(QObject *pParent = nullptr);
