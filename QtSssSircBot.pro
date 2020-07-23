@@ -56,8 +56,6 @@ HEADERS += \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
-	IRCeventCodes.h \
-	IRCeventPool.h \
 	foreign/QtIRC/ircerror.h \
 	foreign/QtIRC/ircreply.h \
 	foreign/QtIRC/ircservermessage.h
@@ -67,5 +65,4 @@ SOURCES += main.cpp \
 	AppSettings.cpp \
 	IRCclient.cpp \
 	IRCclientController.cpp \
-	IRCeventPool.cpp \
 	foreign/QtIRC/ircservermessage.cpp

@@ -20,8 +20,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 AppController *AppController::pSingelton = 0;
 
 AppController::AppController(QObject *pParent) :
-	QObject(pParent),
-	pEP(new IRCeventPool(this)) {
+	QObject(pParent) {
 
 	this->hConnections.clear();
 
@@ -29,6 +28,8 @@ AppController::AppController(QObject *pParent) :
 
 
 AppController::~AppController() {
+
+	// TODO: quit all connections and destroy objects
 
 } // dealloc
 
@@ -119,9 +120,6 @@ void AppController::initConnections() {
 
 //			connect(pController, SIGNAL(abort(qint16)),
 //					this, SLOT(onAbort(qint16)));
-
-			connect(pController, SIGNAL(newEvent(QStringList)),
-					this->pEP, SLOT(onEvent(QStringList)));
 
 			pController->start();
 

@@ -1,5 +1,4 @@
 #include "IRCclientController.h"
-#include "IRCeventCodes.h"
 // TODO: make this class independant from AppSettings
 #include "AppSettings.h"
 
@@ -138,18 +137,13 @@ void IRCclientController::start() {
 
 
 void IRCclientController::onAbort(const quint16 &iR) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Abort))
-						  << QString::number(iR));
+	Q_UNUSED(iR)
 
 } // onAbort
 
 
 void IRCclientController::onConnected(const QString &sIP) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Connected)) << sIP);
+	Q_UNUSED(sIP)
 
 } // onConnected
 
@@ -157,96 +151,69 @@ void IRCclientController::onConnected(const QString &sIP) {
 void IRCclientController::onChannelMessage(const QString &sChannel,
 										   const QString &sFromNick,
 										   const QString &sMessage) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::ChannelMessage))
-						  << sChannel << sFromNick << sMessage);
+	Q_UNUSED(sChannel)
+	Q_UNUSED(sFromNick)
+	Q_UNUSED(sMessage)
 
 } // onChannelMessage
 
 
 void IRCclientController::onDirectMessage(const QString &sFromNick,
 										  const QString &sMessage) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::DirectMessage))
-						  << sFromNick << sMessage);
+	Q_UNUSED(sFromNick)
+	Q_UNUSED(sMessage)
 
 } // onDirectMessage
 
 
 void IRCclientController::onDisconnected() {
 
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Disconnected)));
-
 } // onDisconnected
 
 
 void IRCclientController::onJoined(const QString &sNick,
 								   const QString &sChannel) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Joined))
-						  << sNick << sChannel);
+	Q_UNUSED(sNick)
+	Q_UNUSED(sChannel)
 
 } // onJoined
 
 
 void IRCclientController::onLoggedIn(const QString &sNick) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::LoggedIn))
-						  << sNick);
+	Q_UNUSED(sNick)
 
 } // onLoggedIn
 
 
 void IRCclientController::onNicklist(const QString &sChannel,
 									 const QStringList &aNicks) {
-
-	QStringList aEvent = QStringList() << this->getConnectionID()
-									   << QString(QChar(IRCeventCodes::NickList))
-									   << sChannel;
-	aEvent.append(aNicks);
-
-	Q_EMIT this->newEvent(aEvent);
+	Q_UNUSED(sChannel)
+	Q_UNUSED(aNicks)
 
 } // onNicklist
 
 
 void IRCclientController::onPing(const QString &sMessage) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Ping))
-						  << sMessage);
+	Q_UNUSED(sMessage)
 
 } // onPing
 
 
 void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Quit))
-						  << sNick << sMessage);
+	Q_UNUSED(sNick)
+	Q_UNUSED(sMessage)
 
 } // onQuit
 
 
 void IRCclientController::onRawIncomingLine(const QString &sLine) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::RawIn))
-						  << sLine);
+	Q_UNUSED(sLine)
 
 } // onRawIncomingLine
 
 
 void IRCclientController::onRawOutgoingLine(const QString &sLine) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::RawOut))
-						  << sLine);
+	Q_UNUSED(sLine)
 
 } // onRawOutgoingLine
 

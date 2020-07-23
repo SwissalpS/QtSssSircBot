@@ -8,7 +8,6 @@
 
 #include "AppSettings.h"
 #include "IRCclientController.h"
-#include "IRCeventPool.h"
 
 
 
@@ -35,7 +34,6 @@ private:
 
 protected:
 	AppSettings *pAS;
-	IRCeventPool *pEP;
 	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
 	void initConnections();
