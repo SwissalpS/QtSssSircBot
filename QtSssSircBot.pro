@@ -50,6 +50,8 @@ CONFIG(SssS_RasPi) {
 	INSTALLS += target
 }
 
+DEFINES += LUA_USE_POSIX
+
 HEADERS += \
 	AppController.h \
 	AppSettings.h \
