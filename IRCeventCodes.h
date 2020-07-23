@@ -13,6 +13,7 @@ namespace IRCeventCodes {
 
 
 
+const quint8 Abort = 'a';
 const quint8 ChannelMessage = 'C';
 const quint8 DirectMessage = 'D';
 const quint8 IRCcommand = 'I';

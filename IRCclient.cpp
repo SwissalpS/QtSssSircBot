@@ -54,7 +54,7 @@ void IRCclient::onConnectEncrypted(const QHostInfo &oHI) {
 
 		this->debugMessage("Failed to lookup host: " + this->sHost
 						   + "\neM: " + oHI.errorString());
-		this->quit(-1);
+		this->abort(-1);
 
 		return;
 
@@ -155,7 +155,7 @@ void IRCclient::handleDisconnected() {
 
 	this->onDebugMessage("disconnected");
 	Q_EMIT this->disconnected();
-	Q_EMIT this->quit(0);
+	Q_EMIT this->abort(0);
 
 } // handleDisconnected
 
@@ -243,7 +243,7 @@ void IRCclient::handleError(QAbstractSocket::SocketError oError) {
 	} // switch oError
 
 	this->onDebugMessage("KO:" + sError);
-	Q_EMIT this->quit(-1);
+	Q_EMIT this->abort(-1);
 
 } // handleError
 
@@ -294,7 +294,7 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 			case IRCError::PasswordMismatch:
 
 				this->onDebugMessage("The password you provided is not correct.");
-				Q_EMIT this->quit(-2);
+				Q_EMIT this->abort(-2);
 
 			break;
 
@@ -334,7 +334,8 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 			} else if(IRCcommand::Quit == sCommand) {
 
 				this->onDebugMessage("user quit");
-				//handleUserQuit(ircServerMessage.nick(), ircServerMessage.parameter(0));
+				Q_EMIT this->quit(ircServerMessage.nick(),
+								  ircServerMessage.parameter(0));
 
 			} else if(IRCcommand::Join == sCommand) {
 

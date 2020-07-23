@@ -36,6 +36,7 @@ signals:
 	void newEvent(const QStringList &aEvent) const;
 
 public slots:
+	void onAbort(const quint16 &iR);
 	void onConnected(const QString &sIP);
 	void onChannelMessage(const QString &sChannel, const QString &sFromNick,
 						  const QString &sMessage);
@@ -51,10 +52,9 @@ public slots:
 	void onLoggedIn(const QString &sNick);
 	void onNicklist(const QString &sChannel, const QStringList &aNicks);
 	void onPing(const QString &sMessage);
-	void onQuit(const qint16 iR);
+	void onQuit(const QString &sNick, const QString &sMessage);
 	void onRawIncomingLine(const QString &sLine);
 	void onRawOutgoingLine(const QString &sLine);
-
 }; // IRCclientController
 
 

@@ -69,6 +69,9 @@ public slots:
 	virtual void sendQuit();
 
 signals:
+	// emited when needs to abort: TODO: define return value - = don't restart + = restart in x seconds ?
+	// may get replaced by errorSocket and errorIRC signals
+	void abort(const qint16 iR) const;
 	// emited when socket connects
 	void connected(const QString &sIP) const;
 	// emited when privmsg is received on channel
@@ -93,8 +96,8 @@ signals:
 	void nicklist(const QString &sChannel, const QStringList &aNicks) const;
 	// emited whenever a server sends ping (after pong is sent back)
 	void ping(const QString &sMessage) const;
-	// emited when needs to abort: TODO: define return value - = don't restart + = restart in x seconds ?
-	void quit(const qint16 iR) const;
+	// emited whenever a user has quit
+	void quit(const QString &sNick, const QString &sMessage) const;
 	// connect to this signal to debug all incoming lines as received
 	void rawIncomingLine(const QString &sLine) const;
 	// connect to this signal to debug all outgoing lines as sent

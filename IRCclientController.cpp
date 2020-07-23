@@ -94,6 +94,9 @@ void IRCclientController::init() {
 						this->oJo.value(AppSettings::sSettingIRCremotePassword).toString(),
 						this);
 
+	connect(this->pClient, SIGNAL(abort(quint16)),
+			this, SLOT(onAbort(quint16)));
+
 	connect(this->pClient, SIGNAL(connected(QString)),
 			this, SLOT(onConnected(QString)));
 
@@ -121,8 +124,8 @@ void IRCclientController::init() {
 	connect(this->pClient, SIGNAL(ping(QString)),
 			this, SLOT(onPing(QString)));
 
-	connect(this->pClient, SIGNAL(quit(qint16)),
-			this, SLOT(onQuit(qint16)));
+	connect(this->pClient, SIGNAL(quit(QString, QString)),
+			this, SLOT(onQuit(QString, QString)));
 
 	connect(this->pClient, SIGNAL(rawIncomingLine(QString)),
 			this, SLOT(onRawIncomingLine(QString)));
@@ -140,6 +143,15 @@ void IRCclientController::start() {
 	this->pClient->connectEncrypted();
 
 } // start
+
+
+void IRCclientController::onAbort(const quint16 &iR) {
+
+	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
+						  << QString(QChar(IRCeventCodes::Abort))
+						  << QString::number(iR));
+
+} // onAbort
 
 
 void IRCclientController::onConnected(const QString &sIP) {
@@ -220,11 +232,11 @@ void IRCclientController::onPing(const QString &sMessage) {
 } // onPing
 
 
-void IRCclientController::onQuit(const qint16 iR) {
+void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
 						  << QString(QChar(IRCeventCodes::Quit))
-						  << QString::number(iR));
+						  << sNick << sMessage);
 
 } // onQuit
 
