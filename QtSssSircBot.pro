@@ -89,6 +89,7 @@ HEADERS += \
 	foreign/lua52/lundump.h \
 	foreign/lua52/lvm.h \
 	foreign/lua52/lzio.h \
+	luaAPI/api.h
 
 SOURCES += main.cpp \
 	AppController.cpp \
@@ -130,3 +131,6 @@ SOURCES += main.cpp \
 	foreign/lua52/lundump.c \
 	foreign/lua52/lvm.c \
 	foreign/lua52/lzio.c \
+	luaAPI/IRC.c \
+	luaAPI/api.c \
+	luaAPI/system.c
