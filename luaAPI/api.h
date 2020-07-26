@@ -1,6 +1,5 @@
-#ifndef SwissalpS_QtSssSircBot_API_H
-#define SwissalpS_QtSssSircBot_API_H
-
+#ifndef SwissalpS_QtSssSircBot_luaAPI_API_H
+#define SwissalpS_QtSssSircBot_luaAPI_API_H
 #ifdef __cplusplus
 #include "AppController.h"
 #include "IRCeventPool.h"
@@ -45,4 +44,4 @@ int App_Get_EventC(lua_State *L) { return App_Get_EventCpp(L); }
 }
 #endif
 
-#endif // SwissalpS_QtSssSircBot_API_H
+#endif // SwissalpS_QtSssSircBot_luaAPI_API_H
