@@ -106,8 +106,8 @@ void IRCclient::handleChannelMessage(IRCServerMessage oSM) {
 	const QString sChannel = oSM.parameter(0);
 	const QString sMessage = oSM.parameter(1);
 
-	this->onDebugMessage("CM: on: " + sChannel + " from: " + sFromNick
-						 + " msg: " + sMessage);
+//	this->onDebugMessage("CM: on: " + sChannel + " from: " + sFromNick
+//						 + " msg: " + sMessage);
 	Q_EMIT this->channelMessage(sChannel, sFromNick, sMessage);
 
 } // handleChannelMessage
@@ -117,16 +117,16 @@ void IRCclient::handleDirectMessage(IRCServerMessage oSM) {
 
 	const QString sFromNick = oSM.nick();
 	const QString sMessage = oSM.parameter(1);
-	this->onDebugMessage("DM: from: " + sFromNick + " msg: " + sMessage);
+	//this->onDebugMessage("DM: from: " + sFromNick + " msg: " + sMessage);
 	Q_EMIT this->directMessage(sFromNick, sMessage);
-	this->sendPrivateMessage(sFromNick, sMessage.toUpper());
+	//this->sendPrivateMessage(sFromNick, sMessage.toUpper());
 
 } // handleDirectMessage
 
 
 void IRCclient::handleConnected() {
 
-	this->onDebugMessage("connected");
+	//this->onDebugMessage("connected");
 
 	this->bConnected = true;
 
@@ -263,8 +263,7 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 
 				this->bLoggedIn = true;
 
-				this->onDebugMessage("logged in " + this->sNick);
-
+				//this->onDebugMessage("logged in " + this->sNick);
 				Q_EMIT this->loggedIn(this->sNick);
 
 			break;
@@ -302,7 +301,7 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 			case IRCReply::MessageOfTheDay:
 			case IRCReply::MessageOfTheDayEnd:
 			case IRCError::NoMessageOfTheDay:
-				this->onDebugMessage("MOTD");
+				//this->onDebugMessage("MOTD");
 			break;
 
 			case IRCReply::NoTopic:
@@ -339,8 +338,8 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 
 			} else if(IRCcommand::Join == sCommand) {
 
-				this->onDebugMessage("joined " + ircServerMessage.nick() + " "
-									 + ircServerMessage.parameter(0));
+//				this->onDebugMessage("joined " + ircServerMessage.nick() + " "
+//									 + ircServerMessage.parameter(0));
 				Q_EMIT this->joined(ircServerMessage.nick(),
 									ircServerMessage.parameter(0));
 
@@ -419,7 +418,7 @@ void IRCclient::handleReadyRead() {
 		if (sLine.size()) {
 
 			const QString sL = QString::fromUtf8(sLine.data());
-			this->onDebugMessage("got Line: " + sL);
+			//this->onDebugMessage("got Line: " + sL.trimmed());
 			this->handleIncomingLine(sL);
 
 		} else break;
@@ -491,7 +490,7 @@ void IRCclient::sendLine(const QString &sLine) {
 		this->onDebugMessage("OO:truncated line before sending");
 	}
 
-	this->onDebugMessage("sending: " + sOut);
+	//this->onDebugMessage("sending: " + sOut.trimmed());
 	Q_EMIT this->rawOutgoingLine(sOut);
 
 	this->pSocket->write((sOut + "\r\n").toUtf8());
