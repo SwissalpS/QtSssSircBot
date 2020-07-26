@@ -23,14 +23,22 @@ private:
 
 protected:
 	lua_State *pL;
+	QStringList aCLIargs;
+	void initLua();
 
 public:
 	explicit LuaController(QObject *pParent = nullptr);
 	virtual ~LuaController();
 
+	int callLua(const QString sCall);
+
 	void init(QStringList aArgs);
 
 	inline lua_State *getLuaState() { return this->pL; }
+
+	int callLuaWrapped(const QString sCall);
+
+	static QString wrapLuaCall(const QString sCall);
 
 signals:
 	void debugMessage(const QString &sMessage) const;
@@ -38,6 +46,9 @@ signals:
 public slots:
 	inline void onDebugMessage(const QString &sMessage) const {
 		Q_EMIT this->debugMessage("LC:" + sMessage); }
+	virtual void onIRCevent();
+	virtual void reload();
+	virtual void shutdown();
 
 }; // LuaController
 

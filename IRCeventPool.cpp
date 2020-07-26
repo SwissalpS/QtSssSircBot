@@ -42,6 +42,7 @@ void IRCeventPool::onEvent(const QStringList &aEvent) {
 
 	// add new event to bottom of pile
 	this->aEvents.append(aEvent);
+	Q_EMIT this->eventAdded();
 
 	// check size
 	int iCount = this->aEvents.count();
@@ -54,6 +55,7 @@ void IRCeventPool::onEvent(const QStringList &aEvent) {
 		this->onDebugMessage("OO:More events than requested limit, dropping oldest.");
 
 		this->aEvents.removeFirst();
+		Q_EMIT this->eventDropped();
 
 	}
 

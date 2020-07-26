@@ -1,5 +1,6 @@
 #include "AppController.h"
 #include "AppSettings.h"
+#include "IRCeventCodes.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -88,6 +89,16 @@ void AppController::connectErrorMessages() {
 } // connectErrorMessages
 
 
+void AppController::debugMessage(const QString &sMessage) {
+
+	std::cout << sMessage.toStdString();
+	std::cout << std::endl;
+
+	Q_EMIT debugMessageReceived(sMessage);
+
+} // debugMessage
+
+
 void AppController::initConnections() {
 
 	const QJsonArray oConfigs = this->pAS->getConfigs();
@@ -123,6 +134,13 @@ void AppController::initConnections() {
 			connect(pController, SIGNAL(newEvent(QStringList)),
 					this->pEP, SLOT(onEvent(QStringList)));
 
+			connect(this->pEP, SIGNAL(eventAdded()),
+					this->pLC, SLOT(onIRCevent()));
+
+			// it's up to each controller to drop events not targeted at them
+			connect(this, SIGNAL(luaEvent(QStringList)),
+					pController, SLOT(onLuaEvent(QStringList)));
+
 			pController->start();
 
 		}
@@ -132,14 +150,19 @@ void AppController::initConnections() {
 } // initConnections
 
 
-void AppController::debugMessage(const QString &sMessage) {
+void AppController::initLuaController() {
 
-	std::cout << sMessage.toStdString();
-	std::cout << std::endl;
+	this->pLC = new LuaController(this);
 
-	Q_EMIT debugMessageReceived(sMessage);
+	connect(this->pLC, SIGNAL(debugMessage(QString)),
+			this, SLOT(debugMessage(QString)));
 
-} // debugMessage
+	QStringList aArgs = QCoreApplication::arguments();
+	aArgs.append(this->pAS->getPathMusic());
+	aArgs.append(this->pAS->getPathData());
+	this->pLC->init(aArgs);
+
+} // initLuaController
 
 
 void AppController::initSettings() {
@@ -152,6 +175,23 @@ void AppController::initSettings() {
 	this->pAS->init();
 
 } // initSettings
+
+
+void AppController::onLuaEvent(const QStringList &aEvent) {
+
+	int iEvent = aEvent.count();
+	quint8 ubEvent = aEvent.at(1).at(0).unicode();
+	if ((2 <= iEvent) && (IRCeventCodes::Abort == ubEvent)) {
+
+		this->pLC->reload();
+
+	} else if ((3 <= iEvent) && (IRCeventCodes::Exit == ubEvent)) {
+
+		this->quit();
+
+	} else Q_EMIT this->luaEvent(aEvent);
+
+} // onLuaEvent
 
 
 void AppController::quit() {
@@ -170,6 +210,19 @@ void AppController::quit() {
 
 	this->hConnections.clear();
 
+	if (this->pLC) {
+		this->disconnect(this->pLC);
+		this->pLC->shutdown();
+		this->pLC->deleteLater();
+		this->pLC = nullptr;
+	}
+
+	if (this->pEP) {
+		this->disconnect(this->pEP);
+		this->pEP->deleteLater();
+		this->pEP = nullptr;
+	}
+
 	qApp->quit();
 
 } // quit
@@ -186,6 +239,8 @@ void AppController::run() {
 
 	// init 'error' messaging system to route all through app controller
 	this->connectErrorMessages();
+
+	this->initLuaController();
 
 	this->initConnections();
 

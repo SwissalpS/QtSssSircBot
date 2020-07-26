@@ -538,6 +538,9 @@ void AppSettings::setupDirs(QString sPathBase) {
 //	QString sPathWWW = sPathBase + "www/";
 //	this->copyResources(":/www/", sPathWWW);
 
+	QString sPathLua = sPathBase + "lua/";
+	this->copyResources(":/lua/", sPathLua, false);
+
 } // setupDirs
 
 

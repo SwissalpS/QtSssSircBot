@@ -13,9 +13,10 @@ namespace IRCeventCodes {
 
 
 
-const quint8 Abort = 'a';         // "socket-message"
+const quint8 Abort = 'a';         // "lua-interface-message"
 const quint8 ChannelMessage = 'C';
 const quint8 DirectMessage = 'D';
+const quint8 Exit = 'e';          // quit application
 const quint8 IRCcommand = 'I';
 const quint8 Joined = 'J';
 const quint8 LoggedIn = 'L';

@@ -41,6 +41,7 @@ protected:
 	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
 	void initConnections();
+	void initLuaController();
 	void initSettings();
 	void writePID();
 
@@ -53,18 +54,22 @@ public:
 	// public access to singelton instance
 	static AppController *pAppController();
 
+	inline QStringList getConnectionIDs() { return this->hConnections.keys(); }
+
 	inline IRCeventPool *getIRCeventPool() { return this->pEP; }
 
 	inline LuaController *getLuaController() { return this->pLC; }
 
 public slots:
 	virtual void debugMessage(const QString &sMessage);
+	virtual void onLuaEvent(const QStringList &aEvent);
 	virtual void quit();
 	virtual void run();
 
 signals:
 	void done();
 	void debugMessageReceived(const QString &sMessage);
+	void luaEvent(const QStringList &aEvent);
 
 }; // AppControler
 
