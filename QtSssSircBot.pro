@@ -91,7 +91,9 @@ HEADERS += \
 	foreign/lua52/lundump.h \
 	foreign/lua52/lvm.h \
 	foreign/lua52/lzio.h \
-	luaAPI/api.h
+	luaAPI/IRC.h \
+	luaAPI/api.h \
+	luaAPI/system.h
 
 SOURCES += main.cpp \
 	AppController.cpp \
@@ -139,4 +141,3 @@ SOURCES += main.cpp \
 
 RESOURCES += \
 	QtSssSircBot.qrc
-
