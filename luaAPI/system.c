@@ -1,11 +1,15 @@
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
 #include <ctype.h>
 #include <dirent.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 #include <sys/stat.h>
-#include "api.h"
+#include "system.h"
 
+extern int luaAPI_system_splitString_C(lua_State *L);
 
 static int f_chdir(lua_State *L) {
 
@@ -97,6 +101,26 @@ static int f_get_file_info(lua_State *L) {
 } // f_get_file_info
 
 
+static int f_init_rand(lua_State *L) {
+
+	time_t t;
+	srand((unsigned) time(&t));
+
+	return 0;
+
+} // f_get_rand
+
+
+static int f_get_rand(lua_State *L) {
+
+	int n = rand();
+	lua_pushnumber(L, n);
+
+	return 1;
+
+} // f_get_rand
+
+
 static int f_exec(lua_State *L) {
 
 	size_t len;
@@ -119,7 +143,14 @@ static int f_exec(lua_State *L) {
 
 
 static const luaL_Reg lib[] = {
+	{ "absolute_path", f_absolute_path },
 	{ "chdir", f_chdir },
+	{ "exec", f_exec },
+	{ "get_file_info", f_get_file_info },
+	{ "get_rand", f_get_rand },
+	{ "init_rand", f_init_rand },
+	{ "list_dir", f_list_dir },
+	{ "split_string", luaAPI_system_splitString_C },
 	{ NULL, NULL }
 };
 
