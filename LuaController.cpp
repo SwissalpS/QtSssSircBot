@@ -46,8 +46,8 @@ void LuaController::init(QStringList aArgs) {
 	for (int i = 0; i < iCountArgs - 1; i++) {
 		ba = aArgs.at(i).toLocal8Bit();
 		pCstring = ba.data();
-	  lua_pushstring(L, pCstring); //qstringToConstCharPointer());
-	  lua_rawseti(L, -2, i + 1);
+		lua_pushstring(L, pCstring);
+		lua_rawseti(L, -2, i + 1);
 	}
 	lua_setglobal(L, "ARGS");
 
@@ -56,9 +56,6 @@ void LuaController::init(QStringList aArgs) {
 
 	lua_pushstring(L, SssS_APP_NAME_FULL); //SDL_GetPlatform());
 	lua_setglobal(L, "PLATFORM");
-
-	lua_pushnumber(L, 1); //get_scale());
-	lua_setglobal(L, "SCALE");
 
 	lua_pushstring(L, SssS_APP_NAME);
 	lua_setglobal(L, "EXEFILE");
