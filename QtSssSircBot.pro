@@ -136,3 +136,7 @@ SOURCES += main.cpp \
 	luaAPI/IRC.c \
 	luaAPI/api.c \
 	luaAPI/system.c
+
+RESOURCES += \
+	QtSssSircBot.qrc
+

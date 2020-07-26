@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lua/core/init.lua</file>
+        <file>lua/core/object.lua</file>
+        <file>lua/core/strict.lua</file>
+    </qresource>
+</RCC>
