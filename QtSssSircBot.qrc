@@ -1,21 +1,21 @@
 <RCC>
-    <qresource prefix="/">
-        <file>lua/core/init.lua</file>
-        <file>lua/core/object.lua</file>
-        <file>lua/core/strict.lua</file>
-        <file>lua/plugins/debugRawIn.lua</file>
-        <file>lua/plugins/debugRawOut.lua</file>
-        <file>lua/plugins/debugPing.lua</file>
-        <file>lua/plugins/debugConnected.lua</file>
-        <file>lua/plugins/debugDisonnected.lua</file>
-        <file>lua/plugins/debugQuit.lua</file>
-        <file>lua/plugins/debugNickList.lua</file>
-        <file>lua/plugins/debugLoggedIn.lua</file>
-        <file>lua/plugins/debugJoined.lua</file>
-        <file>lua/plugins/debugIRCcommand.lua</file>
-        <file>lua/plugins/debugDirectMessage.lua</file>
-        <file>lua/plugins/debugChannelMessage.lua</file>
-    </qresource>
+	<qresource prefix="/">
 		<file>lua/core/config.lua</file>
+		<file>lua/core/init.lua</file>
+		<file>lua/core/object.lua</file>
+		<file>lua/core/strict.lua</file>
+		<file>lua/plugins/debugChannelMessage.lua</file>
+		<file>lua/plugins/debugConnected.lua</file>
+		<file>lua/plugins/debugDirectMessage.lua</file>
+		<file>lua/plugins/debugDisonnected.lua</file>
+		<file>lua/plugins/debugIRCcommand.lua</file>
+		<file>lua/plugins/debugJoined.lua</file>
+		<file>lua/plugins/debugLoggedIn.lua</file>
+		<file>lua/plugins/debugNickList.lua</file>
+		<file>lua/plugins/debugPing.lua</file>
+		<file>lua/plugins/debugQuit.lua</file>
+		<file>lua/plugins/debugRawIn.lua</file>
+		<file>lua/plugins/debugRawOut.lua</file>
 		<file>lua/user/init.lua</file>
+	</qresource>
 </RCC>
