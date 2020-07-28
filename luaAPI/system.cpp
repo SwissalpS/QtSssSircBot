@@ -16,6 +16,8 @@
 namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace System {
 
 
+// all the functions starting with 'f_' are taken from github.com/rxi/lite
+// only a few changes were needed to make them compile as Cpp code.
 
 static int f_chdir(lua_State *L) {
 
