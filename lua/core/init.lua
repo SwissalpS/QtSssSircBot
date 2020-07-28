@@ -4,6 +4,7 @@
   used github.com/rxi/lite.git as guide
 --]]
 require 'core.strict'
+local config = require 'core.config'
 -- just in case global has not been set
 local core = {}
 
@@ -12,7 +13,14 @@ local core = {}
 -- over or C/Cpp side to call hooks defined in core.events
 function core.init()
   print('core.init', EXEDIR)
-  core.load_plugins()
+
+  local errorPlugins = not core.load_plugins()
+  local errorUser = not core.try(require, "user")
+
+  if errorPlugins or errorUser then
+	core.log_quiet('error initializing')
+  end
+
 end -- core.init
 
 
