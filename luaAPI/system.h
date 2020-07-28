@@ -9,8 +9,6 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace Syst
 
 
 
-//static int splitString(lua_State *L);
-
 int luaopen(lua_State *L);
 
 
