@@ -86,7 +86,7 @@ void LuaController::initLua() {
 	this->pL = luaL_newstate();
 	lua_State *L = this->pL;
 	luaL_openlibs(L);
-	api_load_libs(L);
+	luaAPI::apiLoadLibs(L);
 
 	lua_newtable(L);
 	QByteArray ba;

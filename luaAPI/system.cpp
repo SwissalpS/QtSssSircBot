@@ -1,15 +1,21 @@
-#include <stdbool.h>
-#include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/stat.h>
 #include "system.h"
 
-extern int luaAPI_system_splitString_C(lua_State *L);
+#include <ctype.h>
+#include <dirent.h>
+#include <errno.h>
+#include <QString>
+#include <QStringList>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <unistd.h>
+
+
+namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace System {
+
+
 
 static int f_chdir(lua_State *L) {
 
@@ -23,6 +29,7 @@ static int f_chdir(lua_State *L) {
 
 
 static int f_list_dir(lua_State *L) {
+
 	const char *path = luaL_checkstring(L, 1);
 
 	DIR *dir = opendir(path);
@@ -45,7 +52,8 @@ static int f_list_dir(lua_State *L) {
 
 	closedir(dir);
 	return 1;
-}
+
+} // f_list_dir
 
 
 #ifdef _WIN32
@@ -102,6 +110,7 @@ static int f_get_file_info(lua_State *L) {
 
 
 static int f_init_rand(lua_State *L) {
+	Q_UNUSED(L)
 
 	time_t t;
 	srand((unsigned) time(&t));
@@ -121,41 +130,84 @@ static int f_get_rand(lua_State *L) {
 } // f_get_rand
 
 
-static int f_exec(lua_State *L) {
+//static int f_exec(lua_State *L) {
 
-	size_t len;
-	const char *cmd = luaL_checklstring(L, 1, &len);
-	char *buf = malloc(len + 32);
-	if (!buf) { luaL_error(L, "buffer allocation failed"); }
-#if _WIN32
-	sprintf(buf, "cmd /c \"%s\"", cmd);
-	WinExec(buf, SW_HIDE);
-#else
-	sprintf(buf, "%s &", cmd);
-	int res = system(buf);
-	(void) res;
-#endif
-	free(buf);
+//	size_t len;
+//	const char *cmd = luaL_checklstring(L, 1, &len);
+//	char *buf = malloc(len + 32);
+//	if (!buf) { luaL_error(L, "buffer allocation failed"); }
+//#if _WIN32
+//	sprintf(buf, "cmd /c \"%s\"", cmd);
+//	WinExec(buf, SW_HIDE);
+//#else
+//	sprintf(buf, "%s &", cmd);
+//	int res = system(buf);
+//	(void) res;
+//#endif
+//	free(buf);
 
-	return 0;
+//	return 0;
 
-} // f_exec
+//} // f_exec
+
+
+static int splitString(lua_State *L) {
+
+	const char *pIn = luaL_checkstring(L, 1);
+	const char *pDelim = luaL_checkstring(L, 2);
+	const QString sIn(pIn);
+	const QString sDelim(pDelim);
+	const QStringList aOut = sIn.split(sDelim, QString::SkipEmptyParts, Qt::CaseSensitive);
+
+	lua_newtable(L);
+
+	// no parts -> return input string in table
+	if (0 == aOut.count()) {
+
+		lua_pushstring(L, pIn);
+		lua_rawseti(L, -2, 1);
+
+		return 1;
+
+	} // if no parts
+
+	QByteArray ba;
+	const char *pCstring;
+	for (int i = 0; i < aOut.count(); ++i) {
+
+		ba = aOut.at(i).toLocal8Bit();
+		pCstring = ba.data();
+		lua_pushstring(L, pCstring);
+		lua_rawseti(L, -2, i + 1);
+
+	} // loop all parts into table
+
+	return 1;
+
+} // luaAPIcpp_system_splitString
 
 
 static const luaL_Reg lib[] = {
 	{ "absolute_path", f_absolute_path },
 	{ "chdir", f_chdir },
-	{ "exec", f_exec },
+//	{ "exec", f_exec },
 	{ "get_file_info", f_get_file_info },
 	{ "get_rand", f_get_rand },
 	{ "init_rand", f_init_rand },
 	{ "list_dir", f_list_dir },
-	{ "split_string", luaAPI_system_splitString_C },
+	{ "split_string", splitString },
 	{ NULL, NULL }
 };
 
 
-int luaopen_system(lua_State *L) {
+int luaopen(lua_State *L) {
+
 	luaL_newlib(L, lib);
+
 	return 1;
-}
+
+} // luaopen
+
+
+
+} } } } // namespace SwissalpS::QtSssSircBot::luaAPI::system

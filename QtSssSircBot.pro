@@ -135,9 +135,9 @@ SOURCES += main.cpp \
 	foreign/lua52/lundump.c \
 	foreign/lua52/lvm.c \
 	foreign/lua52/lzio.c \
-	luaAPI/IRC.c \
-	luaAPI/api.c \
-	luaAPI/system.c
+	luaAPI/IRC.cpp \
+	luaAPI/api.cpp \
+	luaAPI/system.cpp
 
 RESOURCES += \
 	QtSssSircBot.qrc
