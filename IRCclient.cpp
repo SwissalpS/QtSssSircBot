@@ -508,6 +508,10 @@ void IRCclient::sendNicknameChangeRequest(const QString &sNickname) {
 void IRCclient::sendPrivateMessage(const QString &sRecipient,
 								   const QString &sMessage) {
 
+	// clean nick first
+	QString sToNick(sRecipient);
+	sToNick.replace(QRegExp("^[~&@%+]"), "");
+
 	// PRIVMSG <recipient> :<mesg> => 7 + 1 + 1 + 1 + <recipient>.len
 	quint8 ubLenHead = 10u + sRecipient.count();
 	quint8 ubLenPortion = 150u - ubLenHead;
