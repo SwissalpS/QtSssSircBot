@@ -1,5 +1,5 @@
 --[[
-  debugDirectMessage.lua
+  lua/plugins/debugDirectMessage.lua
   prints received direct messages to standard out
 --]]
 -- [[

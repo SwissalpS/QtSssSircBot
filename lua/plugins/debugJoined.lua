@@ -1,5 +1,5 @@
 --[[
-  debugJoined.lua
+  lua/plugins/debugJoined.lua
   prints joined messages to standard out
 --]]
 -- [[

@@ -1,5 +1,5 @@
 --[[
-  debugQuit.lua
+  lua/plugins/debugQuit.lua
   prints received quit messages to standard out
 --]]
 -- [[

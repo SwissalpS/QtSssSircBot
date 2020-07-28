@@ -1,5 +1,5 @@
 --[[
-  debugRawOut.lua
+  lua/plugins/debugRawOut.lua
   prints raw sent lines to standard out
 --]]
 -- [[

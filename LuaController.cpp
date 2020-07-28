@@ -83,11 +83,17 @@ void LuaController::initLua() {
 	int iCountArgs = this->aCLIargs.count();
 	assert(2 <= iCountArgs);
 
+	// init lua state
 	this->pL = luaL_newstate();
+	// for convenience we use a local pointer
 	lua_State *L = this->pL;
+
+	// load libraries
 	luaL_openlibs(L);
 	luaAPI::loadLibs(L);
 
+	// pass cli-arguments, possibly some more,
+	// to lua global space
 	lua_newtable(L);
 	QByteArray ba;
 	const char *pCstring;
@@ -110,13 +116,20 @@ void LuaController::initLua() {
 
 	QString sBootstrap =
 			"core = {}\n" + wrapLuaCall(
+				// modify print function for now, to help detect where debug
+				// messages are comming from
 			"  local print_orig = print\n"
 			"  print = function(...) print_orig('L:', ...) end\n"
+				// detect path separator
 			"  PATHSEP = package.config:sub(1, 1)\n"
+				// last argument is not actually a cli-argument
 			"  EXEDIR = '" + this->aCLIargs.last() + "'\n"
+				// prepare auto-load mechanism
 			"  package.path = EXEDIR .. 'lua/?.lua;' .. package.path\n"
 			"  package.path = EXEDIR .. 'lua/?/init.lua;' .. package.path\n"
+				// load core/init.lua
 			"  core = require('core')\n"
+				// init lua side, load plugins etc.
 			"  core.init()\n"
 //			"  core.run()\n"
 				);

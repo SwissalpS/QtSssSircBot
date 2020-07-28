@@ -1,5 +1,5 @@
 --[[
-  debugPing.lua
+  lua/plugins/debugPing.lua
   prints received pings to standard out
 --]]
 -- [[

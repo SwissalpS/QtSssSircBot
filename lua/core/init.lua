@@ -1,10 +1,15 @@
-require "core.strict"
+--[[
+  lua/core/init.lua
+  main lua entrance - loads the lua files
+  used github.com/rxi/lite.git as guide
+--]]
+require 'core.strict'
 -- just in case global has not been set
 local core = {}
 
--- init lua state, do not call any ICR-api methods yet
+-- init lua state, do not call any IRC-api methods yet
 -- just set up and be ready for either core.run to take
--- over or C/Cpp side to call hooks defined in plugins
+-- over or C/Cpp side to call hooks defined in core.events
 function core.init()
   print('core.init', EXEDIR)
   core.load_plugins()

@@ -1,5 +1,5 @@
 --[[
-  debugIRCcommand.lua
+  lua/plugins/debugIRCcommand.lua
   prints received IRC commands to standard out
 --]]
 -- [[

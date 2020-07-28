@@ -1,5 +1,5 @@
 --[[
-  debugLoggedIn.lua
+  lua/plugins/debugLoggedIn.lua
   prints loggin message to standard out
 --]]
 -- [[

@@ -1,3 +1,9 @@
+--[[
+  lua/core/object.lua
+  base object structure
+  may be useful for some plugins or other mechanics
+  taken as is from github.com/rxi/lite.git adding this disclaimer
+--]]
 local Object = {}
 Object.__index = Object
 

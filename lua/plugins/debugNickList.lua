@@ -1,5 +1,5 @@
 --[[
-  debugNickList.lua
+  lua/plugins/debugNickList.lua
   prints received nick list to standard out
 --]]
 -- [[

@@ -1,5 +1,5 @@
 --[[
-  debugChannelMessage.lua
+  lua/plugins/debugChannelMessage.lua
   prints received channel messages to standard out
 --]]
 -- [[

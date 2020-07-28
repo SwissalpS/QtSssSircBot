@@ -1,3 +1,8 @@
+--[[
+  lua/core/strict.lua
+  use strict global handling
+  taken as is from github.com/rxi/lite.git adding this disclaimer
+--]]
 local strict = {}
 strict.defined = {}
 

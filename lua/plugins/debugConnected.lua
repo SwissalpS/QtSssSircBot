@@ -1,5 +1,5 @@
 --[[
-  debugConnected.lua
+  lua/plugins/debugConnected.lua
   prints IP to standard out
 --]]
 -- [[
