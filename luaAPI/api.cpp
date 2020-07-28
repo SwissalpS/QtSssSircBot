@@ -15,7 +15,7 @@ static const luaL_Reg libs[] = {
 };
 
 
-void apiLoadLibs(lua_State *L) {
+void loadLibs(lua_State *L) {
 
 	for (int i = 0; libs[i].name; i++) {
 

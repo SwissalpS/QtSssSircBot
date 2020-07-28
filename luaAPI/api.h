@@ -15,7 +15,7 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI {
 
 
 
-void apiLoadLibs(lua_State *L);
+void loadLibs(lua_State *L);
 
 
 
