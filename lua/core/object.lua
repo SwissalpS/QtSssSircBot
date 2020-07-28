@@ -15,9 +15,9 @@ end
 function Object:extend()
   local cls = {}
   for k, v in pairs(self) do
-    if k:find("__") == 1 then
-      cls[k] = v
-    end
+	if k:find("__") == 1 then
+	  cls[k] = v
+	end
   end
   cls.__index = cls
   cls.super = self
@@ -28,11 +28,11 @@ end
 
 function Object:implement(...)
   for _, cls in pairs({...}) do
-    for k, v in pairs(cls) do
-      if self[k] == nil and type(v) == "function" then
-        self[k] = v
-      end
-    end
+	for k, v in pairs(cls) do
+	  if self[k] == nil and type(v) == "function" then
+		self[k] = v
+	  end
+	end
   end
 end
 
@@ -40,10 +40,10 @@ end
 function Object:is(T)
   local mt = getmetatable(self)
   while mt do
-    if mt == T then
-      return true
-    end
-    mt = getmetatable(mt)
+	if mt == T then
+	  return true
+	end
+	mt = getmetatable(mt)
   end
   return false
 end
