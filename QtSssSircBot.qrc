@@ -16,4 +16,6 @@
         <file>lua/plugins/debugDirectMessage.lua</file>
         <file>lua/plugins/debugChannelMessage.lua</file>
     </qresource>
+		<file>lua/core/config.lua</file>
+		<file>lua/user/init.lua</file>
 </RCC>
