@@ -109,7 +109,7 @@ static int f_get_file_info(lua_State *L) {
 } // f_get_file_info
 
 
-static int f_init_rand(lua_State *L) {
+static int initRand(lua_State *L) {
 	Q_UNUSED(L)
 
 	time_t t;
@@ -117,17 +117,17 @@ static int f_init_rand(lua_State *L) {
 
 	return 0;
 
-} // f_get_rand
+} // initRand
 
 
-static int f_get_rand(lua_State *L) {
+static int getRand(lua_State *L) {
 
 	int n = rand();
 	lua_pushnumber(L, n);
 
 	return 1;
 
-} // f_get_rand
+} // getRand
 
 
 //static int f_exec(lua_State *L) {
@@ -192,8 +192,8 @@ static const luaL_Reg lib[] = {
 	{ "chdir", f_chdir },
 //	{ "exec", f_exec },
 	{ "get_file_info", f_get_file_info },
-	{ "get_rand", f_get_rand },
-	{ "init_rand", f_init_rand },
+	{ "get_rand", getRand },
+	{ "init_rand", initRand },
 	{ "list_dir", f_list_dir },
 	{ "split_string", splitString },
 	{ NULL, NULL }
