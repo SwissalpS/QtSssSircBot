@@ -132,25 +132,25 @@ static int getRand(lua_State *L) {
 } // getRand
 
 
-//static int f_exec(lua_State *L) {
+static int f_exec(lua_State *L) {
 
-//	size_t len;
-//	const char *cmd = luaL_checklstring(L, 1, &len);
-//	char *buf = malloc(len + 32);
-//	if (!buf) { luaL_error(L, "buffer allocation failed"); }
-//#if _WIN32
-//	sprintf(buf, "cmd /c \"%s\"", cmd);
-//	WinExec(buf, SW_HIDE);
-//#else
-//	sprintf(buf, "%s &", cmd);
-//	int res = system(buf);
-//	(void) res;
-//#endif
-//	free(buf);
+	size_t len;
+	const char *cmd = luaL_checklstring(L, 1, &len);
+	char *buf = (char *)malloc(len + 32);
+	if (!buf) { luaL_error(L, "buffer allocation failed"); }
+#if _WIN32
+	sprintf(buf, "cmd /c \"%s\"", cmd);
+	WinExec(buf, SW_HIDE);
+#else
+	sprintf(buf, "%s &", cmd);
+	int res = system(buf);
+	(void) res;
+#endif
+	free(buf);
 
-//	return 0;
+	return 0;
 
-//} // f_exec
+} // f_exec
 
 
 static int splitString(lua_State *L) {
@@ -192,7 +192,7 @@ static int splitString(lua_State *L) {
 static const luaL_Reg lib[] = {
 	{ "absolute_path", f_absolute_path },
 	{ "chdir", f_chdir },
-//	{ "exec", f_exec },
+	{ "exec", f_exec },
 	{ "get_file_info", f_get_file_info },
 	{ "get_rand", getRand },
 	{ "init_rand", initRand },
