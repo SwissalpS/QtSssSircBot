@@ -16,6 +16,13 @@ function core.init()
 
   local errorPlugins = not core.load_plugins()
   local errorUser = not core.try(require, "user")
+  -- load trigger code
+  local tT = require 'core.triggers'
+  core.Trigger = tT[1]
+  core.TriggerManager = tT[2]
+  -- create a shared TriggerManager-instance
+  -- which also tracks how often a user is issueing commands
+  core.oTriggerManager = core.TriggerManager()
 
   if errorPlugins or errorUser then
 	core.log_quiet('error initializing')
@@ -226,10 +233,13 @@ function core.events.abort(sConnectionID, iCode)
 end
 -- private message to channel on which bot is part of was received
 function core.events.channelMessage(sConnectionID, sChannel, sFromNick, sMessage)
+  core.oTriggerManager:checkTriggers(sConnectionID, sChannel, sFromNick, sMessage)
 end
 -- private message to bot received
 function core.events.directMessage(sConnectionID, sNick, sMessage)
+  core.oTriggerManager:checkTriggers(sConnectionID, nil, sNick, sMessage)
 end
+
 function core.events.IRCcommand(sConnectionID, sCommand, lParams)
 end
 -- a user has joined a channel

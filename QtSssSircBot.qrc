@@ -4,6 +4,7 @@
 		<file>lua/core/init.lua</file>
 		<file>lua/core/object.lua</file>
 		<file>lua/core/strict.lua</file>
+		<file>lua/core/triggers.lua</file>
 		<file>lua/plugins/debugChannelMessage.lua</file>
 		<file>lua/plugins/debugConnected.lua</file>
 		<file>lua/plugins/debugDirectMessage.lua</file>
