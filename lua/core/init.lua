@@ -5,6 +5,7 @@
 --]]
 require 'core.strict'
 local config = require 'core.config'
+
 -- just in case global has not been set
 local core = {}
 
@@ -14,8 +15,6 @@ local core = {}
 function core.init()
   print('core.init', EXEDIR)
 
-  local errorPlugins = not core.load_plugins()
-  local errorUser = not core.try(require, "user")
   -- load trigger code
   local tT = require 'core.triggers'
   core.Trigger = tT[1]
@@ -24,8 +23,11 @@ function core.init()
   -- which also tracks how often a user is issueing commands
   core.oTriggerManager = core.TriggerManager()
 
-  if errorPlugins or errorUser then
-	core.log_quiet('error initializing')
+  local bErrorPlugins = not core.load_plugins()
+  local bErrorUser = not core.try(require, "user")
+
+  if bErrorPlugins or bErrorUser then
+	  core.error('error initializing core')
   end
 
 end -- core.init
@@ -45,7 +47,7 @@ end -- core.run
 function core.poll_event()
   local aEvent = IRC.poll_event()
   if aEvent then
-	core.handleEvent(aEvent)
+    core.handleEvent(aEvent)
   end
 end -- core.poll_event
 
@@ -277,3 +279,4 @@ end
 
 
 return core
+
