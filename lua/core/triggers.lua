@@ -2,12 +2,12 @@
   lua/core/triggers.lua
   infrastructure to define and maintain trigger sequences
   Trigger: mandatory params for new instance are:
-    lTriggerRxs: minimum one regular expression that matches in message
-    fCallback: function that will be called if any in lTriggerRxs match
+	lTriggerRxs: minimum one regular expression that matches in message
+	fCallback: function that will be called if any in lTriggerRxs match
    Hint: use convenience methods to make direct message only or channel message
-    only or mixed mode.
+	only or mixed mode.
   Manager:
-    TODO: add logic that removes stale entries in hRequests
+	TODO: add logic that removes stale entries in hRequests
 --]]
 local Object = require 'core.object'
 local config = require 'core.config'
