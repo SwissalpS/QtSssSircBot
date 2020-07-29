@@ -54,6 +54,7 @@ function Trigger:new(tParams)
 	if nil ~= tParams.bDirectMessagesOnly then self.bDirectMessagesOnly = tParams.bDirectMessagesOnly end
 	if 'table' == type(tParams.lConnectionIDrxs) then self.lConnectionIDrxs = tParams.lConnectionIDrxs end
 	if 'table' == type(tParams.lChannelRxs) then self.lChannelRxs = tParams.lChannelRxs end
+	if 'table' == type(tParams.lNickRxs) then self.lNickRxs = tParams.lNickRxs end
 	if 'table' == type(tParams.lPermissions) then self.lPermissions = tParams.lPermissions end
 	if 'table' == type(tParams.hRateLimit) then self.hRateLimit = tParams.hRateLimit end
 	if 'string' == type(tParams.sDescription) then self.sDescription = tParams.sDescription end
