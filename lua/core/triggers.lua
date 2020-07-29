@@ -19,6 +19,8 @@ config.TriggerDefaultRequestRateLimit = { iRequests = 180, iDuring = 3600 }
 config.TriggerDefaultDirectMessagesAlso = false
 -- trigger only reacts to DMs if set to true
 config.TriggerDefaultDirectMessagesOnly = false
+-- if true, description is used in help listings
+config.TriggerDefaultIncludeInHelp = false
 -- trigger only reacts if connectionID matches any of these
 config.TriggerDefaultConnectionIDrxs = { '.*' }
 -- trigger only reacts if channel matches any of these
@@ -52,6 +54,7 @@ function Trigger:new(tParams)
 
 	if nil ~= tParams.bDirectMessagesAlso then self.bDirectMessagesAlso = tParams.bDirectMessagesAlso end
 	if nil ~= tParams.bDirectMessagesOnly then self.bDirectMessagesOnly = tParams.bDirectMessagesOnly end
+	if nil ~= tParams.bIncludeInHelp then self.bIncludeInHelp = tParams.bIncludeInHelp end
 	if 'table' == type(tParams.lConnectionIDrxs) then self.lConnectionIDrxs = tParams.lConnectionIDrxs end
 	if 'table' == type(tParams.lChannelRxs) then self.lChannelRxs = tParams.lChannelRxs end
 	if 'table' == type(tParams.lNickRxs) then self.lNickRxs = tParams.lNickRxs end
@@ -65,6 +68,7 @@ end -- Trigger:new
 function Trigger:reset()
 	self.bDirectMessagesAlso = config.TriggerDefaultDirectMessagesAlso
 	self.bDirectMessagesOnly = config.TriggerDefaultDirectMessagesOnly
+	self.bIncludeInHelp = config.TriggerDefaultIncludeInHelp
 	self.fCallback = nil
 	self.hRateLimit = config.TriggerDefaultRequestRateLimit
 	self.lConnectionIDrxs = config.TriggerDefaultConnectionIDrxs
