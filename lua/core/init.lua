@@ -163,6 +163,11 @@ function core.load_plugins()
 end -- core.load_plugins
 
 
+function core.cleanNick(sNick)
+  return sNick:gsub('^[~&@%+]', '')
+end
+
+
 function core.handleEvent(aEvent)
 
   local iEvent = #aEvent
