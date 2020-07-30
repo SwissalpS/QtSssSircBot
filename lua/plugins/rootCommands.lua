@@ -44,21 +44,25 @@ local function rootCommands(tP)
   end
 end -- rootCommands
 
-local oTrigger = core.Trigger({
-  lTriggerRxs = {
-    '^&([cd])%s(%S*)%s(%S*)', '^&([ax])%s(%S*)' },
-  fCallback = rootCommands,
-  lConnectionIDrxs = config.RootCommandsConnectionIDrxs,
-  lNickRxs = config.RootCommandsNickRxs,
-  hRateLimit = config.RootCommandsRateLimit,
-  bIncludeInHelp = true,
-  sDescription = '&(c|d) <password> <connection-ID>\n'
-    .. '  c: (re)connect or d: disconnect the connection with ID.\n'
-    .. '&(x|a) <password>\n'
-    .. '  exit application or restart lua portion.'
-})
-oTrigger:makeDMonly()
+local function init()
+  local oTrigger = core.Trigger({
+    lTriggerRxs = {
+      '^&([cd])%s(%S*)%s(%S*)', '^&([ax])%s(%S*)' },
+    fCallback = rootCommands,
+    lConnectionIDrxs = config.RootCommandsConnectionIDrxs,
+    lNickRxs = config.RootCommandsNickRxs,
+    hRateLimit = config.RootCommandsRateLimit,
+    bIncludeInHelp = true,
+    sDescription = '&(c|d) <password> <connection-ID>\n'
+      .. '  c: (re)connect or d: disconnect the connection with ID.\n'
+      .. '&(x|a) <password>\n'
+      .. '  exit application or restart lua portion.'
+  })
+  oTrigger:makeDMonly()
 
-core.oTriggerManager:addTrigger(oTrigger)
+  core.oTriggerManager:addTrigger(oTrigger)
+end -- init
+
+core.oNotificationManager:subscribe('core.init.done', init)
 --]]
 

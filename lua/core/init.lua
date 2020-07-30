@@ -23,12 +23,17 @@ function core.init()
   -- which also tracks how often a user is issueing commands
   core.oTriggerManager = core.TriggerManager()
 
+  -- load shared Notification Manager
+  core.oNotificationManager = require 'core.notifications'
+
   local bErrorPlugins = not core.load_plugins()
   local bErrorUser = not core.try(require, "user")
 
   if bErrorPlugins or bErrorUser then
 	  core.error('error initializing core')
   end
+
+  core.oNotificationManager:post('core.init.done', nil)
 
 end -- core.init
 
@@ -253,48 +258,91 @@ end -- core.handleEvent
 
 
 -- events are designed to be overridden by plugins
+-- alternatively you can use the notification system
 core.events = {}
 
 function core.events.abort(sConnectionID, iCode)
-  core.quit()
+  -- TODO: not sure we want to quit on this signal
+  -- it is issued mainly by socket errors
+  --core.quit()
+  core.oNotificationManager:post('core.events.abort', {
+    sConnectionID = sConnectionID, iCode = iCode
+  })
 end
 -- private message to channel on which bot is part of was received
 function core.events.channelMessage(sConnectionID, sChannel, sFromNick, sMessage)
   core.oTriggerManager:checkTriggers(sConnectionID, sChannel, sFromNick, sMessage)
+  core.oNotificationManager:post('core.events.channelMessage', {
+    sConnectionID = sConnectionID, sChannel = sChannel,
+    sFromNick = sFromNick, sMessage = sMessage
+  })
 end
 -- private message to bot received
 function core.events.directMessage(sConnectionID, sNick, sMessage)
   core.oTriggerManager:checkTriggers(sConnectionID, nil, sNick, sMessage)
+  core.oNotificationManager:post('core.events.directMessage', {
+    sConnectionID = sConnectionID, sFromNick = sNick, sMessage = sMessage
+  })
 end
 
 function core.events.IRCcommand(sConnectionID, sCommand, lParams)
+  core.oNotificationManager:post('core.events.IRCcommand', {
+    sConnectionID = sConnectionID, sCommand = sCommand, lParams = lParams
+  })
 end
 -- a user has joined a channel
 function core.events.joined(sConnectionID, sNick, sChannel)
+  core.oNotificationManager:post('core.events.', {
+    sConnectionID = sConnectionID, sNick = sNick, sChannel = sChannel
+  })
 end
 -- bot has logged in
 function core.events.loggedIn(sConnectionID, sNick)
+  core.oNotificationManager:post('core.events.loggedIn', {
+    sConnectionID = sConnectionID, sNick = sNick
+  })
 end
 -- list of nicks in channel received
 function core.events.nickList(sConnectionID, sChannel, lNicks)
+  core.oNotificationManager:post('core.events.nickList', {
+    sConnectionID = sConnectionID, sChannel = sChannel, lNicks = lNicks
+  })
 end
 -- ping received (pong has already been sent back)
 function core.events.ping(sConnectionID, sMessage)
+  core.oNotificationManager:post('core.events.ping', {
+    sConnectionID = sConnectionID, sMessage = sMessage
+  })
 end
 -- a user has quit
 function core.events.quit(sConnectionID, sNick, sMessage)
+  core.oNotificationManager:post('core.events.quit', {
+    sConnectionID = sConnectionID, sNick = sNick, sMessage = sMessage
+  })
 end
 -- socket is connected
 function core.events.connected(sConnectionID, sIP)
+  core.oNotificationManager:post('core.events.connected', {
+    sConnectionID = sConnectionID, sIP
+  })
 end
 -- socket has disconnected
 function core.events.disconnected(sConnectionID)
+  core.oNotificationManager:post('core.events.disconnected', {
+    sConnectionID = sConnectionID
+  })
 end
 -- raw line received
 function core.events.rawIn(sConnectionID, sLine)
+  core.oNotificationManager:post('core.events.rawIn', {
+    sConnectionID = sConnectionID, sLine = sLine
+  })
 end
 -- raw output bot has sent
 function core.events.rawOut(sConnectionID, sLine)
+  core.oNotificationManager:post('core.events.rawOut', {
+    sConnectionID = sConnectionID, sLine = sLine
+  })
 end
 
 
