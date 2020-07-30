@@ -17,16 +17,15 @@ config.RootCommandsRateLimit = { iRequests = 12, iDuring = 3600 }
 local sendDM = IRC.send_direct_message
 
 local function rootCommands(tP)
-  local sSubCommond = tP.sMatch
+  local sSubCommand = tP.sMatch
   local sPassword = string.match(tP.sMessage, '^&[acdx]%s(%S*)')
   if sPassword ~= config.RootCommandsPassword then
     --sendDM(tP.sConnectionID, tP.sNick, 'KO:password missmatch')
     return
   end
-  print(sSubCommond, sPassword)
-  if string.match(sSubCommond, '[cd]') then
+  if string.match(sSubCommand, '[cd]') then
     local sConnectionID = string.match(tP.sMessage, '^&[cd]%s%S*%s(%S*)')
-    if 'd' == sSubCommond then
+    if 'd' == sSubCommand then
       sendDM(tP.sConnectionID, tP.sNick, 'OK:disconnecting ' .. sConnectionID)
       IRC.send_quit(sConnectionID, config.CoreQuitMessage or 'GoodBye :D')
       IRC.disconnect(sConnectionID)
@@ -35,7 +34,7 @@ local function rootCommands(tP)
       IRC.send_quit(sConnectionID, config.CoreQuitMessageReconnect or 'brb')
       IRC.reconnect(sConnectionID)
     end
-  elseif 'a' == sSubCommond then
+  elseif 'a' == sSubCommand then
     sendDM(tP.sConnectionID, tP.sNick, 'OK:re-loading lua')
     core.abort(1)
   else -- 'x'

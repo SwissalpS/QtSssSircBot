@@ -34,7 +34,7 @@ static int disconnectSocket(lua_State *L) {
 
 	return 0;
 
-} // disconnect
+} // disconnectSocket
 
 
 static int exitApp(lua_State *L) {

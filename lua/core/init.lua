@@ -39,7 +39,7 @@ function core.init()
   core.oNotificationManager = require 'core.notifications'
 
   local bErrorPlugins = not core.load_plugins()
-  local bErrorUser = not core.try(require, "user")
+  local bErrorUser = not core.try(require, 'user')
 
   if bErrorPlugins or bErrorUser then
 	  core.error('error initializing core')
@@ -108,12 +108,12 @@ function core.poll_events()
   local aEvent
   local bContinue = true
   while bContinue do
-	aEvent = IRC.poll_event()
-	if nil == aEvent then
-	  bContinue = false
-	else
-	  core.handleEvent(aEvent)
-	end
+	  aEvent = IRC.poll_event()
+	  if nil == aEvent then
+	    bContinue = false
+	  else
+	    core.handleEvent(aEvent)
+	  end
   end
 end -- core.poll_events
 
@@ -150,14 +150,14 @@ end
 function core.try(fn, ...)
   local err
   local ok, res = xpcall(fn, function(msg)
-	local item = core.error("%s", msg)
-	item.info = debug.traceback(nil, 2):gsub("\t", "")
-	err = msg
-  end, ...)
+	  local item = core.error("%s", msg)
+	  item.info = debug.traceback(nil, 2):gsub("\t", "")
+	  err = msg
+    end, ...)
   if ok then
-	return true, res
+	  return true, res
   end
-  return false, err
+    return false, err
 end -- core.try
 
 
@@ -165,9 +165,9 @@ function core.on_error(err)
   -- write error to file
   local fp = io.open(EXEDIR .. "/lua_error.txt", "wb")
   if nil ~= fp then
-	fp:write("Error: " .. tostring(err) .. "\n")
-	fp:write(debug.traceback(nil, 4))
-	fp:close()
+  	fp:write("Error: " .. tostring(err) .. "\n")
+  	fp:write(debug.traceback(nil, 4))
+  	fp:close()
   end
 end -- core.on_error
 
@@ -180,9 +180,9 @@ local temp_file_counter = 0
 
 local function delete_temp_files()
   for _, filename in ipairs(system.list_dir(EXEDIR)) do
-	if filename:find(temp_file_prefix, 1, true) == 1 then
-	  os.remove(EXEDIR .. PATHSEP .. filename)
-	end
+  	if filename:find(temp_file_prefix, 1, true) == 1 then
+  	  os.remove(EXEDIR .. PATHSEP .. filename)
+  	end
   end
 end -- delete_temp_files
 
@@ -225,13 +225,13 @@ function core.load_plugins()
   local files = system.list_dir(EXEDIR .. "/lua/plugins")
   if nil == files then return no_errors end
   for _, filename in ipairs(files) do
-	local modname = "plugins." .. filename:gsub(".lua$", "")
-	local ok = core.try(require, modname)
-	if ok then
-	  core.log_quiet("Loaded plugin %q", modname)
-	else
-	  no_errors = false
-	end
+	  local modname = "plugins." .. filename:gsub(".lua$", "")
+	  local ok = core.try(require, modname)
+	  if ok then
+	    core.log_quiet("Loaded plugin %q", modname)
+	  else
+	    no_errors = false
+	  end
   end
   return no_errors
 end -- core.load_plugins
@@ -246,8 +246,8 @@ function core.handleEvent(aEvent)
 
   local iEvent = #aEvent
   if 3 > iEvent then
-	core.log_quiet('invalid event length')
-	return
+	  core.log_quiet('invalid event length')
+  	return
   end
 
   local sID = aEvent[1]
@@ -258,47 +258,47 @@ function core.handleEvent(aEvent)
   local i
 
   if 'a' == sInterfaceCommand then
-	core.events.abort(sID, tonumber(sParam0))
+	  core.events.abort(sID, tonumber(sParam0))
   elseif 'C' == sInterfaceCommand then
-	if 5 <= iEvent then
-	  core.events.channelMessage(sID, sParam0, aEvent[4], aEvent[5])
-	end
+  	if 5 <= iEvent then
+  	  core.events.channelMessage(sID, sParam0, aEvent[4], aEvent[5])
+  	end
   elseif 'D' == sInterfaceCommand then
-	if 4 <= iEvent then
-	  core.events.directMessage(sID, sParam0, aEvent[4])
-	end
+  	if 4 <= iEvent then
+  	  core.events.directMessage(sID, sParam0, aEvent[4])
+  	end
   elseif 'I' == sInterfaceCommand then
-	for i = 4, iEvent, 1 do
-	  table.insert(lParams, aEvent[i])
-	end
-	core.events.IRCcommand(sID, sParam0, lParams)
+  	for i = 4, iEvent, 1 do
+  	  table.insert(lParams, aEvent[i])
+  	end
+  	core.events.IRCcommand(sID, sParam0, lParams)
   elseif 'J' == sInterfaceCommand then
-	if 4 <= iEvent then
-	  core.events.joined(sID, sParam0, aEvent[4])
-	end
+  	if 4 <= iEvent then
+  	  core.events.joined(sID, sParam0, aEvent[4])
+  	end
   elseif 'L' == sInterfaceCommand then
-	core.events.loggedIn(sID, sParam0)
+	  core.events.loggedIn(sID, sParam0)
   elseif 'N' == sInterfaceCommand then
-	for i = 4, iEvent, 1 do
-	  table.insert(lParams, aEvent[i])
-	end
-	core.events.nickList(sID, sParam0, lParams)
+  	for i = 4, iEvent, 1 do
+  	  table.insert(lParams, aEvent[i])
+  	end
+  	core.events.nickList(sID, sParam0, lParams)
   elseif 'P' == sInterfaceCommand then
-	core.events.ping(sID, sParam0)
+	  core.events.ping(sID, sParam0)
   elseif 'Q' == sInterfaceCommand then
-	if 4 <= iEvent then
-	  core.events.quit(sID, sParam0, aEvent[4])
-	end
+  	if 4 <= iEvent then
+  	  core.events.quit(sID, sParam0, aEvent[4])
+  	end
   elseif 'c' == sInterfaceCommand then
-	core.events.connected(sID, sParam0)
+	  core.events.connected(sID, sParam0)
   elseif 'd' == sInterfaceCommand then
-	core.events.disconnected(sID)
+	  core.events.disconnected(sID)
   elseif '<' == sInterfaceCommand then
-	core.events.rawIn(sID, sParam0)
+	  core.events.rawIn(sID, sParam0)
   elseif '>' == sInterfaceCommand then
-	core.events.rawOut(sID, sParam0)
+	  core.events.rawOut(sID, sParam0)
   else
-	core.log_quiet('OO:unknown interface command: ' .. sInterfaceCommand)
+	  core.log('OO:unknown interface command: ' .. sInterfaceCommand)
   end
 
 end -- core.handleEvent
