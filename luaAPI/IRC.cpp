@@ -101,6 +101,20 @@ static int getEvent(lua_State *L) {
 } // getEvent
 
 
+static int reconnectSocket(lua_State *L) {
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::Connected))); // 'c'
+	aEvent.append(QString()); // just to pass initial inspection of argument count
+
+	AppController::pAppController()->onLuaEvent(aEvent);
+
+	return 0;
+
+} // reconnectSocket
+
+
 static int sendChannelMessage(lua_State *L) {
 
 	QStringList aEvent;
@@ -169,6 +183,7 @@ static const luaL_Reg lib[] = {
 	{ "disconnect", disconnectSocket },
 	{ "exit", exitApp },
 	{ "poll_event", getEvent },
+	{ "reconnect", reconnectSocket },
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
 	{ "send_line", sendLine },

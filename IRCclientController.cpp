@@ -245,6 +245,9 @@ void IRCclientController::onLuaEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
+		case IRCeventCodes::Connected:
+			QTimer::singleShot(0, this->pClient, SLOT(reconnect()));
+		break;
 		case IRCeventCodes::DirectMessage:
 
 			if (4 > iEvent) {
