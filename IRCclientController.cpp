@@ -86,8 +86,8 @@ void IRCclientController::init() {
 						this->oJo.value(AppSettings::sSettingIRCremotePassword).toString(),
 						this);
 
-	connect(this->pClient, SIGNAL(abort(quint16)),
-			this, SLOT(onAbort(quint16)));
+	connect(this->pClient, SIGNAL(abort(qint16)),
+			this, SLOT(onAbort(qint16)));
 
 	connect(this->pClient, SIGNAL(connected(QString)),
 			this, SLOT(onConnected(QString)));
@@ -137,8 +137,11 @@ void IRCclientController::start() {
 } // start
 
 
-void IRCclientController::onAbort(const quint16 &iR) {
-	Q_UNUSED(iR)
+void IRCclientController::onAbort(const qint16 &iR) {
+
+	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
+						  << QString(QChar(IRCeventCodes::Abort))
+						  << QString::number(iR));
 
 } // onAbort
 

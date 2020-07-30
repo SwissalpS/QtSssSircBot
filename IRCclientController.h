@@ -36,7 +36,7 @@ signals:
 	void newEvent(const QStringList &aEvent) const;
 
 public slots:
-	void onAbort(const quint16 &iR);
+	void onAbort(const qint16 &iR);
 	void onConnected(const QString &sIP);
 	void onChannelMessage(const QString &sChannel, const QString &sFromNick,
 						  const QString &sMessage);
