@@ -19,6 +19,7 @@
 		<file>lua/plugins/debugQuit.lua</file>
 		<file>lua/plugins/debugRawIn.lua</file>
 		<file>lua/plugins/debugRawOut.lua</file>
+		<file>lua/plugins/helpCommands.lua</file>
 		<file>lua/plugins/rootCommands.lua</file>
 		<file>lua/user/init.lua</file>
 	</qresource>
