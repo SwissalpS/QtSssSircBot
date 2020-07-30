@@ -11,6 +11,8 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
+#include "AppController.h"
+
 
 
 namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace System {
@@ -18,6 +20,18 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace Syst
 
 // all the functions starting with 'f_' are taken from github.com/rxi/lite
 // only a few changes were needed to make them compile as Cpp code.
+
+static int delayedCallback(lua_State *L) {
+
+	QString sID(luaL_checkstring(L, 1));
+	int iDuration = luaL_checkinteger(L, 2);
+
+	AppController::pAppController()->addDelayedCallback(sID, iDuration);
+
+	return 0;
+
+} // delayedCallback
+
 
 static int f_chdir(lua_State *L) {
 
@@ -192,6 +206,7 @@ static int splitString(lua_State *L) {
 static const luaL_Reg lib[] = {
 	{ "absolute_path", f_absolute_path },
 	{ "chdir", f_chdir },
+	{ "delayed_callback", delayedCallback },
 	{ "exec", f_exec },
 	{ "get_file_info", f_get_file_info },
 	{ "get_rand", getRand },

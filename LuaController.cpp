@@ -42,6 +42,13 @@ LuaController::~LuaController() {
 } // dealloc
 
 
+int LuaController::callDelayedCallback(const QString &sID) {
+
+	return this->callLua("core.call_delayed_callback('" + sID + "')");
+
+} // callDelayedCallback
+
+
 // returns 0 on success
 int LuaController::callLua(const QString sCall) {
 

@@ -36,6 +36,7 @@ public:
 
 	inline lua_State *getLuaState() { return this->pL; }
 
+	int callDelayedCallback(const QString &sID);
 	int callLuaWrapped(const QString sCall);
 
 	static QString wrapLuaCall(const QString sCall);

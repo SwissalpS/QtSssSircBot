@@ -55,6 +55,7 @@ DEFINES += LUA_USE_POSIX
 HEADERS += \
 	AppController.h \
 	AppSettings.h \
+	DelayedCallback.h \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
@@ -98,6 +99,7 @@ HEADERS += \
 SOURCES += main.cpp \
 	AppController.cpp \
 	AppSettings.cpp \
+	DelayedCallback.cpp \
 	IRCclient.cpp \
 	IRCclientController.cpp \
 	IRCeventPool.cpp \

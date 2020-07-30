@@ -1,6 +1,7 @@
 #include "AppController.h"
 #include "AppSettings.h"
 #include "IRCeventCodes.h"
+#include "DelayedCallback.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -80,6 +81,14 @@ AppController *AppController::pAppController() {
 	return pSingelton;
 
 } // singelton access
+
+
+void AppController::addDelayedCallback(const QString sID, const int iDuration) {
+
+	DelayedCallback *pCB = new DelayedCallback(sID, iDuration, this->pLC, this);
+	pCB->start();
+
+} // addDelayedCallback
 
 
 void AppController::connectErrorMessages() {
