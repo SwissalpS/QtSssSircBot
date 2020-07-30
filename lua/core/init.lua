@@ -9,6 +9,8 @@ local config = require 'core.config'
 -- just in case global has not been set
 local core = {}
 
+local hDelayedCallbacks = {}
+
 -- init lua state, do not call any IRC-api methods yet
 -- just set up and be ready for either core.run to take
 -- over or C/Cpp side to call hooks defined in core.events
@@ -47,6 +49,38 @@ function core.run()
 	--sleep
   -- end loop
 end -- core.run
+
+
+-- iInterval in milliseconds -> 1000 ms = 1 second
+function core.call_later(iInterval, fCallback, mData)
+  if 0 > iInterval then
+    core.error('interval must be 0 or greater')
+    return
+  end
+  if 'function' ~= type(fCallback) then
+    core.error('callback must be a function')
+    return
+  end
+  -- TODO: not sure we need this, maybe simple indexes would do it too
+  local sID = 'c' .. tostring(system.get_rand())
+  while nil ~= hDelayedCallbacks[sID] do
+    sID = 'c' .. tostring(system.get_rand())
+  end
+  hDelayedCallbacks[sID] = { f = fCallback, m = mData }
+  system.delayed_callback(sID, iInterval)
+end -- core.call_later
+
+
+-- called by LuaController when a timed callback times-out
+function core.call_delayed_callback(sID)
+  local hCallback = hDelayedCallbacks[sID]
+  if nil == hCallback then
+    core.error('callback does not exist')
+    return
+  end
+  core.try(hCallback.f, hCallback.m)
+  hDelayedCallbacks[sID] = nil
+end -- core.call_delayed_callback
 
 
 function core.poll_event()
