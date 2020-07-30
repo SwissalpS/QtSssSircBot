@@ -11,6 +11,16 @@ local core = {}
 
 local hDelayedCallbacks = {}
 
+-- maintenance tasks that get done at intervals
+local function repeater(iInterval)
+  -- TriggerManager keeps track of requests that users make
+  -- need to clean that history from time to time
+  local iLast = os.time() - (config.CoreTriggerPurgeOlder or (2 * 3600))
+  core.oTriggerManager:purgeRequestsBefore(iLast)
+
+  core.call_later(iInterval, repeater, iInterval)
+end
+
 -- init lua state, do not call any IRC-api methods yet
 -- just set up and be ready for either core.run to take
 -- over or C/Cpp side to call hooks defined in core.events
@@ -36,6 +46,9 @@ function core.init()
   end
 
   core.oNotificationManager:post('core.init.done', nil)
+
+  -- start maintenance cycle
+  repeater(config.CoreRepeaterInterval)
 
 end -- core.init
 

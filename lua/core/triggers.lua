@@ -176,6 +176,25 @@ function Manager:isInRequestLimit(sNick, hRateLimit)
 end -- Manager:isInRequestLimit
 
 
+-- call this from time to time to clean out stale entries
+function Manager:purgeRequestsBefore(iLast)
+  local lNew
+  for sN, lTimes in pairs(self.hRequests) do
+    lNew = {}
+    for _, iThen in ipairs(lTimes) do
+      if iThen >= iLast then
+        table.insert(lNew, iThen)
+      end -- if not too old
+    end -- loop times
+    if (0 == #lNew) then
+      self.hRequests[sN] = nil
+    else
+      self.hRequests[sN] = lNew
+    end
+  end -- loop nicks
+end -- Manager:purgeRequestsBefore
+
+
 function Manager:recordRequest(sNick)
 	local sN = core.cleanNick(sNick)
 	if nil == self.hRequests[sN] then self.hRequests[sN] = {} end
