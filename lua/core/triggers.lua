@@ -157,21 +157,21 @@ function Manager:hasTriggerMatch(sMessage, lTriggerRxs)
 end -- Manager:hasTriggerMatch
 
 
-function Manager:isInRequestLimit(sNick, tRateLimit)
+function Manager:isInRequestLimit(sNick, hRateLimit)
 	local sN = core.cleanNick(sNick)
 	local tNick = self.hRequests[sN]
 	if nil == tNick then return true end
-	if #tNick < tRateLimit.iRequests then return true end
+	if #tNick < hRateLimit.iRequests then return true end
 	local iNow = os.time()
 	-- no need to check any before iLast
-	local iLast = iNow - tRateLimit.iDuring
+	local iLast = iNow - hRateLimit.iDuring
 	local iCount = 0
 	for i = #tNick, 1, -1 do
 		if tNick[i] < iLast then break end
 		iCount = iCount + 1
 	end
 
-	return iCount < tRateLimit.iRequests
+	return iCount < hRateLimit.iRequests
 
 end -- Manager:isInRequestLimit
 
@@ -198,7 +198,7 @@ function Manager:checkTrigger(oTrigger, sConnectionID, sChannel, sNick, sMessage
 	if false ~= sMatch then
 
 	  -- drop request if user is over limit
-		if not self:isInRequestLimit(sNick, oTrigger.tRateLimit) then return end
+		if not self:isInRequestLimit(sNick, oTrigger.hRateLimit) then return end
 
 		-- keep track of requests
 		self:recordRequest(sNick)

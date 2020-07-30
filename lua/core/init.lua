@@ -142,9 +142,29 @@ function core.temp_filename(ext)
 end -- core.temp_filename
 
 
-function core.quit()
+-- called at quit but also when lua env is being re-loaded
+-- assume that connections stay active or are dead already (when exiting app)
+-- save state if needed using override
+function core.abort(iRes)
   -- cleanup
   delete_temp_files()
+  -- signal that we are ready for re-load
+  IRC.abort(iRes)
+end -- core.abort
+
+function core.disconnectAll()
+  local lIDs = IRC.connection_ids()
+  for _, sConnectionID in ipairs(lIDs) do
+    print(sConnectionID)
+    IRC.send_quit(sConnectionID, config.CoreQuitMessage or 'goodbye :D')
+    IRC.disconnect(sConnectionID)
+  end
+end -- core.disconnectAll
+
+function core.quit()
+  core.disconnectAll()
+  core.abort(0)
+  IRC.exit(0)
 end -- core.quit
 
 

@@ -181,13 +181,18 @@ void AppController::onLuaEvent(const QStringList &aEvent) {
 
 	int iEvent = aEvent.count();
 	quint8 ubEvent = aEvent.at(1).at(0).unicode();
-	if ((2 <= iEvent) && (IRCeventCodes::Abort == ubEvent)) {
+	if ((3 <= iEvent) && (IRCeventCodes::Abort == ubEvent)) {
 
-		this->pLC->reload();
+		int iRes = aEvent.at(2).toInt();
+		if (0 < iRes) {
+			QTimer::singleShot(iRes, this->pLC, SLOT(reload()));
+		} else {
+			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
+		}
 
 	} else if ((3 <= iEvent) && (IRCeventCodes::Exit == ubEvent)) {
 
-		this->quit();
+		QTimer::singleShot(1000, this, SLOT(quit()));
 
 	} else Q_EMIT this->luaEvent(aEvent);
 

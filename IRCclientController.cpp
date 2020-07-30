@@ -4,6 +4,7 @@
 #include "AppSettings.h"
 
 #include <QJsonArray>
+#include <QTimer>
 
 
 
@@ -60,7 +61,7 @@ IRCclientController::~IRCclientController() {
 	if (this->pClient) {
 		this->disconnect(this->pClient);
 		this->pClient->sendQuit();
-		this->pClient->disconnect();
+		this->pClient->disconnectSocket();
 		this->pClient->deleteLater();
 	}
 
@@ -252,12 +253,15 @@ void IRCclientController::onLuaEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
+		case IRCeventCodes::Disconnected:
+			QTimer::singleShot(0, this->pClient, SLOT(disconnectSocket()));
+		break;
 		case IRCeventCodes::IRCcommand:
 			for (i = 3; i < iEvent; ++i) aParams.append(aEvent.at(i));
 			this->pClient->sendIRCCommand(aEvent.at(2), aParams);
 		break;
 		case IRCeventCodes::Quit:
-			this->pClient->sendQuit();
+			this->pClient->sendQuit(aEvent.at(2));
 		break;
 		case IRCeventCodes::Joined:
 			this->pClient->sendJoin(aEvent.at(2));

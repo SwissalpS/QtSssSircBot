@@ -14,12 +14,27 @@ static int abortLua(lua_State *L) {
 	QStringList aEvent;
 	aEvent.append("-"); // connection ID not relevant here
 	aEvent.append(QString(QChar(IRCeventCodes::Abort))); // 'a'
+	aEvent.append(QString::number(luaL_checknumber(L, 1)));
 
 	SwissalpS::QtSssSircBot::AppController::pAppController()->onLuaEvent(aEvent);
 
 	return 0;
 
 } // abortLua
+
+
+static int disconnectSocket(lua_State *L) {
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::Disconnected))); // 'd'
+	aEvent.append(QString()); // just to pass initial inspection of argument count
+
+	AppController::pAppController()->onLuaEvent(aEvent);
+
+	return 0;
+
+} // disconnect
 
 
 static int exitApp(lua_State *L) {
@@ -132,14 +147,32 @@ static int sendLine(lua_State *L) {
 } // sendLine
 
 
+static int sendQuit(lua_State *L) {
+
+	// fetch connection-id-string and message
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::Quit))); // 'Q'
+	aEvent.append(QString(luaL_checkstring(L, 2))); // quit message
+
+	AppController::pAppController()->onLuaEvent(aEvent);
+
+	return 0;
+
+} // sendLine
+
+
 static const luaL_Reg lib[] = {
 	{ "abort", abortLua },
 	{ "connection_ids", getConnectionIDs },
+	{ "disconnect", disconnectSocket },
 	{ "exit", exitApp },
 	{ "poll_event", getEvent },
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
 	{ "send_line", sendLine },
+	{ "send_quit", sendQuit },
 	{ NULL, NULL }
 };
 
