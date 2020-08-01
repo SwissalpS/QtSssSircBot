@@ -61,6 +61,7 @@ public:
 	inline LuaController *getLuaController() { return this->pLC; }
 
 public slots:
+	virtual void addConnection(const QJsonObject oConfig);
 	virtual void addDelayedCallback(const QString sID, const int iDuration);
 	virtual void debugMessage(const QString &sMessage);
 	virtual void onLuaEvent(const QStringList &aEvent);

@@ -83,6 +83,46 @@ AppController *AppController::pAppController() {
 } // singelton access
 
 
+void AppController::addConnection(const QJsonObject oConfig) {
+
+	IRCclientController *pController = new IRCclientController(oConfig, this);
+	const QString sID = pController->getConnectionID();
+
+	if (this->hConnections.contains(sID)) {
+
+		this->debugMessage("AC:OO:Duplicate connection ID: <" + sID +
+							 "> found. Skipping. Make sure all your "
+							 "connections have unique identifiers.");
+
+		pController->deleteLater();
+
+	} else {
+
+		this->hConnections.insert(sID, pController);
+
+		connect(pController, SIGNAL(debugMessage(QString)),
+				this, SLOT(debugMessage(QString)));
+
+//			connect(pController, SIGNAL(abort(qint16)),
+//					this, SLOT(onAbort(qint16)));
+
+		connect(pController, SIGNAL(newEvent(QStringList)),
+				this->pEP, SLOT(onEvent(QStringList)));
+
+		connect(this->pEP, SIGNAL(eventAdded()),
+				this->pLC, SLOT(onIRCevent()));
+
+		// it's up to each controller to drop events not targeted at them
+		connect(this, SIGNAL(luaEvent(QStringList)),
+				pController, SLOT(onLuaEvent(QStringList)));
+
+		pController->start();
+
+	} // if valid connection-ID or not
+
+} // addConnection
+
+
 void AppController::addDelayedCallback(const QString sID, const int iDuration) {
 
 	DelayedCallback *pCB = new DelayedCallback(sID, iDuration, this->pLC, this);
@@ -112,47 +152,13 @@ void AppController::initConnections() {
 
 	const QJsonArray oConfigs = this->pAS->getConfigs();
 
-	QString sID;
 	QJsonObject oConfig;
-	IRCclientController *pController;
 
 	for (int i = 0; i < oConfigs.count(); ++i) {
 
 		oConfig = oConfigs.at(i).toObject();
-		pController = new IRCclientController(oConfig, this);
-		sID = pController->getConnectionID();
 
-		if (this->hConnections.contains(sID)) {
-
-			this->debugMessage("AC:OO:Duplicate connection ID: <" + sID +
-								 "> found. Skipping. Make sure all your "
-								 "connections have unique identifiers.");
-
-			pController->deleteLater();
-
-		} else {
-
-			this->hConnections.insert(sID, pController);
-
-			connect(pController, SIGNAL(debugMessage(QString)),
-					this, SLOT(debugMessage(QString)));
-
-//			connect(pController, SIGNAL(abort(qint16)),
-//					this, SLOT(onAbort(qint16)));
-
-			connect(pController, SIGNAL(newEvent(QStringList)),
-					this->pEP, SLOT(onEvent(QStringList)));
-
-			connect(this->pEP, SIGNAL(eventAdded()),
-					this->pLC, SLOT(onIRCevent()));
-
-			// it's up to each controller to drop events not targeted at them
-			connect(this, SIGNAL(luaEvent(QStringList)),
-					pController, SLOT(onLuaEvent(QStringList)));
-
-			pController->start();
-
-		}
+		this->addConnection(oConfig);
 
 	} // loop all connections
 

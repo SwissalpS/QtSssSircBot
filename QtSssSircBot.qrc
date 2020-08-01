@@ -1,6 +1,7 @@
 <RCC>
 	<qresource prefix="/">
 		<file>lua/core/config.lua</file>
+		<file>lua/core/connections.lua</file>
 		<file>lua/core/init.lua</file>
 		<file>lua/core/json.lua</file>
 		<file>lua/core/notifications.lua</file>

@@ -2,6 +2,8 @@
 #include "AppController.h"
 #include "IRCeventCodes.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
 
 
 namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace IRC {
@@ -21,6 +23,24 @@ static int abortLua(lua_State *L) {
 	return 0;
 
 } // abortLua
+
+
+static int addConnection(lua_State *L) {
+
+	const QJsonDocument oJdoc = QJsonDocument::fromJson(luaL_checkstring(L, 1));
+	if (!oJdoc.isObject()) {
+		lua_pushnil(L);
+		lua_pushstring(L, "invalid JSON, not an object");
+		return 2;
+	}
+
+	const QJsonObject oJo = oJdoc.object();
+	AppController::pAppController()->addConnection(oJo);
+
+	lua_pushboolean(L, true);
+	return 1;
+
+} // addConnection
 
 
 static int disconnectSocket(lua_State *L) {
@@ -179,6 +199,7 @@ static int sendQuit(lua_State *L) {
 
 static const luaL_Reg lib[] = {
 	{ "abort", abortLua },
+	{ "add_connection", addConnection },
 	{ "connection_ids", getConnectionIDs },
 	{ "disconnect", disconnectSocket },
 	{ "exit", exitApp },
