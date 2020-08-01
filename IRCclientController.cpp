@@ -69,6 +69,7 @@ IRCclientController::~IRCclientController() {
 } // dealloc
 
 
+// AppController asks for this
 QString IRCclientController::getConnectionID() {
 
 	return this->oJo.value("sConnectionID").toString();
@@ -132,6 +133,7 @@ void IRCclientController::init() {
 } // init
 
 
+// AppController triggers this
 void IRCclientController::start() {
 
 	if (!this->pClient) this->init();
@@ -141,6 +143,7 @@ void IRCclientController::start() {
 } // start
 
 
+// signal from IRCclient
 void IRCclientController::onAbort(const qint16 &iR) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
@@ -150,12 +153,14 @@ void IRCclientController::onAbort(const qint16 &iR) {
 } // onAbort
 
 
+// signal from IRCclient
 void IRCclientController::onConnected(const QString &sIP) {
 	Q_UNUSED(sIP)
 
 } // onConnected
 
 
+// signal from IRCclient
 void IRCclientController::onChannelMessage(const QString &sChannel,
 										   const QString &sFromNick,
 										   const QString &sMessage) {
@@ -166,6 +171,7 @@ void IRCclientController::onChannelMessage(const QString &sChannel,
 } // onChannelMessage
 
 
+// signal from IRCclient
 void IRCclientController::onDirectMessage(const QString &sFromNick,
 										  const QString &sMessage) {
 	Q_UNUSED(sFromNick)
@@ -174,11 +180,13 @@ void IRCclientController::onDirectMessage(const QString &sFromNick,
 } // onDirectMessage
 
 
+// signal from IRCclient
 void IRCclientController::onDisconnected() {
 
 } // onDisconnected
 
 
+// signal from IRCclient
 void IRCclientController::onJoined(const QString &sNick,
 								   const QString &sChannel) {
 	Q_UNUSED(sNick)
@@ -187,6 +195,7 @@ void IRCclientController::onJoined(const QString &sNick,
 } // onJoined
 
 
+// signal from IRCclient
 void IRCclientController::onLoggedIn(const QString &sNick) {
 	Q_UNUSED(sNick)
 
@@ -209,6 +218,7 @@ void IRCclientController::onLoggedIn(const QString &sNick) {
 } // onLoggedIn
 
 
+// signal from IRCclient
 void IRCclientController::onNicklist(const QString &sChannel,
 									 const QStringList &aNicks) {
 	Q_UNUSED(sChannel)
@@ -217,12 +227,14 @@ void IRCclientController::onNicklist(const QString &sChannel,
 } // onNicklist
 
 
+// signal from IRCclient
 void IRCclientController::onPing(const QString &sMessage) {
 	Q_UNUSED(sMessage)
 
 } // onPing
 
 
+// signal from IRCclient
 void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) {
 	Q_UNUSED(sNick)
 	Q_UNUSED(sMessage)
@@ -230,12 +242,14 @@ void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) 
 } // onQuit
 
 
+// signal from IRCclient
 void IRCclientController::onRawIncomingLine(const QString &sLine) {
 	Q_UNUSED(sLine)
 
 } // onRawIncomingLine
 
 
+// signal from IRCclient
 void IRCclientController::onRawOutgoingLine(const QString &sLine) {
 	Q_UNUSED(sLine)
 
