@@ -2,6 +2,7 @@
 	<qresource prefix="/">
 		<file>lua/core/config.lua</file>
 		<file>lua/core/init.lua</file>
+		<file>lua/core/json.lua</file>
 		<file>lua/core/notifications.lua</file>
 		<file>lua/core/object.lua</file>
 		<file>lua/core/strict.lua</file>
