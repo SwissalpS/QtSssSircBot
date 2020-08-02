@@ -92,8 +92,6 @@ void IRCclient::disconnectSocket() {
 
 	if (0 == this->pSocket) return;
 
-	this->onDebugMessage("disconnect");
-
 	QObject::disconnect(this->pSocket);
 	this->pSocket->disconnect();
 	this->pSocket->deleteLater();
@@ -128,8 +126,6 @@ void IRCclient::handleDirectMessage(IRCServerMessage oSM) {
 
 void IRCclient::handleConnected() {
 
-	//this->onDebugMessage("connected");
-
 	this->bConnected = true;
 
 /* order of connect messages according to RFC2812
@@ -154,8 +150,6 @@ void IRCclient::handleConnected() {
 
 
 void IRCclient::handleDisconnected() {
-
-	this->onDebugMessage("disconnected");
 
 	this->bConnected = false;
 	Q_EMIT this->disconnected();
