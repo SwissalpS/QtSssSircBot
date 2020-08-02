@@ -202,6 +202,7 @@ end -- core.temp_filename
 -- save state if needed using override or notification
 function core.abort(iRes)
   -- cleanup
+  core.oNotificationManager:post('core.abort', iRes)
   delete_temp_files()
   -- signal that we are ready for re-load
   IRC.abort(iRes)
@@ -219,6 +220,7 @@ end -- core.disconnectAll
 function core.quit()
   core.disconnectAll()
   core.abort(0)
+  core.oNotificationManager:post('core.quit', 0)
   IRC.exit(0)
 end -- core.quit
 
