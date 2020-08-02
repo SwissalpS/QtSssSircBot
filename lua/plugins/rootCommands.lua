@@ -43,6 +43,16 @@ local function rootCommands(tP)
   end
 end -- rootCommands
 
+local function rootCommands2(tP)
+  local sPassword, sConnectionID, sMessage = tP.sMatch:match('^(%S*)%s(%S*)%s(.*)$')
+  if sPassword ~= config.RootCommandsPassword then
+    --sendDM(tP.sConnectionID, tP.sNick, 'KO:password missmatch')
+    return
+  end
+  IRC.send_line(sConnectionID, sMessage)
+  sendDM(tP.sConnectionID, tP.sNick, 'OK:sent line')
+end -- rootCommands2
+
 local function init()
   local oTrigger = core.Trigger({
     lTriggerRxs = {
@@ -60,6 +70,20 @@ local function init()
   oTrigger:makeDMonly()
 
   core.oTriggerManager:addTrigger(oTrigger)
+
+  local oTrigger2 = core.Trigger({
+    lTriggerRxs = { '^&s%s(%S*%s%S*%s.*)$' },
+    fCallback = rootCommands2,
+    lConnectionIDrxs = config.RootCommandsConnectionIDrxs,
+    lNickRxs = config.RootCommandsNickRxs,
+    hRateLimit = config.RootCommandsRateLimit,
+    bIncludeInHelp = true,
+    -- TODO: implement privs authentication system so don't need to pass password each time
+    sDescription = '&s <password> <connection-ID> <raw IRC line to send>\n'
+  })
+  oTrigger2:makeDMonly()
+
+  core.oTriggerManager:addTrigger(oTrigger2)
 end -- init
 
 core.oNotificationManager:subscribe('core.init.done', init)
