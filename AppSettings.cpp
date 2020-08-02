@@ -390,13 +390,12 @@ void AppSettings::initOverrides() {
 								 "once logged in.",
 								 "channels");
 	QCommandLineOption oConfig("config",
-							   "Not Yet Implemented! Give path to configuration "
+							   "Give path to configuration "
 							   "JSON-file to use instead of values from "
 							   "settings.ini or command line arguments. This "
 							   "will enable multiple connections and other fun "
 							   "ideas like a list of raw IRC to send for "
-							   "additional authentication and mode changes. "
-							   "Maybe also plugins to load.",
+							   "additional authentication and mode changes.",
 							   "configuration");
 	QCommandLineOption oHost("host", "Remote host to use.", "host");
 	QCommandLineOption oNicks("nicks", "Nicks to use.", "nicks");
