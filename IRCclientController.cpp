@@ -81,7 +81,7 @@ QString IRCclientController::getConnectionID() {
 void IRCclientController::init() {
 
 	QStringList aNicks;
-	QJsonArray oJa = this->oJo.value(AppSettings::sSettingIRCremoteNick).toArray();
+	QJsonArray oJa = this->oJo.value(AppSettings::sSettingIRCremoteNicks).toArray();
 	for (int i = 0; i < oJa.count(); ++i) aNicks << oJa.at(i).toString();
 
 	this->pClient = new IRCclient(
