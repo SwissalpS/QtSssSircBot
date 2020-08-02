@@ -41,7 +41,7 @@ public:
 	static const QString sSettingIRCconfig;
 	static const QString sSettingIRCremoteChannels;
 	static const QString sSettingIRCremoteHost;
-	static const QString sSettingIRCremoteNick;
+	static const QString sSettingIRCremoteNicks;
 	static const QString sSettingIRCremotePassword;
 	static const QString sSettingIRCremotePort;
 	static const QString sSettingIRCremoteRealname;
