@@ -119,17 +119,19 @@ function core.poll_events()
 end -- core.poll_events
 
 
-local function log(icon, icon_color, fmt, ...)
-  local text = string.format(fmt, ...)
+local function log(sIcon, icon_color, sFormat, ...)
 
-  local info = debug.getinfo(2, "Sl")
-  local at = string.format("%s:%d", info.short_src, info.currentline)
-  local item = { text = text, time = os.time(), at = at }
+  local sText = string.format(sFormat, ...)
 
-  -- for now let's just print it, later we can append to log file
-  print(text)
+  local tInfo = debug.getinfo(2, "Sl")
+  local sAt = string.format("%s:%d", tInfo.short_src, tInfo.currentline)
+  local hItem = { sText = sText, iTime = os.time(), sAt = sAt, sIcon = sIcon }
 
-  return item
+  -- allow plugins and user modules to handle logging
+  core.oNotificationManager:post('core.log', hItem)
+
+  return hItem
+
 end -- log
 
 
