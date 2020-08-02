@@ -20,7 +20,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 const QString AppSettings::sSettingIRCconfig = "sIRCconfigPath";
 const QString AppSettings::sSettingIRCremoteChannels = "sIRCremoteChannels";
 const QString AppSettings::sSettingIRCremoteHost = "sIRCremoteHost";
-const QString AppSettings::sSettingIRCremoteNick = "sIRCremoteNicks";
+const QString AppSettings::sSettingIRCremoteNicks = "sIRCremoteNicks";
 const QString AppSettings::sSettingIRCremotePassword = "sIRCremotePassword";
 const QString AppSettings::sSettingIRCremotePort = "uiIRCremotePort";
 const QString AppSettings::sSettingIRCremoteRealname = "sIRCremoteRealname";
@@ -197,7 +197,7 @@ QVariant AppSettings::get(const QString sKey) const {
 
 		return pSettings->value(sKey, sSettingIRCremoteHostDefault);
 
-	} else if (sSettingIRCremoteNick == sKey) {
+	} else if (sSettingIRCremoteNicks == sKey) {
 
 		return pSettings->value(sKey, sSettingIRCremoteNickDefault);
 
@@ -273,11 +273,11 @@ QJsonArray AppSettings::getConfigs() const {
 	oJo.insert("sConnectionID", "unset");
 	oJo.insert(sSettingIRCremoteHost,
 			   this->get(sSettingIRCremoteHost).toString());
-	const QString sNicks = this->get(sSettingIRCremoteNick).toString();
+	const QString sNicks = this->get(sSettingIRCremoteNicks).toString();
 	const QStringList aNicks = sNicks.split(',', QString::SkipEmptyParts, Qt::CaseInsensitive);
 	QJsonArray oJaNicks;
 	for (int i = 0; i < aNicks.count(); ++i) oJaNicks.append(aNicks.at(i));
-	oJo.insert(sSettingIRCremoteNick, oJaNicks);
+	oJo.insert(sSettingIRCremoteNicks, oJaNicks);
 	oJo.insert(sSettingIRCremotePort,
 			   (double)this->get(sSettingIRCremotePort).toUInt());
 	oJo.insert(sSettingIRCremoteRealname,
@@ -365,7 +365,7 @@ void AppSettings::init() {
 	pS->setValue(sSettingIRCconfig, this->get(sSettingIRCconfig));
 	pS->setValue(sSettingIRCremoteChannels, this->get(sSettingIRCremoteChannels));
 	pS->setValue(sSettingIRCremoteHost, this->get(sSettingIRCremoteHost));
-	pS->setValue(sSettingIRCremoteNick, this->get(sSettingIRCremoteNick));
+	pS->setValue(sSettingIRCremoteNicks, this->get(sSettingIRCremoteNicks));
 	pS->setValue(sSettingIRCremotePassword, this->get(sSettingIRCremotePassword));
 	pS->setValue(sSettingIRCremotePort, this->get(sSettingIRCremotePort));
 	pS->setValue(sSettingIRCremoteRealname, this->get(sSettingIRCremoteRealname));
@@ -399,7 +399,7 @@ void AppSettings::initOverrides() {
 							   "Maybe also plugins to load.",
 							   "configuration");
 	QCommandLineOption oHost("host", "Remote host to use.", "host");
-	QCommandLineOption oNick("nick", "Nick to use.", "nick");
+	QCommandLineOption oNicks("nicks", "Nicks to use.", "nicks");
 	QCommandLineOption oPass("pass", "Password to use.", "password");
 	QCommandLineOption oPort("port", "Remote port to use.", "port");
 	QCommandLineOption oRealName("realname", "Realname to use.", "realname");
@@ -416,7 +416,7 @@ void AppSettings::initOverrides() {
 	oCLP.addOption(oChannels);
 	oCLP.addOption(oConfig);
 	oCLP.addOption(oHost);
-	oCLP.addOption(oNick);
+	oCLP.addOption(oNicks);
 	oCLP.addOption(oPass);
 	oCLP.addOption(oPort);
 	oCLP.addOption(oRealName);
@@ -430,7 +430,7 @@ void AppSettings::initOverrides() {
 	const QString sChannels = oCLP.value(oChannels);
 	const QString sConfig = oCLP.value(oConfig);
 	const QString sHost = oCLP.value(oHost);
-	const QString sNick = oCLP.value(oNick); // TODO: limit to 9 chars
+	const QString sNicks = oCLP.value(oNicks); // TODO: limit each to 9 chars
 	const QString sPass = oCLP.value(oPass);
 	const quint16 uiPort = oCLP.value(oPort).toUInt();
 	const QString sRealName = oCLP.value(oRealName); // TODO: limit to x chars
@@ -452,8 +452,8 @@ void AppSettings::initOverrides() {
 		this->oJo.insert(sSettingIRCremoteHost, sHost);
 	}
 
-	if (oCLP.isSet(oNick)) {
-		this->oJo.insert(sSettingIRCremoteNick, sNick);
+	if (oCLP.isSet(oNicks)) {
+		this->oJo.insert(sSettingIRCremoteNicks, sNicks);
 	}
 
 	if (oCLP.isSet(oPass)) {
