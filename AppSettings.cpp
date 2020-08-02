@@ -5,6 +5,9 @@
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QMutex>
 #include <QStandardPaths>
 
@@ -17,7 +20,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 const QString AppSettings::sSettingIRCconfig = "sIRCconfigPath";
 const QString AppSettings::sSettingIRCremoteChannels = "sIRCremoteChannels";
 const QString AppSettings::sSettingIRCremoteHost = "sIRCremoteHost";
-const QString AppSettings::sSettingIRCremoteNick = "sIRCremoteNick";
+const QString AppSettings::sSettingIRCremoteNick = "sIRCremoteNicks";
 const QString AppSettings::sSettingIRCremotePassword = "sIRCremotePassword";
 const QString AppSettings::sSettingIRCremotePort = "uiIRCremotePort";
 const QString AppSettings::sSettingIRCremoteRealname = "sIRCremoteRealname";
@@ -247,23 +250,20 @@ QJsonArray AppSettings::getConfigs() const {
 	const QString sPath = this->get(sSettingIRCconfig).toString();
 	QFile oFile(sPath);
 
-	if (oFile.isReadable()) {
+	if (oFile.open(QIODevice::ReadOnly)) {
 
-		if (oFile.open(QIODevice::ReadOnly)) {
+		const QByteArray aJson = oFile.readAll();
+		oFile.close();
 
-			QByteArray aJson = oFile.readAll();
-			oFile.close();
-			QJsonDocument oJdoc = QJsonDocument::fromJson(aJson);
+		QJsonDocument oJdoc = QJsonDocument::fromJson(aJson);
 
-			if ((!oJdoc.isNull()) && oJdoc.isArray()) {
+		if ((!oJdoc.isNull()) && oJdoc.isArray()) {
 
-				return oJdoc.array();
+			return oJdoc.array();
 
-			}
+		}
 
-		} // if opened
-
-	} // if readable
+	} // if opened
 
 	this->onDebugMessage("Falling back to one default connection.");
 
