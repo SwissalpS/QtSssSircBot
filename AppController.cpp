@@ -85,6 +85,7 @@ AppController *AppController::pAppController() {
 
 void AppController::addConnection(const QJsonObject oConfig) {
 
+	QJsonDocument oJdoc(oConfig);
 	IRCclientController *pController = new IRCclientController(oConfig, this);
 	const QString sID = pController->getConnectionID();
 
