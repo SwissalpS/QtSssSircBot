@@ -156,6 +156,8 @@ void IRCclient::handleConnected() {
 void IRCclient::handleDisconnected() {
 
 	this->onDebugMessage("disconnected");
+
+	this->bConnected = false;
 	Q_EMIT this->disconnected();
 	Q_EMIT this->abort(0);
 
@@ -493,6 +495,8 @@ void IRCclient::sendIRCCommand(const QString &sCommand,
 
 void IRCclient::sendLine(const QString &sLine) {
 
+	if (!this->pSocket) return;
+	if (!this->pSocket->isOpen()) return;
 	if(!this->bConnected) return;
 
 	// RFC2812 2.3 Messages SHALL NOT be longer than 512 including CRLF
