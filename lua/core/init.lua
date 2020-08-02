@@ -9,7 +9,8 @@ local config = require 'core.config'
 -- just in case global has not been set
 local core = {}
 
-local hDelayedCallbacks = {}
+-- keep hash table of { sID = { f = fCallback, m = mData } }
+local hDelayedCallbacks = { c = { f = function() end, m = nil } }
 
 -- maintenance tasks that get done at intervals
 local function repeater(iInterval)
@@ -74,8 +75,8 @@ function core.call_later(iInterval, fCallback, mData)
     core.error('callback must be a function')
     return
   end
-  -- TODO: not sure we need this, maybe simple indexes would do it too
-  local sID = 'c' .. tostring(system.get_rand())
+  -- make sure we use a unique id
+  local sID = 'c'
   while nil ~= hDelayedCallbacks[sID] do
     sID = 'c' .. tostring(system.get_rand())
   end
