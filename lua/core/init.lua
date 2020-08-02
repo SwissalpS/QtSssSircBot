@@ -196,7 +196,7 @@ end -- core.temp_filename
 
 -- called at quit but also when lua env is being re-loaded
 -- assume that connections stay active or are dead already (when exiting app)
--- save state if needed using override
+-- save state if needed using override or notification
 function core.abort(iRes)
   -- cleanup
   delete_temp_files()
@@ -221,19 +221,21 @@ end -- core.quit
 
 
 function core.load_plugins()
-  local no_errors = true
-  local files = system.list_dir(EXEDIR .. "/lua/plugins")
-  if nil == files then return no_errors end
-  for _, filename in ipairs(files) do
-	  local modname = "plugins." .. filename:gsub(".lua$", "")
-	  local ok = core.try(require, modname)
-	  if ok then
-	    core.log_quiet("Loaded plugin %q", modname)
+  local bNoErrors = true
+  local lFiles = system.list_dir(EXEDIR .. '/lua/plugins')
+  if nil == lFiles then return bNoErrors end
+
+  for _, sFilename in ipairs(lFiles) do
+	  local sModname = 'plugins.' .. sFilename:gsub('.lua$', '')
+	  local bOK = core.try(require, sModname)
+	  if bOK then
+	    core.log_quiet('Loaded plugin %q', sModname)
 	  else
-	    no_errors = false
+	    bNoErrors = false
 	  end
   end
-  return no_errors
+
+  return bNoErrors
 end -- core.load_plugins
 
 
@@ -246,7 +248,7 @@ function core.handleEvent(aEvent)
 
   local iEvent = #aEvent
   if 3 > iEvent then
-	  core.log_quiet('invalid event length')
+	  core.error('invalid event length')
   	return
   end
 
@@ -309,9 +311,7 @@ end -- core.handleEvent
 core.events = {}
 
 function core.events.abort(sConnectionID, iCode)
-  -- TODO: not sure we want to quit on this signal
-  -- it is issued mainly by socket errors
-  --core.quit()
+  -- this signal is issued mainly by socket errors
   core.oNotificationManager:post('core.events.abort', {
     sConnectionID = sConnectionID, iCode = iCode
   })
