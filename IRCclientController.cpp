@@ -83,6 +83,7 @@ void IRCclientController::init() {
 	QStringList aNicks;
 	QJsonArray oJa = this->oJo.value(AppSettings::sSettingIRCremoteNick).toArray();
 	for (int i = 0; i < oJa.count(); ++i) aNicks << oJa.at(i).toString();
+
 	this->pClient = new IRCclient(
 						this->oJo.value(AppSettings::sSettingIRCremoteHost).toString(),
 						aNicks,
