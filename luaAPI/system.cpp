@@ -18,6 +18,11 @@
 namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace System {
 
 
+
+// calling mutex is costly, so we hold on to a pointer
+static AppController *pAC = AppController::pAppController();
+
+
 // all the functions starting with 'f_' are taken from github.com/rxi/lite
 // only a few changes were needed to make them compile as Cpp code.
 
@@ -26,7 +31,7 @@ static int delayedCallback(lua_State *L) {
 	QString sID(luaL_checkstring(L, 1));
 	int iDuration = luaL_checkinteger(L, 2);
 
-	AppController::pAppController()->addDelayedCallback(sID, iDuration);
+	pAC->addDelayedCallback(sID, iDuration);
 
 	return 0;
 

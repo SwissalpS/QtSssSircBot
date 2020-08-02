@@ -10,6 +10,9 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace IRC 
 
 
 
+static AppController *pAC = AppController::pAppController();
+
+
 static int abortLua(lua_State *L) {
 	Q_UNUSED(L)
 
@@ -18,7 +21,7 @@ static int abortLua(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Abort))); // 'a'
 	aEvent.append(QString::number(luaL_checknumber(L, 1)));
 
-	SwissalpS::QtSssSircBot::AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -34,8 +37,7 @@ static int addConnection(lua_State *L) {
 		return 2;
 	}
 
-	const QJsonObject oJo = oJdoc.object();
-	AppController::pAppController()->addConnection(oJo);
+	pAC->addConnection(oJdoc.object());
 
 	lua_pushboolean(L, true);
 	return 1;
@@ -50,7 +52,7 @@ static int disconnectSocket(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Disconnected))); // 'd'
 	aEvent.append(QString()); // just to pass initial inspection of argument count
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -64,7 +66,7 @@ static int exitApp(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Exit))); // 'e'
 	aEvent.append(QString::number(luaL_checknumber(L, 1)));
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -73,7 +75,7 @@ static int exitApp(lua_State *L) {
 
 static int getConnectionIDs(lua_State *L) {
 
-	QStringList aList = AppController::pAppController()->getConnectionIDs();
+	QStringList aList = pAC->getConnectionIDs();
 
 	QByteArray ba;
 	const char *pCstring;
@@ -95,7 +97,7 @@ static int getConnectionIDs(lua_State *L) {
 
 static int getEvent(lua_State *L) {
 
-	IRCeventPool *pEP = AppController::pAppController()->getIRCeventPool();
+	IRCeventPool *pEP = pAC->getIRCeventPool();
 
 	QStringList aEvent = pEP->pollEvent();
 	if (aEvent.isEmpty()) {
@@ -128,7 +130,7 @@ static int reconnectSocket(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Connected))); // 'c'
 	aEvent.append(QString()); // just to pass initial inspection of argument count
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -143,7 +145,7 @@ static int sendChannelMessage(lua_State *L) {
 	aEvent.append(QString(luaL_checkstring(L, 2))); // channel
 	aEvent.append(QString(luaL_checkstring(L, 3))); // message
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -158,7 +160,7 @@ static int sendDirectMessage(lua_State *L) {
 	aEvent.append(QString(luaL_checkstring(L, 2))); // toNick
 	aEvent.append(QString(luaL_checkstring(L, 3))); // message
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -174,7 +176,7 @@ static int sendLine(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::RawOut))); // '>'
 	aEvent.append(QString(luaL_checkstring(L, 2))); // raw line
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
@@ -190,7 +192,7 @@ static int sendQuit(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Quit))); // 'Q'
 	aEvent.append(QString(luaL_checkstring(L, 2))); // quit message
 
-	AppController::pAppController()->onLuaEvent(aEvent);
+	pAC->onLuaEvent(aEvent);
 
 	return 0;
 
