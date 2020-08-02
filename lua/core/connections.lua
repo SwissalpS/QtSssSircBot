@@ -33,7 +33,7 @@ function connections.addConnection(tConfig)
     end
   end
 
-  local bOK, mRes = core.try(json.encode(tConfig))
+  local bOK, mRes = core.try(json.encode, tConfig)
   if not bOK then
     core.error('error encoding json: ' .. mRes)
     return nil
