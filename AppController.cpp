@@ -256,6 +256,8 @@ void AppController::run() {
 	// init settings
 	this->initSettings();
 
+	QDir::setCurrent(this->pAS->getPathData());
+
 	this->writePID();
 
 	// init 'error' messaging system to route all through app controller
