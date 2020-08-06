@@ -14,7 +14,8 @@ namespace SwissalpS { namespace QtSssSircBot {
 IRCclientController::IRCclientController(const QJsonObject &oConfig,
 										 QObject *pParent) :
 	QObject(pParent),
-	pClient(nullptr) {
+	pClient(nullptr),
+	iChannelIndex(0) {
 
 	// TODO: make sure all keys are set with some value
 	this->oJo = QJsonObject(oConfig);
@@ -195,17 +196,31 @@ void IRCclientController::onJoined(const QString &sNick,
 } // onJoined
 
 
+// used after logged in (protected slot)
+void IRCclientController::onJoinNextChannel() {
+
+	const QJsonArray aChannels = this->oJo.value(AppSettings::sSettingIRCremoteChannels).toArray();
+
+	int iTotal = aChannels.count();
+	if (this->iChannelIndex >= iTotal) return;
+
+	this->pClient->sendJoin(aChannels.at(this->iChannelIndex).toString());
+
+	this->iChannelIndex++;
+	if (this->iChannelIndex >= iTotal) return;
+
+	// TODO: use a setting for delay
+	QTimer::singleShot(1234, this, SLOT(onJoinNextChannel()));
+
+} // onJoinNextChannel
+
+
 // signal from IRCclient
 void IRCclientController::onLoggedIn(const QString &sNick) {
 	Q_UNUSED(sNick)
 
-	const QJsonArray aChannels = this->oJo.value(AppSettings::sSettingIRCremoteChannels).toArray();
-
-	for (int i = 0; i < aChannels.count(); ++i) {
-
-		this->pClient->sendJoin(aChannels.at(i).toString());
-
-	} // loop
+	this->iChannelIndex = 0;
+	this->onJoinNextChannel();
 
 	const QJsonArray aChannels = this->oJo.value(AppSettings::sSettingIRCremoteChannels).toArray();
 
