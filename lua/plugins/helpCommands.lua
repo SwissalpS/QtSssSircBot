@@ -53,7 +53,7 @@ local function init()
       .. '  lists help texts to commands available to user.\n'
       .. 'with option "all", lists all commands that are visible to help system.'
   })
-  oTrigger:makeCMandDM()
+  oTrigger:makeDMonly()
 
   core.oTriggerManager:addTrigger(oTrigger)
 end -- init
