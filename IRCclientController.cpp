@@ -16,7 +16,8 @@ IRCclientController::IRCclientController(const QJsonObject &oConfig,
 										 QObject *pParent) :
 	QObject(pParent),
 	pClient(nullptr),
-	iChannelIndex(0) {
+	iChannelIndex(0),
+	iLineIndex(0) {
 
 	// TODO: make sure all keys are set with some value
 	this->oJo = QJsonObject(oConfig);
@@ -161,6 +162,9 @@ void IRCclientController::onConnected(const QString &sIP) {
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
 						  << QString(QChar(IRCeventCodes::Connected)) << sIP);
 
+	this->iLineIndex = 0;
+	this->onPreLoginNextLine();
+
 } // onConnected
 
 
@@ -233,8 +237,8 @@ void IRCclientController::onLoggedIn(const QString &sNick) {
 						  << QString(QChar(IRCeventCodes::LoggedIn))
 						  << sNick);
 
-	this->iChannelIndex = 0;
-	this->onJoinNextChannel();
+	this->iLineIndex = 0;
+	this->onPostLoginNextLine();
 
 } // onLoggedIn
 
@@ -331,6 +335,56 @@ void IRCclientController::onPing(const QString &sMessage) {
 						  << sMessage);
 
 } // onPing
+
+
+void IRCclientController::onPostLoginNextLine() {
+
+	const QJsonArray aLines = this->oJo.value("sIRCrawPostLoginLines").toArray();
+
+	int iTotal = aLines.count();
+	if (this->iLineIndex < iTotal) {
+
+		this->pClient->sendLine(aLines.at(this->iLineIndex).toString());
+
+		this->iLineIndex++;
+		if (this->iLineIndex < iTotal) {
+
+			QTimer::singleShot(1234, this, SLOT(onPostLoginNextLine()));
+			return;
+
+		} // if has more lines
+
+	} // if has lines
+
+	// time to start joining channels
+	this->iChannelIndex = 0;
+	this->onJoinNextChannel();
+
+} // onPostLoginNextLine
+
+
+void IRCclientController::onPreLoginNextLine() {
+
+	const QJsonArray aLines = this->oJo.value("sIRCrawPreLoginLines").toArray();
+
+	int iTotal = aLines.count();
+	if (this->iLineIndex < iTotal) {
+
+		this->pClient->sendLine(aLines.at(this->iLineIndex).toString());
+
+		this->iLineIndex++;
+		if (this->iLineIndex < iTotal) {
+
+			QTimer::singleShot(1234, this, SLOT(onPreLoginNextLine()));
+			return;
+
+		} // if has more lines
+
+	} // if has lines
+
+	this->pClient->doLogin();
+
+} // onPreLoginNextLine
 
 
 // signal from IRCclient

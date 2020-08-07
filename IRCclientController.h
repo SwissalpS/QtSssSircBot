@@ -21,6 +21,13 @@ private:
 protected:
 	QJsonObject oJo;
 	IRCclient *pClient;
+	int iChannelIndex; // used to join channels in a paced manner
+	int iLineIndex; // used to do pre and post login lines in a paced manner
+
+protected slots:
+	void onJoinNextChannel();
+	void onPostLoginNextLine();
+	void onPreLoginNextLine();
 
 public:
 	explicit IRCclientController(const QJsonObject &oConfig,
@@ -57,6 +64,9 @@ public slots:
 	void onQuit(const QString &sNick, const QString &sMessage);
 	void onRawIncomingLine(const QString &sLine);
 	void onRawOutgoingLine(const QString &sLine);
+
+	friend class IRCclient;
+
 }; // IRCclientController
 
 
