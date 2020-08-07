@@ -30,8 +30,6 @@ protected:
 	bool bConnected;
 	bool bLoggedIn;
 
-	// send raw IRC formatted line
-	void sendLine(const QString &sLine);
 	void handleChannelMessage(IRCServerMessage oSM);
 	void handleDirectMessage(IRCServerMessage oSM);
 
@@ -54,18 +52,21 @@ public:
 public slots:
 	virtual void connectEncrypted();
 	virtual void disconnectSocket();
+	virtual void doLogin();
 
 	inline void onDebugMessage(const QString &sMessage) const {
 		Q_EMIT this->debugMessage("Ic:" + sMessage); }
 
 	virtual void reconnect();
 
-	void sendIRCCommand(const QString &sCommand,
+	virtual void sendIRCCommand(const QString &sCommand,
 						const QStringList &aArguments);
 	// join a channel, channel names generally begin with #
 	virtual void sendJoin(const QString &sChannel);
-	void sendNicknameChangeRequest(const QString &sNickname);
-	void sendPrivateMessage(const QString &sRecipient,
+	// send raw IRC formatted line
+	void sendLine(const QString &sLine);
+	virtual void sendNicknameChangeRequest(const QString &sNickname);
+	virtual void sendPrivateMessage(const QString &sRecipient,
 							const QString &sMessage);
 
 	virtual void sendQuit(const QString &sMessage = "");
