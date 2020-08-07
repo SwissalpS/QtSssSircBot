@@ -100,6 +100,26 @@ void IRCclient::disconnectSocket() {
 } // disconnect
 
 
+void IRCclient::doLogin() {
+
+	/* order of connect messages according to RFC2812
+	1. Pass message
+	2. Nick message                 2. Service message
+	3. User message
+	*/
+		// 1. PASS <password>
+		this->sendIRCCommand(IRCcommand::Password, QStringList(this->sPassword));
+
+		// 2. NICK <nick>
+		this->sendNicknameChangeRequest(this->sNick);
+
+		// RFC2812 3.1.3
+		// 3. USER <user> <mode> <unused> <realname>
+		this->sendIRCCommand(IRCcommand::User, QStringList() << this->sNick << "0"
+							 << "*" << this->sRealName);
+
+} // doLogin
+
 void IRCclient::handleChannelMessage(IRCServerMessage oSM) {
 
 	const QString sFromNick = oSM.nick();
@@ -127,22 +147,6 @@ void IRCclient::handleDirectMessage(IRCServerMessage oSM) {
 void IRCclient::handleConnected() {
 
 	this->bConnected = true;
-
-/* order of connect messages according to RFC2812
-1. Pass message
-2. Nick message                 2. Service message
-3. User message
-*/
-	// 1. PASS <password>
-	this->sendIRCCommand(IRCcommand::Password, QStringList(this->sPassword));
-
-	// 2. NICK <nick>
-	this->sendNicknameChangeRequest(this->sNick);
-
-	// RFC2812 3.1.3
-	// 3. USER <user> <mode> <unused> <realname>
-	this->sendIRCCommand(IRCcommand::User, QStringList() << this->sNick << "0"
-						 << "*" << this->sRealName);
 
 	Q_EMIT this->connected(this->oHost.toString());
 
