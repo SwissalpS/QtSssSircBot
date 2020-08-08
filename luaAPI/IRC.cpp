@@ -253,7 +253,7 @@ static int sendQuit(lua_State *L) {
 	QStringList aEvent;
 	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
 	aEvent.append(QString(QChar(IRCeventCodes::Quit))); // 'Q'
-	aEvent.append(QString(luaL_checkstring(L, 2))); // quit message
+	aEvent.append(QString(luaL_optstring(L, 2, ""))); // optional quit message
 
 	pAC->onLuaEvent(aEvent);
 
