@@ -66,6 +66,7 @@ public slots:
 	virtual void debugMessage(const QString &sMessage);
 	virtual void onLuaEvent(const QStringList &aEvent);
 	virtual void quit();
+	virtual void reloadConnections();
 	virtual void run();
 
 signals:

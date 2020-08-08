@@ -27,6 +27,7 @@ const quint8 Connected = 'c';     // socket-message
 const quint8 Disconnected = 'd';  // socket-message
 const quint8 RawIn = '<';         // "socket-message"
 const quint8 RawOut = '>';        // "socket-message"
+const quint8 ReloadConnections = 'r'; // lua-interface-message
 
 
 

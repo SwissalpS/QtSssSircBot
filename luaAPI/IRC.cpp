@@ -137,6 +137,20 @@ static int reconnectSocket(lua_State *L) {
 } // reconnectSocket
 
 
+static int reloadConnections(lua_State *L) {
+	Q_UNUSED(L)
+
+	QStringList aEvent;
+	aEvent.append("-"); // connection ID not relevant here
+	aEvent.append(QString(QChar(IRCeventCodes::ReloadConnections))); // 'r'
+
+	pAC->onLuaEvent(aEvent);
+
+	return 0;
+
+} // reloadConnections
+
+
 static int sendChannelMessage(lua_State *L) {
 
 	QStringList aEvent;
@@ -207,6 +221,7 @@ static const luaL_Reg lib[] = {
 	{ "exit", exitApp },
 	{ "poll_event", getEvent },
 	{ "reconnect", reconnectSocket },
+	{ "reload_connections", reloadConnections },
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
 	{ "send_line", sendLine },

@@ -210,6 +210,10 @@ void AppController::onLuaEvent(const QStringList &aEvent) {
 
 		QTimer::singleShot(1000, this, SLOT(quit()));
 
+	} else if (IRCeventCodes::ReloadConnections == ubEvent) {
+
+		QTimer::singleShot(0, this, SLOT(reloadConnections()));
+
 	} else Q_EMIT this->luaEvent(aEvent);
 
 } // onLuaEvent
@@ -225,6 +229,7 @@ void AppController::quit() {
 
 		pCC = this->hConnections.value(aKeys.at(i));
 		this->disconnect(pCC);
+		pCC->disconnect();
 		pCC->deleteLater();
 
 	} // loop
@@ -247,6 +252,27 @@ void AppController::quit() {
 	qApp->quit();
 
 } // quit
+
+
+void SwissalpS::QtSssSircBot::AppController::reloadConnections() {
+
+	// first disconnect all existing connections
+	QStringList aKeys = this->hConnections.keys();
+	IRCclientController *pCC;
+	for (int i = 0; i < aKeys.count(); ++i) {
+
+		pCC = this->hConnections.value(aKeys.at(i));
+		this->disconnect(pCC);
+		pCC->disconnect();
+		pCC->deleteLater();
+
+	} // loop
+
+	this->hConnections.clear();
+
+	this->initConnections();
+
+} // reloadConnections
 
 
 void AppController::run() {
