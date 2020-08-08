@@ -130,6 +130,8 @@ local function log(sIcon, icon_color, sFormat, ...)
   -- allow plugins and user modules to handle logging
   core.oNotificationManager:post('core.log', hItem)
 
+  print(sText)
+
   return hItem
 
 end -- log
