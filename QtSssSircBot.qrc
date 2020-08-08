@@ -23,6 +23,8 @@
 		<file>lua/plugins/debugRawIn.lua</file>
 		<file>lua/plugins/debugRawOut.lua</file>
 		<file>lua/plugins/helpCommands.lua</file>
+		<file>lua/plugins/logDebug.lua</file>
+		<file>lua/plugins/logRawIRC.lua</file>
 		<file>lua/plugins/rootCommands.lua</file>
 		<file>lua/user/init.lua</file>
 	</qresource>
