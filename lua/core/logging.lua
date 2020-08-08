@@ -6,9 +6,9 @@ local Object = require 'core.object'
 local config = require 'core.config'
 
 config.LoggerDefaultMaxArchives = 7
-config.LoggerDefaultMaxFileSize = 3072
 config.LoggerTimeStampFormat = '%Y%m%d_%H%M%S'
 config.LoggerLineFormat = '%timeStamp %level %message\n'
+config.LoggerDefaultMaxFileSize = 3145728
 
 local Logger = Object:extend()
 
