@@ -3,7 +3,6 @@
   infrastructure to manage very simple notifications
 --]]
 local Object = require 'core.object'
-local core = require 'core'
 
 local Manager = Object:extend()
 

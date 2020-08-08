@@ -11,7 +11,6 @@
 --]]
 local Object = require 'core.object'
 local config = require 'core.config'
-local core = require 'core'
 
 -- n requests within x seconds
 config.TriggerDefaultRequestRateLimit = { iRequests = 180, iDuring = 3600 }
