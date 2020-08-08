@@ -6,9 +6,9 @@ local Object = require 'core.object'
 local config = require 'core.config'
 
 config.LoggerDefaultMaxArchives = 7
-config.LoggerTimeStampFormat = '%Y%m%d_%H%M%S'
-config.LoggerLineFormat = '%timeStamp %level %message\n'
 config.LoggerDefaultMaxFileSize = 3145728
+config.LoggerFormatTimeStamp = '%Y%m%d_%H%M%S'
+config.LoggerFormatLine = '%timeStamp %level %message\n'
 
 local Logger = Object:extend()
 
@@ -25,6 +25,12 @@ function Logger:new(tParams)
 	if ('number' == type(tParams.iMaxBytes)) and (0 < tParams.iMaxBytes) then
 		self.iMaxBytes = tParams.iMaxBytes
 	end
+	if 'string' == type(tParams.sFormatLine) then
+		self.sFormatLine = tParams.sFormatLine
+	end
+	if 'string' == type(tParams.sFormatTimeStamp) then
+		self.sFormatTimeStamp = tParams.sFormatTimeStamp
+	end
 	if 'string' == type(tParams.sPathFile) then
 		self.sPathFile = tParams.sPathFile
 	end
@@ -36,12 +42,14 @@ function Logger:reset()
 	self.iMaxArchives = config.LoggerDefaultMaxArchives
 	self.iMaxBytes = config.LoggerDefaultMaxFileSize
 	self.rFileHandle = nil
+	self.sFormatLine = config.LoggerFormatLine
+	self.sFormatTimeStamp = config.LoggerFormatTimeStamp
 	self.sPathFile = core.temp_filename('.log')
 end -- Logger:reset
 
 
 function Logger:currentTimeStamp(iTime)
-	return os.date(config.LoggerTimeStampFormat, iTime)
+	return os.date(self.sFormatTimeStamp, iTime)
 end -- Logger:currentTimeStamp
 
 
@@ -100,8 +108,8 @@ end -- Logger:openRollover
 
 
 function Logger:prepareLine(sPattern, sTimeStamp, sLevel, sMessage)
-	local sOut = sPattern or config.LoggerLineFormat
 	sLevel = sLevel or ''
+	local sOut = sPattern or self.sFormatLine
 	sMessage = sMessage:gsub('%%', '%%%%')
 	sOut = sOut:gsub('%%timeStamp', sTimeStamp)
 	sOut = sOut:gsub('%%level', sLevel)
