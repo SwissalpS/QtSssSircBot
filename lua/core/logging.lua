@@ -75,14 +75,14 @@ function Logger:openRollover()
 	end -- if not yet open
 
 	local iSize = self.rFileHandle:seek('end', 0)
-	if (self.iSize < self.iMaxBytes) then
+	if (iSize < self.iMaxBytes) then
 		return self.rFileHandle
 	end
 
 	-- rollover
 	for i = self.iMaxArchives - 1, 1, -1 do
 		os.rename(self.sPathFile .. '.' .. tostring(i),
-				  self.sPathFile .. '.' .. tostring(i + 1)
+				  self.sPathFile .. '.' .. tostring(i + 1))
 	end
 
 	self.rFileHandle:close()
@@ -101,6 +101,7 @@ end -- Logger:openRollover
 
 function Logger:prepareLine(sPattern, sTimeStamp, sLevel, sMessage)
 	local sOut = sPattern or config.LoggerLineFormat
+	sLevel = sLevel or ''
 	sMessage = sMessage:gsub('%%', '%%%%')
 	sOut = sOut:gsub('%%timeStamp', sTimeStamp)
 	sOut = sOut:gsub('%%level', sLevel)
@@ -110,7 +111,7 @@ end -- Logger:prepareLine
 
 
 function Logger:write(sLine)
-	local rH = self.openRollover()
+	local rH = self:openRollover()
 	if nil == rH then return nil end
 	rH:write(sLine)
 	return true
