@@ -37,6 +37,9 @@ local function rootCommands(tP)
   elseif 'a' == sSubCommand then
     sendDM(tP.sConnectionID, tP.sNick, 'OK:re-loading lua')
     core.abort(1)
+  elseif 'r' == sSubCommand then
+    sendDM(tP.sConnectionID, tP.sNick, 'OK:re-loading connections')
+    IRC.reload_connections()
   else -- 'x'
     sendDM(tP.sConnectionID, tP.sNick, 'OK:terminating ' .. EXEFILE)
     core.quit()
@@ -56,7 +59,7 @@ end -- rootCommands2
 local function init()
   local oTrigger = core.Trigger({
     lTriggerRxs = {
-      '^&([cd])%s(%S*)%s(%S*)', '^&([ax])%s(%S*)' },
+      '^&([cd])%s(%S*)%s(%S*)', '^&([arx])%s(%S*)' },
     fCallback = rootCommands,
     lConnectionIDrxs = config.RootCommandsConnectionIDrxs,
     lNickRxs = config.RootCommandsNickRxs,
@@ -64,8 +67,8 @@ local function init()
     bIncludeInHelp = true,
     sDescription = '&(c|d) <password> <connection-ID>\n'
       .. '  c: (re)connect or d: disconnect the connection with ID.\n'
-      .. '&(x|a) <password>\n'
-      .. '  exit application or restart lua portion.'
+      .. '&(x|a|r) <password>\n'
+      .. '  e(x)it application, rest(a)rt lu(a) portion or (r)eload connections.'
   })
   oTrigger:makeDMonly()
 
