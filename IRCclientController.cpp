@@ -302,6 +302,13 @@ void IRCclientController::onLuaEvent(const QStringList &aEvent) {
 		case IRCeventCodes::Joined:
 			this->pClient->sendJoin(aEvent.at(2));
 		break;
+		case IRCeventCodes::Part:
+			if (4 <= iEvent) {
+				this->pClient->sendPart(aEvent.at(2), aEvent.at(3));
+			} else {
+				this->pClient->sendPart(aEvent.at(2));
+			}
+		break;
 
 		default:
 			this->onDebugMessage("unknown interface-command-code given: "

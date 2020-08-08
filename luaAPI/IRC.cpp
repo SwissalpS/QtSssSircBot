@@ -197,6 +197,23 @@ static int sendLine(lua_State *L) {
 } // sendLine
 
 
+static int sendPart(lua_State *L) {
+
+	// fetch connection-id-string and channels as comma separated list
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::Part))); // '-'
+	aEvent.append(QString(luaL_checkstring(L, 2))); // channels
+	aEvent.append(QString(luaL_optstring(L, 3, ""))); // optional message
+
+	pAC->onLuaEvent(aEvent);
+
+	return 0;
+
+} // sendPart
+
+
 static int sendQuit(lua_State *L) {
 
 	// fetch connection-id-string and message
@@ -225,6 +242,7 @@ static const luaL_Reg lib[] = {
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
 	{ "send_line", sendLine },
+	{ "send_part", sendPart },
 	{ "send_quit", sendQuit },
 	{ NULL, NULL }
 };

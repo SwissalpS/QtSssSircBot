@@ -21,6 +21,7 @@ const quint8 IRCcommand = 'I';
 const quint8 Joined = 'J';
 const quint8 LoggedIn = 'L';
 const quint8 NickList = 'N';
+const quint8 Part = '-';          // "lua-interface-message"
 const quint8 Ping = 'P';
 const quint8 Quit = 'Q';
 const quint8 Connected = 'c';     // socket-message
