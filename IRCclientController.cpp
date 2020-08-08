@@ -302,6 +302,9 @@ void IRCclientController::onLuaEvent(const QStringList &aEvent) {
 		case IRCeventCodes::Joined:
 			this->pClient->sendJoin(aEvent.at(2));
 		break;
+		case IRCeventCodes::NickList:
+			this->pClient->sendNicknameChangeRequest(aEvent.at(2));
+		break;
 		case IRCeventCodes::Part:
 			if (4 <= iEvent) {
 				this->pClient->sendPart(aEvent.at(2), aEvent.at(3));

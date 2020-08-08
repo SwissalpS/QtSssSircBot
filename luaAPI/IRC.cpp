@@ -197,6 +197,22 @@ static int sendLine(lua_State *L) {
 } // sendLine
 
 
+static int sendNickChangeRequest(lua_State *L) {
+
+	// fetch connection-id-string and nick
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::NickList))); // 'N'
+	aEvent.append(QString(luaL_checkstring(L, 2))); // new nick
+
+	pAC->onLuaEvent(aEvent);
+
+	return 0;
+
+} // sendNickChangeRequest
+
+
 static int sendPart(lua_State *L) {
 
 	// fetch connection-id-string and channels as comma separated list
@@ -242,6 +258,7 @@ static const luaL_Reg lib[] = {
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
 	{ "send_line", sendLine },
+	{ "send_nick_change_request", sendNickChangeRequest },
 	{ "send_part", sendPart },
 	{ "send_quit", sendQuit },
 	{ NULL, NULL }
