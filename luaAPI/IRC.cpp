@@ -181,6 +181,22 @@ static int sendDirectMessage(lua_State *L) {
 } // sendDirectMessage
 
 
+static int sendJoin(lua_State *L) {
+
+	// fetch connection-id-string and channel
+
+	QStringList aEvent;
+	aEvent.append(QString(luaL_checkstring(L, 1))); // connection ID
+	aEvent.append(QString(QChar(IRCeventCodes::Joined))); // 'J'
+	aEvent.append(QString(luaL_checkstring(L, 2))); // channel
+
+	pAC->onLuaEvent(aEvent);
+
+	return 0;
+
+} // sendJoin
+
+
 static int sendLine(lua_State *L) {
 
 	// fetch connection-id-string and message
@@ -257,6 +273,7 @@ static const luaL_Reg lib[] = {
 	{ "reload_connections", reloadConnections },
 	{ "send_channel_message", sendChannelMessage },
 	{ "send_direct_message", sendDirectMessage },
+	{ "send_join", sendJoin },
 	{ "send_line", sendLine },
 	{ "send_nick_change_request", sendNickChangeRequest },
 	{ "send_part", sendPart },
