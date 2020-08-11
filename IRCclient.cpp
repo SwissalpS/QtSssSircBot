@@ -555,7 +555,9 @@ void IRCclient::sendPrivateMessage(const QString &sRecipient,
 
 void IRCclient::sendQuit(const QString &sMessage) {
 
-	this->sendIRCCommand(IRCcommand::Quit, QStringList() << sMessage);
+	QStringList aArguments;
+	if (!sMessage.isEmpty()) aArguments << sMessage;
+	this->sendIRCCommand(IRCcommand::Quit, aArguments);
 
 } // sendQuit
 
