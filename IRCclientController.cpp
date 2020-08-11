@@ -3,6 +3,7 @@
 #include "AppSettings.h"
 
 #include <QJsonArray>
+#include <QTimer>
 
 
 
@@ -59,7 +60,7 @@ IRCclientController::~IRCclientController() {
 	if (this->pClient) {
 		this->disconnect(this->pClient);
 		this->pClient->sendQuit();
-		this->pClient->disconnect();
+		this->pClient->disconnectSocket();
 		this->pClient->deleteLater();
 	}
 

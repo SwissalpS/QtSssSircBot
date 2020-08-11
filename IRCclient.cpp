@@ -33,7 +33,7 @@ IRCclient::IRCclient(const QString &domainOrIP, const QString &initialNick,
 
 IRCclient::~IRCclient() {
 
-	this->disconnect();
+	this->disconnectSocket();
 
 } // destruct
 
@@ -41,7 +41,7 @@ IRCclient::~IRCclient() {
 void IRCclient::connectEncrypted() {
 
 	// if already got a socket, destroy it
-	this->disconnect();
+	this->disconnectSocket();
 
 	QHostInfo::lookupHost(this->sHost, this, SLOT(onConnectEncrypted(QHostInfo)));
 
@@ -86,7 +86,7 @@ void IRCclient::onConnectEncrypted(const QHostInfo &oHI) {
 } // onConnectEncrypted
 
 
-void IRCclient::disconnect() {
+void IRCclient::disconnectSocket() {
 
 	if (0 == this->pSocket) return;
 
@@ -95,7 +95,7 @@ void IRCclient::disconnect() {
 	QObject::disconnect(this->pSocket);
 	this->pSocket->disconnect();
 	this->pSocket->deleteLater();
-	this->pSocket = 0;
+	this->pSocket = nullptr;
 
 } // disconnect
 
@@ -430,7 +430,7 @@ void IRCclient::handleReadyRead() {
 
 void IRCclient::reconnect() {
 
-	this->disconnect();
+	this->disconnectSocket();
 
 	if (!this->uiPort) return;
 
@@ -529,9 +529,9 @@ void IRCclient::sendPrivateMessage(const QString &sRecipient,
 } // sendPrivateMessage
 
 
-void IRCclient::sendQuit() {
+void IRCclient::sendQuit(const QString &sMessage) {
 
-	this->sendIRCCommand(IRCcommand::Quit, QStringList());
+	this->sendIRCCommand(IRCcommand::Quit, QStringList() << sMessage);
 
 } // sendQuit
 

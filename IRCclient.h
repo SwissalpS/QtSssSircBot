@@ -51,7 +51,7 @@ public:
 
 public slots:
 	virtual void connectEncrypted();
-	virtual void disconnect();
+	virtual void disconnectSocket();
 
 	inline void onDebugMessage(const QString &sMessage) const {
 		Q_EMIT this->debugMessage("Ic:" + sMessage); }
@@ -66,7 +66,7 @@ public slots:
 	void sendPrivateMessage(const QString &sRecipient,
 							const QString &sMessage);
 
-	virtual void sendQuit();
+	virtual void sendQuit(const QString &sMessage = "");
 
 signals:
 	// emited when needs to abort: TODO: define return value - = don't restart + = restart in x seconds ?
