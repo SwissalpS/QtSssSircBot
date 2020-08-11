@@ -1,5 +1,7 @@
 <RCC>
 	<qresource prefix="/">
+		<file>lua/core/API_IRC.lua</file>
+		<file>lua/core/API_system.lua</file>
 		<file>lua/core/config.lua</file>
 		<file>lua/core/connections.lua</file>
 		<file>lua/core/init.lua</file>
