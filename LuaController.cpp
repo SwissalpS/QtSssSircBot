@@ -72,8 +72,7 @@ int LuaController::callLuaWrapped(const QString sCall) {
 
 void LuaController::init(QStringList aArgs) {
 
-	int iCountArgs = aArgs.count();
-	assert(2 <= iCountArgs);
+	// need at least 2 args!
 
 	this->aCLIargs.clear();
 	this->aCLIargs.append(aArgs);
@@ -88,7 +87,7 @@ void LuaController::initLua() {
 	if (this->pL) return;
 
 	int iCountArgs = this->aCLIargs.count();
-	assert(2 <= iCountArgs);
+//	assert(2 <= iCountArgs);
 
 	// init lua state
 	this->pL = luaL_newstate();
