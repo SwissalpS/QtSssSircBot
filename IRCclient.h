@@ -66,6 +66,7 @@ public slots:
 	// send raw IRC formatted line
 	void sendLine(const QString &sLine);
 	virtual void sendNicknameChangeRequest(const QString &sNickname);
+	virtual void sendPart(const QString &sChannels, const QString &sMessage = "");
 	virtual void sendPrivateMessage(const QString &sRecipient,
 							const QString &sMessage);
 

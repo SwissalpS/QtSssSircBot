@@ -518,6 +518,17 @@ void IRCclient::sendNicknameChangeRequest(const QString &sNickname) {
 } // sendNicknameChangeRequest
 
 
+void IRCclient::sendPart(const QString &sChannels, const QString &sMessage) {
+
+	QStringList aArguments;
+	aArguments << sChannels;
+	if (!sMessage.isEmpty()) aArguments << sMessage;
+
+	this->sendIRCCommand(IRCcommand::Part, aArguments);
+
+} // sendPart
+
+
 void IRCclient::sendPrivateMessage(const QString &sRecipient,
 								   const QString &sMessage) {
 
