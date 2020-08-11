@@ -139,47 +139,9 @@ void LuaController::initLua() {
 			"  core.init()\n"
 //			"  core.run()\n"
 				);
-	/*
-	sBootstrap = "xpcall(function()\n"
-				 "  print(ARGS[1])\n"
-				 "  error('ouchi')\n"
-				 "end, function(err)\n"
-				 "  print('???? ' .. err)\n"
-				 "end)";
-	*/
 
 	int iRes = this->callLua(sBootstrap);
 	this->onDebugMessage("lua init: " + QString::number(iRes));
-
-	return;
-
-	iRes = this->callLuaWrapped("IRC.send_channel_message('haha', '#SwissalpS', 'I got it')");
-
-	iRes = this->callLuaWrapped("core.events.channelMessage('hh', '#SwissalpS', 'feut', 'I got it')");
-
-
-	iRes = this->callLuaWrapped("print(system.get_rand()) print(system.get_rand() % 0xffffffff) local b, rOe = core.try(print, 'ii(haeu)') print(b, rOe)");
-
-	iRes = this->callLuaWrapped("local t = system.split_string('hae, eth, ehut,oeu,ou,eu,,,3,eu0',',')\n"
-								"print(#t)\n"
-								"for _, s in ipairs(t) do\n"
-								"  print(s)\n"
-								"end\n"
-								"print(EXEDIR, system.absolute_path('../'))\n"
-								"t = system.list_dir(EXEDIR..'lua/core')\n"
-								"print(#t)\n"
-								"for _, s in ipairs(t) do\n"
-								"  print(s)\n"
-								"end\n"
-								"t = system.get_file_info(EXEDIR..'lua/core/init.lua')\n"
-								"print(#t)\n"
-								"for k, s in pairs(t) do\n"
-								"  print(k, s)\n"
-								"end\n"
-								);
-
-	iRes = this->callLua("print(type(core.events))");
-	iRes = this->callLua("print(#core.events)");
 
 } // initLua
 
