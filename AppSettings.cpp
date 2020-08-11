@@ -273,8 +273,11 @@ QJsonArray AppSettings::getConfigs() const {
 	oJo.insert("sConnectionID", "unset");
 	oJo.insert(sSettingIRCremoteHost,
 			   this->get(sSettingIRCremoteHost).toString());
-	oJo.insert(sSettingIRCremoteNick,
-			   this->get(sSettingIRCremoteNick).toString());
+	const QString sNicks = this->get(sSettingIRCremoteNick).toString();
+	const QStringList aNicks = sNicks.split(',', QString::SkipEmptyParts, Qt::CaseInsensitive);
+	QJsonArray oJaNicks;
+	for (int i = 0; i < aNicks.count(); ++i) oJaNicks.append(aNicks.at(i));
+	oJo.insert(sSettingIRCremoteNick, oJaNicks);
 	oJo.insert(sSettingIRCremotePort,
 			   (double)this->get(sSettingIRCremotePort).toUInt());
 	oJo.insert(sSettingIRCremoteRealname,

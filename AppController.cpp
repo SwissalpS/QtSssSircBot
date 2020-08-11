@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QHostInfo>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QMutex>
 #include <QProcess>
 #include <QStandardPaths>
@@ -82,6 +83,39 @@ AppController *AppController::pAppController() {
 } // singelton access
 
 
+void AppController::addConnection(const QJsonObject oConfig) {
+
+	IRCclientController *pController = new IRCclientController(oConfig, this);
+	const QString sID = pController->getConnectionID();
+
+	if (this->hConnections.contains(sID)) {
+
+		this->debugMessage("AC:OO:Duplicate connection ID: <" + sID +
+							 "> found. Skipping. Make sure all your "
+							 "connections have unique identifiers.");
+
+		pController->deleteLater();
+
+	} else {
+
+		this->hConnections.insert(sID, pController);
+
+		connect(pController, SIGNAL(debugMessage(QString)),
+				this, SLOT(debugMessage(QString)));
+
+//			connect(pController, SIGNAL(abort(qint16)),
+//					this, SLOT(onAbort(qint16)));
+
+		connect(pController, SIGNAL(newEvent(QStringList)),
+				this->pEP, SLOT(onEvent(QStringList)));
+
+		pController->start();
+
+	} // if valid connection-ID or not
+
+} // addConnection
+
+
 void AppController::connectErrorMessages() {
 
 	//AppSettings *pAS = AppSettings::pAppSettings();
@@ -138,6 +172,23 @@ void AppController::debugMessage(const QString &sMessage) {
 	Q_EMIT debugMessageReceived(sMessage);
 
 } // debugMessage
+
+
+void AppController::initConnections() {
+
+	const QJsonArray oConfigs = this->pAS->getConfigs();
+
+	QJsonObject oConfig;
+
+	for (int i = 0; i < oConfigs.count(); ++i) {
+
+		oConfig = oConfigs.at(i).toObject();
+
+		this->addConnection(oConfig);
+
+	} // loop all connections
+
+} // initConnections
 
 
 void AppController::initSettings() {
@@ -214,4 +265,3 @@ void AppController::writePID() {
 
 
 }	} // namespace SwissalpS::QtSssSircBot
-

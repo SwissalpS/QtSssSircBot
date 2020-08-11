@@ -50,6 +50,7 @@ public:
 	static AppController *pAppController();
 
 public slots:
+	virtual void addConnection(const QJsonObject oConfig);
 	virtual void debugMessage(const QString &sMessage);
 	virtual void quit();
 	virtual void run();

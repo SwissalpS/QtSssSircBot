@@ -14,7 +14,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 
 
 
-IRCclient::IRCclient(const QString &domainOrIP, const QString &initialNick,
+IRCclient::IRCclient(const QString &domainOrIP, const QStringList &aNicks,
 					 quint16 port, const QString &realName,
 					 const QString &password, QObject *pParent) :
 	QObject(pParent),
@@ -22,7 +22,9 @@ IRCclient::IRCclient(const QString &domainOrIP, const QString &initialNick,
 	oHost(QHostAddress()),
 	uiPort(port),
 	sHost(domainOrIP),
-	sNick(initialNick),
+	sNick(aNicks.first()),
+	aNicks(aNicks),
+	iNick(0),
 	sPassword(password),
 	sRealName(realName),
 	bConnected(false),
@@ -283,7 +285,16 @@ void IRCclient::handleIncomingLine(const QString &sLine) {
 				// Change the nick so that we can at least log in.
 				else {
 
-					this->sNick += "_";
+					this->iNick++;
+
+					if (this->iNick == this->aNicks.count()) {
+						this->sNick = this->aNicks.first() + "_";
+					} else if (this->iNick > this->aNicks.count()) {
+						this->sNick += "_";
+					} else {
+						this->sNick = this->aNicks.at(this->iNick);
+					}
+
 					this->sendNicknameChangeRequest(this->sNick);
 
 				} // if already logged in or not

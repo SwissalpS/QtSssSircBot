@@ -23,6 +23,8 @@ protected:
 	quint16 uiPort;
 	QString sHost;
 	QString sNick;
+	QStringList aNicks;
+	int iNick;
 	QString sPassword;
 	QString sRealName;
 	bool bConnected;
@@ -42,7 +44,7 @@ protected slots:
 	virtual void onConnectEncrypted(const QHostInfo &oHI);
 
 public:
-	explicit IRCclient(const QString &domainOrIP, const QString &initialNick,
+	explicit IRCclient(const QString &domainOrIP, const QStringList &aNicks,
 					   quint16 port = 6697u, const QString &realName = "",
 					   const QString &password = "", QObject *pParent = 0);
 	virtual ~IRCclient();
