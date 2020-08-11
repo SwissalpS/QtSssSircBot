@@ -1,5 +1,4 @@
 #include "AppController.h"
-#include "AppSettings.h"
 
 #include <QCoreApplication>
 #include <QDir>
