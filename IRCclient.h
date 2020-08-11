@@ -64,7 +64,7 @@ public slots:
 	// join a channel, channel names generally begin with #
 	virtual void sendJoin(const QString &sChannel);
 	// send raw IRC formatted line
-	void sendLine(const QString &sLine);
+	virtual void sendLine(const QString &sLine);
 	virtual void sendNicknameChangeRequest(const QString &sNickname);
 	virtual void sendPart(const QString &sChannels, const QString &sMessage = "");
 	virtual void sendPrivateMessage(const QString &sRecipient,
