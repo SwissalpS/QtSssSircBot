@@ -11,23 +11,24 @@
 		<file>lua/core/object.lua</file>
 		<file>lua/core/strict.lua</file>
 		<file>lua/core/triggers.lua</file>
-		<file>lua/plugins/countdown.lua</file>
-		<file>lua/plugins/debugChannelMessage.lua</file>
-		<file>lua/plugins/debugConnected.lua</file>
-		<file>lua/plugins/debugDirectMessage.lua</file>
-		<file>lua/plugins/debugDisonnected.lua</file>
-		<file>lua/plugins/debugIRCcommand.lua</file>
-		<file>lua/plugins/debugJoined.lua</file>
-		<file>lua/plugins/debugLoggedIn.lua</file>
-		<file>lua/plugins/debugNickList.lua</file>
-		<file>lua/plugins/debugPing.lua</file>
-		<file>lua/plugins/debugQuit.lua</file>
-		<file>lua/plugins/debugRawIn.lua</file>
-		<file>lua/plugins/debugRawOut.lua</file>
-		<file>lua/plugins/helpCommands.lua</file>
-		<file>lua/plugins/logDebug.lua</file>
-		<file>lua/plugins/logRawIRC.lua</file>
-		<file>lua/plugins/rootCommands.lua</file>
+		<file>lua/plugins/INFO.txt</file>
+		<file>lua/plugins_available/countdown.lua</file>
+		<file>lua/plugins_available/debugChannelMessage.lua</file>
+		<file>lua/plugins_available/debugConnected.lua</file>
+		<file>lua/plugins_available/debugDirectMessage.lua</file>
+		<file>lua/plugins_available/debugDisonnected.lua</file>
+		<file>lua/plugins_available/debugIRCcommand.lua</file>
+		<file>lua/plugins_available/debugJoined.lua</file>
+		<file>lua/plugins_available/debugLoggedIn.lua</file>
+		<file>lua/plugins_available/debugNickList.lua</file>
+		<file>lua/plugins_available/debugPing.lua</file>
+		<file>lua/plugins_available/debugQuit.lua</file>
+		<file>lua/plugins_available/debugRawIn.lua</file>
+		<file>lua/plugins_available/debugRawOut.lua</file>
+		<file>lua/plugins_available/helpCommands.lua</file>
+		<file>lua/plugins_available/logDebug.lua</file>
+		<file>lua/plugins_available/logRawIRC.lua</file>
+		<file>lua/plugins_available/rootCommands.lua</file>
 		<file>lua/user/init.lua</file>
 		<file>lua/user/switchNick.lua</file>
 	</qresource>
