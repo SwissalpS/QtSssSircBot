@@ -53,6 +53,7 @@ public slots:
 	virtual void addConnection(const QJsonObject oConfig);
 	virtual void debugMessage(const QString &sMessage);
 	virtual void quit();
+	virtual void reloadConnections();
 	virtual void run();
 
 signals:

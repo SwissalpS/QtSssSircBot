@@ -123,47 +123,6 @@ void AppController::connectErrorMessages() {
 } // connectErrorMessages
 
 
-void AppController::initConnections() {
-
-	const QJsonArray oConfigs = this->pAS->getConfigs();
-
-	QString sID;
-	QJsonObject oConfig;
-	IRCclientController *pController;
-
-	for (int i = 0; i < oConfigs.count(); ++i) {
-
-		oConfig = oConfigs.at(i).toObject();
-		pController = new IRCclientController(oConfig, this);
-		sID = pController->getConnectionID();
-
-		if (this->hConnections.contains(sID)) {
-
-			this->debugMessage("AC:OO:Duplicate connection ID: <" + sID +
-								 "> found. Skipping. Make sure all your "
-								 "connections have unique identifiers.");
-
-			pController->deleteLater();
-
-		} else {
-
-			this->hConnections.insert(sID, pController);
-
-			connect(pController, SIGNAL(debugMessage(QString)),
-					this, SLOT(debugMessage(QString)));
-
-//			connect(pController, SIGNAL(abort(qint16)),
-//					this, SLOT(onAbort(qint16)));
-
-			pController->start();
-
-		}
-
-	} // loop all connections
-
-} // initConnections
-
-
 void AppController::debugMessage(const QString &sMessage) {
 
 	std::cout << sMessage.toStdString();
@@ -213,6 +172,7 @@ void AppController::quit() {
 
 		pCC = this->hConnections.value(aKeys.at(i));
 		this->disconnect(pCC);
+		pCC->disconnect();
 		pCC->deleteLater();
 
 	} // loop
@@ -222,6 +182,27 @@ void AppController::quit() {
 	qApp->quit();
 
 } // quit
+
+
+void SwissalpS::QtSssSircBot::AppController::reloadConnections() {
+
+	// first disconnect all existing connections
+	QStringList aKeys = this->hConnections.keys();
+	IRCclientController *pCC;
+	for (int i = 0; i < aKeys.count(); ++i) {
+
+		pCC = this->hConnections.value(aKeys.at(i));
+		this->disconnect(pCC);
+		pCC->disconnect();
+		pCC->deleteLater();
+
+	} // loop
+
+	this->hConnections.clear();
+
+	this->initConnections();
+
+} // reloadConnections
 
 
 void AppController::run() {
