@@ -1,5 +1,4 @@
 #include "AppController.h"
-#include "AppSettings.h"
 #include "IRCeventCodes.h"
 #include "DelayedCallback.h"
 
