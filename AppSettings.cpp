@@ -494,7 +494,7 @@ void AppSettings::initPaths() {
 
 	this->sPathMusicBase = aPaths.first() + "/";
 
-	this->onDebugMessage(tr("OK:Using for music: ") + this->sPathMusicBase);
+	//this->onDebugMessage(tr("OK:Using for music: ") + this->sPathMusicBase);
 
 } // initPaths
 
