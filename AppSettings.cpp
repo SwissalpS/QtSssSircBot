@@ -526,10 +526,9 @@ void AppSettings::setupDirs(QString sPathBase) {
 //	// copy gpio executables, if missing
 //	this->copyResources(":/gpioScripts/", sPathBin, true);
 
-	// copy config for root executables, if missing
-	//TODO: chown root:root
+	// copy config, if missing
 	QString sPathConfig = sPathBase + "config/";
-	this->copyResources(":/config/", sPathConfig, true);
+	this->copyResources(":/config/", sPathConfig, false);
 
 	// copy root executables, if missing
 	//TODO: chown root:root
