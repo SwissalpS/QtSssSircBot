@@ -29,5 +29,6 @@
 		<file>lua/plugins/logRawIRC.lua</file>
 		<file>lua/plugins/rootCommands.lua</file>
 		<file>lua/user/init.lua</file>
+		<file>lua/user/switchNick.lua</file>
 	</qresource>
 </RCC>
