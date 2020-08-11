@@ -49,6 +49,8 @@ public:
 	// public access to singelton instance
 	static AppController *pAppController();
 
+	inline QStringList getConnectionIDs() { return this->hConnections.keys(); }
+
 public slots:
 	virtual void addConnection(const QJsonObject oConfig);
 	virtual void debugMessage(const QString &sMessage);

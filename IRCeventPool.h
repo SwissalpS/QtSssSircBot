@@ -27,6 +27,10 @@ public:
 
 signals:
 	void debugMessage(const QString &sMessage) const;
+	// emited when an event was added to pool
+	void eventAdded() const;
+	// emited when pool is overflowing
+	void eventDropped() const;
 
 public slots:
 	virtual void onEvent(const QStringList &aEvent);

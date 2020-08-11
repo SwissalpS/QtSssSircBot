@@ -147,10 +147,7 @@ void IRCclientController::start() {
 
 // signal from IRCclient
 void IRCclientController::onAbort(const qint16 &iR) {
-
-	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Abort))
-						  << QString::number(iR));
+	Q_UNUSED(iR)
 
 } // onAbort
 
@@ -225,14 +222,6 @@ void IRCclientController::onLoggedIn(const QString &sNick) {
 
 	this->iLineIndex = 0;
 	this->onPostLoginNextLine();
-
-	const QJsonArray aChannels = this->oJo.value(AppSettings::sSettingIRCremoteChannels).toArray();
-
-	for (int i = 0; i < aChannels.count(); ++i) {
-
-		this->pClient->sendJoin(aChannels.at(i).toString());
-
-	} // loop
 
 } // onLoggedIn
 
