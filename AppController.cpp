@@ -105,8 +105,8 @@ void AppController::addConnection(const QJsonObject oConfig) {
 //			connect(pController, SIGNAL(abort(qint16)),
 //					this, SLOT(onAbort(qint16)));
 
-		connect(pController, SIGNAL(newEvent(QStringList)),
-				this->pEP, SLOT(onEvent(QStringList)));
+//		connect(pController, SIGNAL(newEvent(QStringList)),
+//				this->pEP, SLOT(onEvent(QStringList)));
 
 		pController->start();
 
