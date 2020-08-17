@@ -1,5 +1,5 @@
 #include "FileCommandInterface.h"
-#include "IRCeventCodes.h"
+#include "CommandEventCodes.h"
 
 #include <QFile>
 

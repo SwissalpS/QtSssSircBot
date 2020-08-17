@@ -1,5 +1,5 @@
 #include "AppController.h"
-#include "IRCeventCodes.h"
+#include "CommandEventCodes.h"
 
 #include <QCoreApplication>
 #include <QDir>
