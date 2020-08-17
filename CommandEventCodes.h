@@ -15,7 +15,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 
 
 
-namespace CommandEventCodesodes {
+namespace CommandEventCodes {
 
 
 
