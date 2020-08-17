@@ -23,7 +23,9 @@ AppController *AppController::pSingelton = 0;
 
 AppController::AppController(QObject *pParent) :
 	QObject(pParent),
-	pEP(new IRCeventPool(this)) {
+	pAS(nullptr),
+	pEP(new IRCeventPool(this)),
+	pFCI(nullptr) {
 
 	this->hConnections.clear();
 
@@ -116,6 +118,10 @@ void AppController::addConnection(const QJsonObject oConfig) {
 		connect(this, SIGNAL(luaEvent(QStringList)),
 				pController, SLOT(onLuaEvent(QStringList)));
 
+		// it's up to each controller to drop events not targeted at them
+		connect(this, SIGNAL(commandEvent(QStringList)),
+				pController, SLOT(onCommandEvent(QStringList)));
+
 		pController->start();
 
 	} // if valid connection-ID or not
@@ -180,6 +186,25 @@ void AppController::initLuaController() {
 } // initLuaController
 
 
+void AppController::initFileCommandInterface() {
+
+	if (nullptr != this->pFCI) return;
+
+	int iInterval = this->pAS->get(AppSettings::sSettingBackdoorIntervalMS).toInt();
+	this->pFCI = new FileCommandInterface(this->pAS->getPathBackdoor(),
+										  iInterval, this);
+
+	connect(this->pFCI, SIGNAL(debugMessage(QString)),
+			this, SLOT(debugMessage(QString)));
+
+	connect(this->pFCI, SIGNAL(newEvent(QStringList)),
+			this, SLOT(onCommandEvent(QStringList)));
+
+	this->pFCI->start();
+
+} // initFileCommandInterface
+
+
 void AppController::initSettings() {
 
 	this->pAS = AppSettings::pAppSettings();
@@ -192,7 +217,7 @@ void AppController::initSettings() {
 } // initSettings
 
 
-void AppController::onLuaEvent(const QStringList &aEvent) {
+void AppController::onCommandEvent(const QStringList &aEvent) {
 
 	int iEvent = aEvent.count();
 	quint8 ubEvent = aEvent.at(1).at(0).unicode();
@@ -205,7 +230,29 @@ void AppController::onLuaEvent(const QStringList &aEvent) {
 			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
 		}
 
-	} else if ((3 <= iEvent) && (IRCeventCodes::Exit == ubEvent)) {
+	} else if (IRCeventCodes::Exit == ubEvent) {
+
+		QTimer::singleShot(1000, this, SLOT(quit()));
+
+	} else if (IRCeventCodes::ReloadConnections == ubEvent) {
+
+		QTimer::singleShot(0, this, SLOT(reloadConnections()));
+
+	} else Q_EMIT this->commandEvent(aEvent);
+
+} // onCommandEvent
+
+
+void AppController::onLuaEvent(const QStringList &aEvent) {
+
+		int iRes = aEvent.at(2).toInt();
+		if (0 < iRes) {
+			QTimer::singleShot(iRes, this->pLC, SLOT(reload()));
+		} else {
+			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
+		}
+
+	} else if (IRCeventCodes::Exit == ubEvent) {
 
 		QTimer::singleShot(1000, this, SLOT(quit()));
 
@@ -291,6 +338,8 @@ void AppController::run() {
 	this->initLuaController();
 
 	this->initConnections();
+
+	this->initFileCommandInterface();
 
 } // run
 

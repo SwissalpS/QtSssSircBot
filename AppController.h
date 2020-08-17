@@ -7,6 +7,7 @@
 #include <QHostInfo>
 
 #include "AppSettings.h"
+#include "FileCommandInterface.h"
 #include "IRCclientController.h"
 #include "IRCeventPool.h"
 #include "LuaController.h"
@@ -37,10 +38,12 @@ private:
 protected:
 	AppSettings *pAS;
 	IRCeventPool *pEP;
+	FileCommandInterface *pFCI;
 	LuaController *pLC;
 	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
 	void initConnections();
+	void initFileCommandInterface();
 	void initLuaController();
 	void initSettings();
 	void writePID();
@@ -64,12 +67,14 @@ public slots:
 	virtual void addConnection(const QJsonObject oConfig);
 	virtual void addDelayedCallback(const QString sID, const int iDuration);
 	virtual void debugMessage(const QString &sMessage);
+	virtual void onCommandEvent(const QStringList &aEvent);
 	virtual void onLuaEvent(const QStringList &aEvent);
 	virtual void quit();
 	virtual void reloadConnections();
 	virtual void run();
 
 signals:
+	void commandEvent(const QStringList &aEvent);
 	void done();
 	void debugMessageReceived(const QString &sMessage);
 	void luaEvent(const QStringList &aEvent);
