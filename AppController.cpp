@@ -193,7 +193,7 @@ void AppController::initFileCommandInterface() {
 	connect(this->pFCI, SIGNAL(debugMessage(QString)),
 			this, SLOT(debugMessage(QString)));
 
-	connect(this->pFCI, SIGNAL(newEvent(QStringList)),
+	connect(this->pFCI, SIGNAL(commandEvent(QStringList)),
 			this, SLOT(onCommandEvent(QStringList)));
 
 	this->pFCI->start();
