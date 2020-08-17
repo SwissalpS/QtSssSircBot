@@ -41,7 +41,7 @@ void FileCommandInterface::onTimeout() {
 
 	QFile oFile(this->sPath);
 
-	if (!oFile.isReadable()) return;
+	if (!oFile.exists()) return;
 
 	if (!oFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
 
@@ -103,18 +103,18 @@ void FileCommandInterface::onTimeout() {
 			break;
 			case CommandEventCodes::Joined: // 'J'
 				// send JOIN
-				aEvent << sConnectionID << sCommand << sMessage;
+				aEvent << sConnectionID << sCommand << aParts.first();
 			break;
 			case CommandEventCodes::LoggedIn: // 'L'
 				// ignore
 			break;
 			case CommandEventCodes::NickList: // 'N'
 				// request nick change
-				aEvent << sConnectionID << sCommand << aParts.takeFirst();
-				//aEvent << sConnectionID << sCommand << sMessage;
+				aEvent << sConnectionID << sCommand << aParts.first();
 			break;
 			case CommandEventCodes::Part: // '-'
-				aEvent << sConnectionID << sCommand << sMessage;
+				aEvent << sConnectionID << sCommand << aParts.takeFirst();
+				aEvent << aParts.join(" ");
 			break;
 			case CommandEventCodes::Ping: // 'P'
 				// ignore
@@ -122,11 +122,11 @@ void FileCommandInterface::onTimeout() {
 			case CommandEventCodes::Quit: // 'Q'
 				aEvent << sConnectionID << sCommand << sMessage;
 			break;
-			case CommandEventCodes::Connected: // 'c'
-				aEvent << sConnectionID << sCommand;
+			case CommandEventCodes::Connected: // 'c' (re)connect
+				aEvent << sConnectionID << sCommand << "-";
 			break;
 			case CommandEventCodes::Disconnected: // 'd'
-				aEvent << sConnectionID << sCommand;
+				aEvent << sConnectionID << sCommand << "-";
 			break;
 			case CommandEventCodes::RawIn: // '<'
 				// maybe redirect to sendLine?
