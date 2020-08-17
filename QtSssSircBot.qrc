@@ -11,7 +11,7 @@
 		<file>lua/core/object.lua</file>
 		<file>lua/core/strict.lua</file>
 		<file>lua/core/triggers.lua</file>
-		<file>lua/plugins/INFO.txt</file>
+		<file>lua/plugins/info.lua</file>
 		<file>lua/plugins_available/countdown.lua</file>
 		<file>lua/plugins_available/debugChannelMessage.lua</file>
 		<file>lua/plugins_available/debugConnected.lua</file>
