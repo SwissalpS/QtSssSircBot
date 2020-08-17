@@ -176,11 +176,11 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 	int i;
 	QStringList aParams;
 	switch (ubCC) {
-		case IRCeventCodes::Abort:
+		case CommandEventCodes::Abort:
 			// kill Lua instance -> handled elsewhere
 
 		break;
-		case IRCeventCodes::ChannelMessage:
+		case CommandEventCodes::ChannelMessage:
 
 			if (4 > iEvent) {
 				this->onDebugMessage("OO:too few arguments given");
@@ -188,10 +188,10 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
-		case IRCeventCodes::Connected:
+		case CommandEventCodes::Connected:
 			QTimer::singleShot(0, this->pClient, SLOT(reconnect()));
 		break;
-		case IRCeventCodes::DirectMessage:
+		case CommandEventCodes::DirectMessage:
 
 			if (4 > iEvent) {
 				this->onDebugMessage("OO:too few arguments given");
@@ -199,23 +199,23 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
-		case IRCeventCodes::Disconnected:
+		case CommandEventCodes::Disconnected:
 			QTimer::singleShot(0, this->pClient, SLOT(disconnectSocket()));
 		break;
-		case IRCeventCodes::IRCcommand:
+		case CommandEventCodes::IRCcommand:
 			for (i = 3; i < iEvent; ++i) aParams.append(aEvent.at(i));
 			this->pClient->sendIRCCommand(aEvent.at(2), aParams);
 		break;
-		case IRCeventCodes::Quit:
+		case CommandEventCodes::Quit:
 			this->pClient->sendQuit(aEvent.at(2));
 		break;
-		case IRCeventCodes::Joined:
+		case CommandEventCodes::Joined:
 			this->pClient->sendJoin(aEvent.at(2));
 		break;
-		case IRCeventCodes::NickList:
+		case CommandEventCodes::NickList:
 			this->pClient->sendNicknameChangeRequest(aEvent.at(2));
 		break;
-		case IRCeventCodes::Part:
+		case CommandEventCodes::Part:
 			if (4 <= iEvent) {
 				this->pClient->sendPart(aEvent.at(2), aEvent.at(3));
 			} else {

@@ -1,5 +1,5 @@
-#ifndef SwissalpS_QtSssSircBot_IRCEVENTCODES_H
-#define SwissalpS_QtSssSircBot_IRCEVENTCODES_H
+#ifndef SwissalpS_QtSssSircBot_COMMANDEVENTCODES_H
+#define SwissalpS_QtSssSircBot_COMMANDEVENTCODES_H
 
 // abstracted event codes for interfaces.
 // once for events from IRC-client(-controller) to external interfaces
@@ -15,7 +15,7 @@ namespace SwissalpS { namespace QtSssSircBot {
 
 
 
-namespace IRCeventCodes {
+namespace CommandEventCodes {
 
 const quint8 Abort = 'a';         // "f/l-interface-message"
 const quint8 ChannelMessage = 'C';
@@ -36,7 +36,7 @@ const quint8 ReloadConnections = 'r'; // f/l-interface-message
 
 
 
-} // namespace IRCeventCodes
+} // namespace CommandEventCodes
 
 
 
@@ -44,4 +44,4 @@ const quint8 ReloadConnections = 'r'; // f/l-interface-message
 
 
 
-#endif // SwissalpS_QtSssSircBot_IRCEVENTCODES_H
+#endif // SwissalpS_QtSssSircBot_COMMANDEVENTCODES_H
