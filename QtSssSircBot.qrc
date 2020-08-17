@@ -12,7 +12,9 @@
 		<file>lua/core/strict.lua</file>
 		<file>lua/core/triggers.lua</file>
 		<file>lua/plugins/info.lua</file>
-		<file>lua/plugins_available/countdown.lua</file>
+		<file>lua/plugins_available/commandsCountdown.lua</file>
+		<file>lua/plugins_available/commandsHelp.lua</file>
+		<file>lua/plugins_available/commandsRoot.lua</file>
 		<file>lua/plugins_available/debugChannelMessage.lua</file>
 		<file>lua/plugins_available/debugConnected.lua</file>
 		<file>lua/plugins_available/debugDirectMessage.lua</file>
@@ -25,10 +27,8 @@
 		<file>lua/plugins_available/debugQuit.lua</file>
 		<file>lua/plugins_available/debugRawIn.lua</file>
 		<file>lua/plugins_available/debugRawOut.lua</file>
-		<file>lua/plugins_available/helpCommands.lua</file>
 		<file>lua/plugins_available/logDebug.lua</file>
 		<file>lua/plugins_available/logRawIRC.lua</file>
-		<file>lua/plugins_available/rootCommands.lua</file>
 		<file>lua/user/init.lua</file>
 		<file>lua/user/switchNick.lua</file>
 	</qresource>
