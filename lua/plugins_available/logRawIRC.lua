@@ -5,7 +5,7 @@
 local Logger = require 'core.logging'
 
 -- change path to wherever suits you and add other options
-local oLogger = Logger({ sPathFile = '/var/log/QtSssSircBot/rawIRC.log',
+local oLogger = Logger({ sPathFile = EXEDIR .. 'logs/rawIRC.log',
 							 sFormatLine = '%timeStamp:%message\n' })
 
 local function logIn(hEvent)

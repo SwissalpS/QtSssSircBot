@@ -6,7 +6,7 @@
 local Logger = require 'core.logging'
 
 -- change path to wherever suits you and add other options
-local oLogger = Logger({ sPathFile = '/var/log/QtSssSircBot/debug.log',
+local oLogger = Logger({ sPathFile = EXEDIR .. 'logs/debug.log',
 							 -- setting to nil causes default to be used
 							 sFormatLine = nil })
 

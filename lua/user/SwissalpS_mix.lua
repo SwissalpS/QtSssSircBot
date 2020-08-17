@@ -5,7 +5,7 @@
 --]]
 -- [[
 local Logger = require 'core.logging'
-local oLogger = Logger({ sPathFile = '/var/log/QtSssSircBot/SssS_mix.log',
+local oLogger = Logger({ sPathFile = EXEDIR .. 'logs/SssS_mix.log',
 							 sFormatLine = '%timeStamp:%message\n' })
 
 local sPostToChannel = '#SwissalpS.mix'
