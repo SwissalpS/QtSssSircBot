@@ -68,6 +68,7 @@ public slots:
 	virtual void addDelayedCallback(const QString sID, const int iDuration);
 	virtual void debugMessage(const QString &sMessage);
 	virtual void onCommandEvent(const QStringList &aEvent);
+	// depricated, use onCommandEvent()
 	virtual void onLuaEvent(const QStringList &aEvent);
 	virtual void quit();
 	virtual void reloadConnections();

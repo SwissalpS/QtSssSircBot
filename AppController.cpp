@@ -115,10 +115,6 @@ void AppController::addConnection(const QJsonObject oConfig) {
 				this->pLC, SLOT(onIRCevent()));
 
 		// it's up to each controller to drop events not targeted at them
-		connect(this, SIGNAL(luaEvent(QStringList)),
-				pController, SLOT(onLuaEvent(QStringList)));
-
-		// it's up to each controller to drop events not targeted at them
 		connect(this, SIGNAL(commandEvent(QStringList)),
 				pController, SLOT(onCommandEvent(QStringList)));
 
@@ -243,24 +239,12 @@ void AppController::onCommandEvent(const QStringList &aEvent) {
 } // onCommandEvent
 
 
+// depricated
 void AppController::onLuaEvent(const QStringList &aEvent) {
 
-		int iRes = aEvent.at(2).toInt();
-		if (0 < iRes) {
-			QTimer::singleShot(iRes, this->pLC, SLOT(reload()));
-		} else {
-			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
-		}
+	this->debugMessage("OO:depricated call to onLuaEvent!");
 
-	} else if (IRCeventCodes::Exit == ubEvent) {
-
-		QTimer::singleShot(1000, this, SLOT(quit()));
-
-	} else if (IRCeventCodes::ReloadConnections == ubEvent) {
-
-		QTimer::singleShot(0, this, SLOT(reloadConnections()));
-
-	} else Q_EMIT this->luaEvent(aEvent);
+	return this->onCommandEvent(aEvent);
 
 } // onLuaEvent
 

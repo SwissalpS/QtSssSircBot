@@ -21,7 +21,7 @@ static int abortLua(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Abort))); // 'a'
 	aEvent.append(QString::number(luaL_checknumber(L, 1)));
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -52,7 +52,7 @@ static int disconnectSocket(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Disconnected))); // 'd'
 	aEvent.append(QString()); // just to pass initial inspection of argument count
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -66,7 +66,7 @@ static int exitApp(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Exit))); // 'e'
 	aEvent.append(QString::number(luaL_checknumber(L, 1)));
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -130,7 +130,7 @@ static int reconnectSocket(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Connected))); // 'c'
 	aEvent.append(QString()); // just to pass initial inspection of argument count
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -144,7 +144,7 @@ static int reloadConnections(lua_State *L) {
 	aEvent.append("-"); // connection ID not relevant here
 	aEvent.append(QString(QChar(IRCeventCodes::ReloadConnections))); // 'r'
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -159,7 +159,7 @@ static int sendChannelMessage(lua_State *L) {
 	aEvent.append(QString(luaL_checkstring(L, 2))); // channel
 	aEvent.append(QString(luaL_checkstring(L, 3))); // message
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -174,7 +174,7 @@ static int sendDirectMessage(lua_State *L) {
 	aEvent.append(QString(luaL_checkstring(L, 2))); // toNick
 	aEvent.append(QString(luaL_checkstring(L, 3))); // message
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -190,7 +190,7 @@ static int sendJoin(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Joined))); // 'J'
 	aEvent.append(QString(luaL_checkstring(L, 2))); // channel
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -206,7 +206,7 @@ static int sendLine(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::RawOut))); // '>'
 	aEvent.append(QString(luaL_checkstring(L, 2))); // raw line
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -222,7 +222,7 @@ static int sendNickChangeRequest(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::NickList))); // 'N'
 	aEvent.append(QString(luaL_checkstring(L, 2))); // new nick
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -239,7 +239,7 @@ static int sendPart(lua_State *L) {
 	aEvent.append(QString(luaL_checkstring(L, 2))); // channels
 	aEvent.append(QString(luaL_optstring(L, 3, ""))); // optional message
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 
@@ -255,7 +255,7 @@ static int sendQuit(lua_State *L) {
 	aEvent.append(QString(QChar(IRCeventCodes::Quit))); // 'Q'
 	aEvent.append(QString(luaL_optstring(L, 2, ""))); // optional quit message
 
-	pAC->onLuaEvent(aEvent);
+	pAC->onCommandEvent(aEvent);
 
 	return 0;
 

@@ -324,81 +324,12 @@ void IRCclientController::onLoggedIn(const QString &sNick) {
 
 
 // signal from lua via irc-api and AppController
+// depricated: use onCommandEvent() instead
 void IRCclientController::onLuaEvent(const QStringList &aEvent) {
 
-	// { <connection id>, <interface-command-code>, <parameter0> ... <parameterN> }
-	const int iEvent = aEvent.count();
+	this->onDebugMessage("OO:depricated call to onLuaEvent!");
 
-	if (3 > iEvent) {
-		this->onDebugMessage("OO:got lua event with less than 3 entries.");
-		// nothing to do
-		return;
-	} // if arg count check failed
-
-	const QString sID = aEvent.first();
-	if (0 != sID.compare(this->getConnectionID())) {
-		// not for this connection
-		return;
-	}
-
-	const quint8 ubCC = aEvent.at(1).at(0).unicode();
-
-	int i;
-	QStringList aParams;
-	switch (ubCC) {
-		case IRCeventCodes::Abort:
-			// kill Lua instance -> handled elsewhere
-
-		break;
-		case IRCeventCodes::ChannelMessage:
-
-			if (4 > iEvent) {
-				this->onDebugMessage("OO:too few arguments given");
-				return;
-			}
-			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
-		break;
-		case IRCeventCodes::Connected:
-			QTimer::singleShot(0, this->pClient, SLOT(reconnect()));
-		break;
-		case IRCeventCodes::DirectMessage:
-
-			if (4 > iEvent) {
-				this->onDebugMessage("OO:too few arguments given");
-				return;
-			}
-			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
-		break;
-		case IRCeventCodes::Disconnected:
-			QTimer::singleShot(0, this->pClient, SLOT(disconnectSocket()));
-		break;
-		case IRCeventCodes::IRCcommand:
-			for (i = 3; i < iEvent; ++i) aParams.append(aEvent.at(i));
-			this->pClient->sendIRCCommand(aEvent.at(2), aParams);
-		break;
-		case IRCeventCodes::Quit:
-			this->pClient->sendQuit(aEvent.at(2));
-		break;
-		case IRCeventCodes::Joined:
-			this->pClient->sendJoin(aEvent.at(2));
-		break;
-		case IRCeventCodes::NickList:
-			this->pClient->sendNicknameChangeRequest(aEvent.at(2));
-		break;
-		case IRCeventCodes::Part:
-			if (4 <= iEvent) {
-				this->pClient->sendPart(aEvent.at(2), aEvent.at(3));
-			} else {
-				this->pClient->sendPart(aEvent.at(2));
-			}
-		break;
-
-		default:
-			this->onDebugMessage("unknown interface-command-code given: "
-								 + QString::number(ubCC) + " " + QChar(ubCC));
-		break;
-	} // switch ubCC
-
+	return this->onCommandEvent(aEvent);
 
 } // onLuaEvent
 
