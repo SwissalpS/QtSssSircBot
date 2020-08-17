@@ -56,6 +56,7 @@ HEADERS += \
 	AppController.h \
 	AppSettings.h \
 	DelayedCallback.h \
+	FileCommandInterface.h \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
@@ -100,6 +101,7 @@ SOURCES += main.cpp \
 	AppController.cpp \
 	AppSettings.cpp \
 	DelayedCallback.cpp \
+	FileCommandInterface.cpp \
 	IRCclient.cpp \
 	IRCclientController.cpp \
 	IRCeventPool.cpp \
