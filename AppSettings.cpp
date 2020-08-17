@@ -17,6 +17,8 @@ namespace SwissalpS { namespace QtSssSircBot {
 
 
 
+const QString AppSettings::sSettingBackdoorIntervalMS = "uiBackdoorIntervalMS";
+const QString AppSettings::sSettingBackdoorPathFile = "sPathFileBackdoor";
 const QString AppSettings::sSettingIRCconfig = "sIRCconfigPath";
 const QString AppSettings::sSettingIRCremoteChannels = "sIRCremoteChannels";
 const QString AppSettings::sSettingIRCremoteHost = "sIRCremoteHost";
@@ -29,6 +31,8 @@ const QString AppSettings::sSettingPIDpathFile = "sPathFilePID";
 const QString AppSettings::sSettingUseGUI = "bUseGUI";
 #endif
 
+const quint16 AppSettings::sSettingBackdoorIntervalMSdefault = (quint16)(3u * 60000u);
+const QString AppSettings::sSettingBackdoorPathFileDefault = "";
 const QString AppSettings::sSettingIRCconfigDefault = "";
 const QString AppSettings::sSettingIRCremoteChannelsDefault = "";
 const QString AppSettings::sSettingIRCremoteHostDefault = "0.0.0.0";
@@ -185,11 +189,30 @@ QVariant AppSettings::get(const QString sKey) const {
 	// return override value if exists
 	if (this->oJo.contains(sKey)) return this->oJo.value(sKey).toVariant();
 
-	if(sSettingIRCconfig == sKey) {
+	if (sSettingBackdoorIntervalMS == sKey) {
+
+		quint16 uiInterval = pSettings->value(sKey, sSettingBackdoorIntervalMSdefault).toUInt();
+
+		return QVariant(uiInterval);
+
+	} else if (sSettingBackdoorPathFile == sKey) {
+
+		QString sPathFile = pSettings->value(
+								sKey, sSettingBackdoorPathFileDefault).toString().trimmed();
+
+		if (sPathFile.isEmpty()) {
+
+			sPathFile = this->sPathDataBase + "backdoor";
+
+		} // if none defined
+
+		return QVariant(sPathFile);
+
+	} else if (sSettingIRCconfig == sKey) {
 
 		return pSettings->value(sKey, sSettingIRCconfigDefault);
 
-	} else if(sSettingIRCremoteChannels == sKey) {
+	} else if (sSettingIRCremoteChannels == sKey) {
 
 		return pSettings->value(sKey, sSettingIRCremoteChannelsDefault);
 
@@ -313,6 +336,13 @@ void AppSettings::setChannels(const QStringList aChannels) {
 } // setChannels
 
 
+QString AppSettings::getPathBackdoor() const {
+
+	return this->get(sSettingBackdoorPathFile).toString();
+
+} // getPathBackdoor
+
+
 QString AppSettings::getPathData() const {
 
 	return this->sPathDataBase;
@@ -321,6 +351,7 @@ QString AppSettings::getPathData() const {
 
 
 QString AppSettings::getPathMusic() const {
+
 	return this->sPathMusicBase;
 
 } // getPathMusic
@@ -362,6 +393,8 @@ void AppSettings::init() {
 
 	QSettings *pS = this->pSettings;
 
+	pS->setValue(sSettingBackdoorIntervalMS, this->get(sSettingBackdoorIntervalMS));
+	pS->setValue(sSettingBackdoorPathFile, this->get(sSettingBackdoorPathFile));
 	pS->setValue(sSettingIRCconfig, this->get(sSettingIRCconfig));
 	pS->setValue(sSettingIRCremoteChannels, this->get(sSettingIRCremoteChannels));
 	pS->setValue(sSettingIRCremoteHost, this->get(sSettingIRCremoteHost));
@@ -385,6 +418,10 @@ void AppSettings::init() {
 
 void AppSettings::initOverrides() {
 
+	QCommandLineOption oBackdoor("backdoor",
+								 "path to backdoor file to read "
+								 "occassionally for commands.",
+								 "backdoor");
 	QCommandLineOption oChannels("channels",
 								 "List of comma separated channels to join "
 								 "once logged in.",
@@ -412,6 +449,7 @@ void AppSettings::initOverrides() {
 	oCLP.addHelpOption();
 	oCLP.addVersionOption();
 
+	oCLP.addOption(oBackdoor);
 	oCLP.addOption(oChannels);
 	oCLP.addOption(oConfig);
 	oCLP.addOption(oHost);
@@ -426,6 +464,7 @@ void AppSettings::initOverrides() {
 
 	oCLP.process(*QCoreApplication::instance());
 
+	const QString sBackdoor = oCLP.value(oBackdoor);
 	const QString sChannels = oCLP.value(oChannels);
 	const QString sConfig = oCLP.value(oConfig);
 	const QString sHost = oCLP.value(oHost);
@@ -437,6 +476,10 @@ void AppSettings::initOverrides() {
 //	bool bGUI = oCLP.isSet(oGUI);
 //	bool bNoGUI = oCLP.isSet(oNoGUI);
 #endif
+
+	if (oCLP.isSet(oBackdoor)) {
+		this->oJo.insert(sSettingBackdoorPathFile, sBackdoor);
+	}
 
 	if (oCLP.isSet(oChannels)) {
 		this->oJo.insert(sSettingIRCremoteChannels, sChannels);
