@@ -55,12 +55,12 @@ DEFINES += LUA_USE_POSIX
 HEADERS += \
 	AppController.h \
 	AppSettings.h \
+	CommandEventCodes.h \
 	DelayedCallback.h \
 	FileCommandInterface.h \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
-	IRCeventCodes.h \
 	IRCeventPool.h \
 	LuaController.h \
 	foreign/QtIRC/ircerror.h \

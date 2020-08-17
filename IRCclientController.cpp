@@ -1,5 +1,5 @@
 #include "IRCclientController.h"
-#include "IRCeventCodes.h"
+#include "CommandEventCodes.h"
 // TODO: make this class independant from AppSettings
 #include "AppSettings.h"
 
