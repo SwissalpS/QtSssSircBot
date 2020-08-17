@@ -53,6 +53,7 @@ CONFIG(SssS_RasPi) {
 HEADERS += \
 	AppController.h \
 	AppSettings.h \
+	FileCommandInterface.h \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
@@ -64,6 +65,7 @@ HEADERS += \
 SOURCES += main.cpp \
 	AppController.cpp \
 	AppSettings.cpp \
+	FileCommandInterface.cpp \
 	IRCclient.cpp \
 	IRCclientController.cpp \
 	foreign/QtIRC/ircservermessage.cpp
