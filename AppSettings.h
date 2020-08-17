@@ -38,6 +38,8 @@ protected:
 	void initPaths();
 
 public:
+	static const QString sSettingBackdoorIntervalMS;
+	static const QString sSettingBackdoorPathFile;
 	static const QString sSettingIRCconfig;
 	static const QString sSettingIRCremoteChannels;
 	static const QString sSettingIRCremoteHost;
@@ -50,6 +52,8 @@ public:
 	static const QString sSettingUseGUI;
 #endif
 
+	static const quint16 sSettingBackdoorIntervalMSdefault;
+	static const QString sSettingBackdoorPathFileDefault;
 	static const QString sSettingIRCconfigDefault;
 	static const QString sSettingIRCremoteChannelsDefault;
 	static const QString sSettingIRCremoteHostDefault;
@@ -74,6 +78,8 @@ public:
 
 	QStringList getChannels() const;
 	void setChannels(const QStringList aChannels);
+
+	QString getPathBackdoor() const;
 
 	QString getPathData() const;
 
