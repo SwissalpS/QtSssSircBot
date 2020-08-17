@@ -232,9 +232,10 @@ function core.load_plugins()
   local lFiles = system.list_dir(EXEDIR .. '/lua/plugins')
   if nil == lFiles then return bNoErrors end
 
+  local sModname, bOK
   for _, sFilename in ipairs(lFiles) do
-	  local sModname = 'plugins.' .. sFilename:gsub('.lua$', '')
-	  local bOK = core.try(require, sModname)
+	  sModname = 'plugins.' .. sFilename:gsub('.lua$', '')
+	  bOK = core.try(require, sModname)
 	  if bOK then
 	    core.log_quiet('Loaded plugin %q', sModname)
 	  else
