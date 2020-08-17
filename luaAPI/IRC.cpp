@@ -1,6 +1,6 @@
 ﻿#include "IRC.h"
 #include "AppController.h"
-#include "IRCeventCodes.h"
+#include "CommandEventCodes.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
