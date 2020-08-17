@@ -80,61 +80,61 @@ void FileCommandInterface::onTimeout() {
 		sMessage = aParts.join(" ");
 
 		switch (ubChar) {
-			case IRCeventCodes::Abort: // 'a'
+			case CommandEventCodes::Abort: // 'a'
 				// does not apply to this version
 			break;
-			case IRCeventCodes::ChannelMessage: // 'C'
+			case CommandEventCodes::ChannelMessage: // 'C'
 				if (4 <= iCount) {
 					aEvent << sConnectionID << sCommand << aParts.takeFirst();
 					aEvent << aParts.join(" ");
 				}
 			break;
-			case IRCeventCodes::DirectMessage: // 'D'
+			case CommandEventCodes::DirectMessage: // 'D'
 				if (4 <= iCount) {
 					aEvent << sConnectionID << sCommand << aParts.takeFirst();
 					aEvent << aParts.join(" ");
 				}
 			break;
-			case IRCeventCodes::Exit: // 'e'
+			case CommandEventCodes::Exit: // 'e'
 				aEvent << sConnectionID << sCommand;
 			break;
-			case IRCeventCodes::IRCcommand: // 'I'
+			case CommandEventCodes::IRCcommand: // 'I'
 				// maybe later, it's tricky
 			break;
-			case IRCeventCodes::Joined: // 'J'
+			case CommandEventCodes::Joined: // 'J'
 				// send JOIN
 				aEvent << sConnectionID << sCommand << sMessage;
 			break;
-			case IRCeventCodes::LoggedIn: // 'L'
+			case CommandEventCodes::LoggedIn: // 'L'
 				// ignore
 			break;
-			case IRCeventCodes::NickList: // 'N'
+			case CommandEventCodes::NickList: // 'N'
 				// request nick change
 				aEvent << sConnectionID << sCommand << aParts.takeFirst();
 				//aEvent << sConnectionID << sCommand << sMessage;
 			break;
-			case IRCeventCodes::Part: // '-'
+			case CommandEventCodes::Part: // '-'
 				aEvent << sConnectionID << sCommand << sMessage;
 			break;
-			case IRCeventCodes::Ping: // 'P'
+			case CommandEventCodes::Ping: // 'P'
 				// ignore
 			break;
-			case IRCeventCodes::Quit: // 'Q'
+			case CommandEventCodes::Quit: // 'Q'
 				aEvent << sConnectionID << sCommand << sMessage;
 			break;
-			case IRCeventCodes::Connected: // 'c'
+			case CommandEventCodes::Connected: // 'c'
 				aEvent << sConnectionID << sCommand;
 			break;
-			case IRCeventCodes::Disconnected: // 'd'
+			case CommandEventCodes::Disconnected: // 'd'
 				aEvent << sConnectionID << sCommand;
 			break;
-			case IRCeventCodes::RawIn: // '<'
+			case CommandEventCodes::RawIn: // '<'
 				// maybe redirect to sendLine?
 			break;
-			case IRCeventCodes::RawOut: // '>'
+			case CommandEventCodes::RawOut: // '>'
 				// ignore
 			break;
-			case IRCeventCodes::ReloadConnections: // 'r'
+			case CommandEventCodes::ReloadConnections: // 'r'
 				aEvent << sConnectionID << sCommand;
 			break;
 			default:

@@ -217,7 +217,7 @@ void AppController::onCommandEvent(const QStringList &aEvent) {
 
 	int iEvent = aEvent.count();
 	quint8 ubEvent = aEvent.at(1).at(0).unicode();
-	if ((3 <= iEvent) && (IRCeventCodes::Abort == ubEvent)) {
+	if ((3 <= iEvent) && (CommandEventCodes::Abort == ubEvent)) {
 
 		int iRes = aEvent.at(2).toInt();
 		if (0 < iRes) {
@@ -226,11 +226,11 @@ void AppController::onCommandEvent(const QStringList &aEvent) {
 			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
 		}
 
-	} else if (IRCeventCodes::Exit == ubEvent) {
+	} else if (CommandEventCodes::Exit == ubEvent) {
 
 		QTimer::singleShot(1000, this, SLOT(quit()));
 
-	} else if (IRCeventCodes::ReloadConnections == ubEvent) {
+	} else if (CommandEventCodes::ReloadConnections == ubEvent) {
 
 		QTimer::singleShot(0, this, SLOT(reloadConnections()));
 

@@ -150,7 +150,7 @@ void IRCclientController::start() {
 void IRCclientController::onAbort(const qint16 &iR) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Abort))
+						  << QString(QChar(CommandEventCodes::Abort))
 						  << QString::number(iR));
 
 } // onAbort
@@ -179,11 +179,11 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 	int i;
 	QStringList aParams;
 	switch (ubCC) {
-		case IRCeventCodes::Abort:
+		case CommandEventCodes::Abort:
 			// kill Lua instance -> handled elsewhere
 
 		break;
-		case IRCeventCodes::ChannelMessage:
+		case CommandEventCodes::ChannelMessage:
 
 			if (4 > iEvent) {
 				this->onDebugMessage("OO:too few arguments given");
@@ -191,10 +191,10 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
-		case IRCeventCodes::Connected:
+		case CommandEventCodes::Connected:
 			QTimer::singleShot(0, this->pClient, SLOT(reconnect()));
 		break;
-		case IRCeventCodes::DirectMessage:
+		case CommandEventCodes::DirectMessage:
 
 			if (4 > iEvent) {
 				this->onDebugMessage("OO:too few arguments given");
@@ -202,23 +202,23 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 			}
 			this->pClient->sendPrivateMessage(aEvent.at(2), aEvent.at(3));
 		break;
-		case IRCeventCodes::Disconnected:
+		case CommandEventCodes::Disconnected:
 			QTimer::singleShot(0, this->pClient, SLOT(disconnectSocket()));
 		break;
-		case IRCeventCodes::IRCcommand:
+		case CommandEventCodes::IRCcommand:
 			for (i = 3; i < iEvent; ++i) aParams.append(aEvent.at(i));
 			this->pClient->sendIRCCommand(aEvent.at(2), aParams);
 		break;
-		case IRCeventCodes::Quit:
+		case CommandEventCodes::Quit:
 			this->pClient->sendQuit(aEvent.at(2));
 		break;
-		case IRCeventCodes::Joined:
+		case CommandEventCodes::Joined:
 			this->pClient->sendJoin(aEvent.at(2));
 		break;
-		case IRCeventCodes::NickList:
+		case CommandEventCodes::NickList:
 			this->pClient->sendNicknameChangeRequest(aEvent.at(2));
 		break;
-		case IRCeventCodes::Part:
+		case CommandEventCodes::Part:
 			if (4 <= iEvent) {
 				this->pClient->sendPart(aEvent.at(2), aEvent.at(3));
 			} else {
@@ -240,7 +240,7 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 void IRCclientController::onConnected(const QString &sIP) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Connected)) << sIP);
+						  << QString(QChar(CommandEventCodes::Connected)) << sIP);
 
 	this->iLineIndex = 0;
 	this->onPreLoginNextLine();
@@ -254,7 +254,7 @@ void IRCclientController::onChannelMessage(const QString &sChannel,
 										   const QString &sMessage) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::ChannelMessage))
+						  << QString(QChar(CommandEventCodes::ChannelMessage))
 						  << sChannel << sFromNick << sMessage);
 
 } // onChannelMessage
@@ -265,7 +265,7 @@ void IRCclientController::onDirectMessage(const QString &sFromNick,
 										  const QString &sMessage) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::DirectMessage))
+						  << QString(QChar(CommandEventCodes::DirectMessage))
 						  << sFromNick << sMessage);
 
 } // onDirectMessage
@@ -275,7 +275,7 @@ void IRCclientController::onDirectMessage(const QString &sFromNick,
 void IRCclientController::onDisconnected() {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Disconnected)));
+						  << QString(QChar(CommandEventCodes::Disconnected)));
 
 } // onDisconnected
 
@@ -285,7 +285,7 @@ void IRCclientController::onJoined(const QString &sNick,
 								   const QString &sChannel) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Joined))
+						  << QString(QChar(CommandEventCodes::Joined))
 						  << sNick << sChannel);
 
 } // onJoined
@@ -314,7 +314,7 @@ void IRCclientController::onJoinNextChannel() {
 void IRCclientController::onLoggedIn(const QString &sNick) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::LoggedIn))
+						  << QString(QChar(CommandEventCodes::LoggedIn))
 						  << sNick);
 
 	this->iLineIndex = 0;
@@ -339,7 +339,7 @@ void IRCclientController::onNicklist(const QString &sChannel,
 									 const QStringList &aNicks) {
 
 	QStringList aEvent = QStringList() << this->getConnectionID()
-									   << QString(QChar(IRCeventCodes::NickList))
+									   << QString(QChar(CommandEventCodes::NickList))
 									   << sChannel;
 	aEvent.append(aNicks);
 
@@ -352,7 +352,7 @@ void IRCclientController::onNicklist(const QString &sChannel,
 void IRCclientController::onPing(const QString &sMessage) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Ping))
+						  << QString(QChar(CommandEventCodes::Ping))
 						  << sMessage);
 
 } // onPing
@@ -412,7 +412,7 @@ void IRCclientController::onPreLoginNextLine() {
 void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::Quit))
+						  << QString(QChar(CommandEventCodes::Quit))
 						  << sNick << sMessage);
 
 } // onQuit
@@ -422,7 +422,7 @@ void IRCclientController::onQuit(const QString &sNick, const QString &sMessage) 
 void IRCclientController::onRawIncomingLine(const QString &sLine) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::RawIn))
+						  << QString(QChar(CommandEventCodes::RawIn))
 						  << sLine);
 
 } // onRawIncomingLine
@@ -432,7 +432,7 @@ void IRCclientController::onRawIncomingLine(const QString &sLine) {
 void IRCclientController::onRawOutgoingLine(const QString &sLine) {
 
 	Q_EMIT this->newEvent(QStringList() << this->getConnectionID()
-						  << QString(QChar(IRCeventCodes::RawOut))
+						  << QString(QChar(CommandEventCodes::RawOut))
 						  << sLine);
 
 } // onRawOutgoingLine
