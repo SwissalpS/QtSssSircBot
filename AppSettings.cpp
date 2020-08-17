@@ -31,7 +31,7 @@ const QString AppSettings::sSettingPIDpathFile = "sPathFilePID";
 const QString AppSettings::sSettingUseGUI = "bUseGUI";
 #endif
 
-const quint16 AppSettings::sSettingBackdoorIntervalMSdefault = (quint16)(3u * 60000u);
+const quint32 AppSettings::sSettingBackdoorIntervalMSdefault = (quint32)(3u * 60000u);
 const QString AppSettings::sSettingBackdoorPathFileDefault = "";
 const QString AppSettings::sSettingIRCconfigDefault = "";
 const QString AppSettings::sSettingIRCremoteChannelsDefault = "";
@@ -191,7 +191,7 @@ QVariant AppSettings::get(const QString sKey) const {
 
 	if (sSettingBackdoorIntervalMS == sKey) {
 
-		quint16 uiInterval = pSettings->value(sKey, sSettingBackdoorIntervalMSdefault).toUInt();
+		quint32 uiInterval = pSettings->value(sKey, sSettingBackdoorIntervalMSdefault).toUInt();
 
 		return QVariant(uiInterval);
 
