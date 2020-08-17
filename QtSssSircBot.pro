@@ -56,6 +56,7 @@ HEADERS += \
 	IRCclient.h \
 	IRCclientController.h \
 	IRCcommand.h \
+	IRCeventCodes.h \
 	foreign/QtIRC/ircerror.h \
 	foreign/QtIRC/ircreply.h \
 	foreign/QtIRC/ircservermessage.h
