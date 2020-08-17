@@ -52,7 +52,7 @@ public:
 	static const QString sSettingUseGUI;
 #endif
 
-	static const quint16 sSettingBackdoorIntervalMSdefault;
+	static const quint32 sSettingBackdoorIntervalMSdefault;
 	static const QString sSettingBackdoorPathFileDefault;
 	static const QString sSettingIRCconfigDefault;
 	static const QString sSettingIRCremoteChannelsDefault;
