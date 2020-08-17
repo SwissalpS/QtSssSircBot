@@ -115,4 +115,4 @@ signals:
 
 
 
-#endif // IRCCLIENT_H
+#endif // SwissalpS_QtSssSircBot_IRCCLIENT_H
