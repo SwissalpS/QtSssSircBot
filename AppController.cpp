@@ -1,4 +1,5 @@
 #include "AppController.h"
+#include "IRCeventCodes.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -20,7 +21,9 @@ namespace SwissalpS { namespace QtSssSircBot {
 AppController *AppController::pSingelton = 0;
 
 AppController::AppController(QObject *pParent) :
-	QObject(pParent) {
+	QObject(pParent),
+	pAS(nullptr),
+	pFCI(nullptr) {
 
 	this->hConnections.clear();
 
@@ -108,6 +111,10 @@ void AppController::addConnection(const QJsonObject oConfig) {
 //		connect(pController, SIGNAL(newEvent(QStringList)),
 //				this->pEP, SLOT(onEvent(QStringList)));
 
+		// it's up to each controller to drop events not targeted at them
+		connect(this, SIGNAL(commandEvent(QStringList)),
+				pController, SLOT(onCommandEvent(QStringList)));
+
 		pController->start();
 
 	} // if valid connection-ID or not
@@ -149,6 +156,25 @@ void AppController::initConnections() {
 } // initConnections
 
 
+void AppController::initFileCommandInterface() {
+
+	if (nullptr != this->pFCI) return;
+
+	int iInterval = this->pAS->get(AppSettings::sSettingBackdoorIntervalMS).toInt();
+	this->pFCI = new FileCommandInterface(this->pAS->getPathBackdoor(),
+										  iInterval, this);
+
+	connect(this->pFCI, SIGNAL(debugMessage(QString)),
+			this, SLOT(debugMessage(QString)));
+
+	connect(this->pFCI, SIGNAL(newEvent(QStringList)),
+			this, SLOT(onCommandEvent(QStringList)));
+
+	this->pFCI->start();
+
+} // initFileCommandInterface
+
+
 void AppController::initSettings() {
 
 	this->pAS = AppSettings::pAppSettings();
@@ -159,6 +185,33 @@ void AppController::initSettings() {
 	this->pAS->init();
 
 } // initSettings
+
+
+void AppController::onCommandEvent(const QStringList &aEvent) {
+
+	int iEvent = aEvent.count();
+	quint8 ubEvent = aEvent.at(1).at(0).unicode();
+	if ((3 <= iEvent) && (IRCeventCodes::Abort == ubEvent)) {
+
+// not used in this branch
+//		int iRes = aEvent.at(2).toInt();
+//		if (0 < iRes) {
+//			QTimer::singleShot(iRes, this->pLC, SLOT(reload()));
+//		} else {
+//			QTimer::singleShot(0, this->pLC, SLOT(shutdown()));
+//		}
+
+	} else if (IRCeventCodes::Exit == ubEvent) {
+
+		QTimer::singleShot(1000, this, SLOT(quit()));
+
+	} else if (IRCeventCodes::ReloadConnections == ubEvent) {
+
+		QTimer::singleShot(0, this, SLOT(reloadConnections()));
+
+	} else Q_EMIT this->commandEvent(aEvent);
+
+} // onCommandEvent
 
 
 void AppController::quit() {
@@ -219,6 +272,8 @@ void AppController::run() {
 	this->connectErrorMessages();
 
 	this->initConnections();
+
+	this->initFileCommandInterface();
 
 } // run
 

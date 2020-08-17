@@ -7,6 +7,7 @@
 #include <QHostInfo>
 
 #include "AppSettings.h"
+#include "FileCommandInterface.h"
 #include "IRCclientController.h"
 
 
@@ -34,9 +35,11 @@ private:
 
 protected:
 	AppSettings *pAS;
+	FileCommandInterface *pFCI;
 	QHash<QString, IRCclientController *> hConnections;
 	void connectErrorMessages();
 	void initConnections();
+	void initFileCommandInterface();
 	void initSettings();
 	void writePID();
 
@@ -54,11 +57,13 @@ public:
 public slots:
 	virtual void addConnection(const QJsonObject oConfig);
 	virtual void debugMessage(const QString &sMessage);
+	virtual void onCommandEvent(const QStringList &aEvent);
 	virtual void quit();
 	virtual void reloadConnections();
 	virtual void run();
 
 signals:
+	void commandEvent(const QStringList &aEvent);
 	void done();
 	void debugMessageReceived(const QString &sMessage);
 
