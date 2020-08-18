@@ -60,7 +60,7 @@ public slots:
 	void onLoggedIn(const QString &sNick);
 	// name may be missleading, external interface event - may be better
 	// depricated, use onCommandEvent() instead
-	void onLuaEvent(const QStringList &aEvent);
+	Q_DECL_DEPRECATED void onLuaEvent(const QStringList &aEvent);
 	void onNicklist(const QString &sChannel, const QStringList &aNicks);
 	void onPing(const QString &sMessage);
 	void onQuit(const QString &sNick, const QString &sMessage);
