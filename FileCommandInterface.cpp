@@ -81,7 +81,7 @@ void FileCommandInterface::onTimeout() {
 
 		switch (ubChar) {
 			case CommandEventCodes::Abort: // 'a'
-				// does not apply to this version
+				aEvent << sConnectionID << sCommand << aParts.first();
 			break;
 			case CommandEventCodes::ChannelMessage: // 'C'
 				if (4 <= iCount) {
