@@ -177,7 +177,7 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 	QStringList aParams;
 	switch (ubCC) {
 		case CommandEventCodes::Abort:
-			// kill Lua instance -> handled elsewhere
+			// kill Lua instance -> handled by AppController
 
 		break;
 		case CommandEventCodes::ChannelMessage:
@@ -227,8 +227,8 @@ void IRCclientController::onCommandEvent(const QStringList &aEvent) {
 			this->onDebugMessage("unknown interface-command-code given: "
 								 + QString::number(ubCC) + " " + QChar(ubCC));
 		break;
-	} // switch ubCC
 
+	} // switch ubCC
 
 } // onCommandEvent
 
