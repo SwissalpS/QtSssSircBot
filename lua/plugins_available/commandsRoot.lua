@@ -1,5 +1,5 @@
 --[[
-  lua/plugins/rootCommands.lua
+  lua/plugins/commandsRoot.lua
   provides commands to restart connections/lua and quit
   possibly other maintenance duties will be added here too
 --]]

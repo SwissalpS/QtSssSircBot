@@ -1,5 +1,5 @@
 --[[
-  lua/plugins/helpCommands.lua
+  lua/plugins/commandsHelp.lua
   provides commands to display help
 --]]
 --do return false end

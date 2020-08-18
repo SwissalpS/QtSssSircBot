@@ -1,5 +1,5 @@
 --[[
-  lua/plugins/countdown.lua
+  lua/plugins/commandsCountdown.lua
   provides command to start a countdown
 --]]
 --do return false end
