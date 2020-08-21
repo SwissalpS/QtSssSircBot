@@ -40,6 +40,7 @@ tags
 .directory
 *.debug
 Makefile*
+!/doc/SphinxBreatheExhaleDocutils/Makefile
 *.prl
 *.app
 moc_*.cpp
