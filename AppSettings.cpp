@@ -521,6 +521,7 @@ void AppSettings::initOverrides() {
 } // initOverrides
 
 
+// [markerInitPaths]
 void AppSettings::initPaths() {
 
 	// data ie playlists, settings etc
@@ -540,6 +541,7 @@ void AppSettings::initPaths() {
 	//this->onDebugMessage(tr("OK:Using for music: ") + this->sPathMusicBase);
 
 } // initPaths
+// [markerInitPaths]
 
 
 void AppSettings::setSettings(QSettings *pNewSettings) {
@@ -587,3 +589,4 @@ void AppSettings::setupDirs(QString sPathBase) {
 
 
 }	} // namespace SwissalpS::QtSssSircBot
+

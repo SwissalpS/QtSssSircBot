@@ -5,8 +5,8 @@ Command Line Arguments
 -----------------------
 You may prefer to set certain settings from command line.
 
-If all you want is a bot that connectst to a single network, you can pass all
-parametrs on command line without needing to make a JSON configuration file.
+If all you want is a bot that connects to a single network, you can pass all
+parameters on command line without needing to make a JSON configuration file.
 
 For a list of supported arguments and brief description of them, do:
 
@@ -17,13 +17,16 @@ For a list of supported arguments and brief description of them, do:
 Arguments passed on command line override values from Settings.ini.
 
 - --backdoor </path/to/backdoor>
-    Defaults to ~/Documents/QtSssSircBot/backdoor (OS dependant)
+    Defaults to 'backdoor' in :ref:`the workdir`
     Commands can be written to this file `read more... <backdoor.html>`_
 - --channels <commaListOfChannels>
     Example: #home,#help,#dev
 - --config </path/to/config.json>
     Defaults to none -> uses settings passed by other arguments and falls back
     to whatever is in Settings.ini
+    Options (channels, host, nicks, pass, port, realname) SHOULD not be used in
+    combination with --config option. The idea is to use either config OR the
+    mentioned options.
 - --host <host>
     Remote host to use. Example: irc.freenode.net
 - --nicks <nicks>
@@ -42,46 +45,41 @@ Arguments passed on command line override values from Settings.ini.
 JSON Config File
 -----------------------
 
-Example JSON config file setting up two connections:
+Example JSON config file setting up two connections 'fn' and 'cn':
 
 .. code-block:: json
 
     [{
         "sConnectionID": "fn",
-        "sIRCrawPostLoginLines": [],
-        "sIRCrawPreLoginLines": [],
+        "sIRCrawPostLoginLines": [ "PRIVMSG NickServ identify 476ed1sg" ],
         "sIRCremoteChannels": [
-            "#SwissalpS",
-            "#SwissalpS.mix",
             "#lite",
             "#minetest",
             "#pandorabox"
         ],
         "sIRCremoteHost": "irc.freenode.net",
         "sIRCremoteNicks": [
-            "QtSssSircBot",
-            "QtSwissalpSbot"
+            "AndrewBot",
+            "SmithBot"
         ],
-        "sIRCremotePassword": "",
-        "sIRCremoteRealname": "Qt-IRC-bot written by SwissalpS",
+        "sIRCremoteRealname": "Qt-IRC-bot-that-wants-jokes",
         "uiIRCremotePort": 6697
     },
     {
         "sConnectionID": "cn",
-        "sIRCrawPostLoginLines": [],
-        "sIRCrawPreLoginLines": [],
         "sIRCremoteChannels": [
-            "#home"
+            "#base"
         ],
         "sIRCremoteHost": "irc.foo.bar",
         "sIRCremoteNicks": [
-            "QtSssSircBot",
-            "QtSwissalpSbot"
+            "AndrewSmith",
+            "Smith"
         ],
         "sIRCremotePassword": "Secret",
-        "sIRCremoteRealname": "QtSwissalpSbot",
-        "uiIRCremotePort": 6697
+        "sIRCremoteRealname": "Andrew Smith"
     }]
+
+(this is not a functional sample)
 
 Most field labels are the same as used in Settings.ini.
 
@@ -98,22 +96,33 @@ Most field labels are the same as used in Settings.ini.
 - **sIRCremoteRealname** realname to use when loggin on
 - **uiIRCremotePort** port to use for connection. Defaults to 6697
 
+You can save your config.json files anywhere. Suggested place is in :ref:`the workdir`
+Example: ~/Documents/QtSssSircBot/config/botC.json.
+Prefer absolute paths. Relatvie paths start at `the workdir`_.
+
 Settings.ini File
 -----------------------
+Application level settings and defaults for connection.
 On first launch of QtSssSircBot, Settings.ini is created and populated with
-default values. You will need to edit these, pass on command line or make a
-JSON config file.
+default values in `the workdir`_. You will need to either:
 
-Example Settings.ini::
+    - edit these in Settings.ini
+    - pass parameters on command line
+    - or make a JSON config file and pass it's path on command line or in Settings.ini
 
-    sIRCconfigPath=~/Documents/QtSssSircBot/config/setB.json
+Example Settings.ini:
+
+.. code-block:: ini
+
+    [General]
+    sIRCconfigPath=config/setB.json
     sIRCremoteChannels="#SwissalpS,#home"
     sIRCremoteHost=irc.freenode.net
     sIRCremoteNicks="QtSwissalpSbot,QtSssSbot"
     sIRCremotePassword=
     sIRCremoteRealname=QtSwissalpSbot
-    sPathFileBackdoor=~/Documents/QtSssSircBot/backdoor
-    sPathFilePID=~/Documents/QtSssSircBot/QtSssSircBot.pid
+    sPathFileBackdoor=backdoor
+    sPathFilePID=QtSssSircBot.pid
     uiBackdoorIntervalMS=1800
     uiIRCremotePort=6697
 
@@ -127,4 +136,25 @@ Example Settings.ini::
 - **sPathFilePID** QtSssSircBot's PID is written into this file
 - **uiBackdoorIntervalMS** defaults to 3 minutes, how often backdoor file is checked
 - **uiIRCremotePort** is overridden by ``--port`` Defaults to 6697
+
+.. _`the workdir`:
+
+Work Directory
+---------------
+
+This is where QtSssSircBot keeps settings and other files it may generate.
+At launch this location is determined depending on OS. Generally it is in
+the users "Documents" directory. It's location can only be changed in Cpp code.
+
+Every time QtSssSircBot is launched, it checks for this directory and creates it
+and any missing files and directories in it. Most of these are kept in the .qrc
+file.
+
+The code-block bellow shows where and how the work directory is determined.
+
+.. literalinclude:: ../../../../AppSettings.cpp
+    :caption: hard code another location in AppSettings.cpp initPaths()
+    :start-after: markerInitPaths
+    :end-before: markerInitPaths
+    :emphasize-lines: 7,8
 
