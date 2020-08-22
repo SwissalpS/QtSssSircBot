@@ -20,13 +20,21 @@ project = 'QtSssSircBot'
 copyright = '2020, SwissalpS'
 author = 'SwissalpS'
 
+# for groundwork theme
+# The short X.Y version
+version = '0.0'
+# The full version, including alpha/beta/rc tags
+release = '0.0.1_master'
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['breathe','exhale']
+extensions = ['breathe','exhale',
+    'sphinx.ext.todo',
+    'sphinx.ext.githubpages'
+]
 
 # Setup the breathe extension
 breathe_projects = {
@@ -78,10 +86,28 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
+# for groundwork: master_doc and pygments_style
+master_doc = 'index'
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+
+# also for groundwork: all of these options
+html_theme_options = {
+    "sidebar_width": '240px',
+    "stickysidebar": True,
+    "stickysidebarscrollable": True,
+    "contribute": True,
+    "github_fork": "SwissalpS/QtSssSircBot",
+    "github_user": "SwissalpS",
+}
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+#html_theme = 'alabaster'
+# to install this theme, do:
+# $ pip install groundwork-sphinx-theme --user
+html_theme = 'groundwork'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
