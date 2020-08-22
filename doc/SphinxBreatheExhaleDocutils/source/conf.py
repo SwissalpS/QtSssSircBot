@@ -63,6 +63,8 @@ exhale_args = {
         # Using `=` instead of `+=` overrides
         RECURSIVE = YES
         FULL_PATH_NAMES = YES
+        SHOW_FILES = YES
+        HIDE_IN_BODY_DOCS = NO
         # Allow for rst directives and advanced functions e.g. grid tables
         ALIASES += "rst=\verbatim embed:rst:leading-asterisk"
         ALIASES += "endrst=\endverbatim"

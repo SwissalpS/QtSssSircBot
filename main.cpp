@@ -8,6 +8,8 @@
 
 #include "AppController.h"
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
 int main(int iCountArgs, char *aArguments[]) {
 
 #ifdef SssS_USE_GUI
@@ -35,3 +37,5 @@ int main(int iCountArgs, char *aArguments[]) {
 	return oApp.exec();
 
 } // main
+#endif // DOXYGEN_SHOULD_SKIP_THIS
+
