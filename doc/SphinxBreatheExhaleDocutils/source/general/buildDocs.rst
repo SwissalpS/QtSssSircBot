@@ -50,3 +50,13 @@ For a better cross-liked version of the C++ code reference:
 
 resulting pages can be found in QtSssSircBot/doc/Doxygen/html
 
+Updating Version Information
+------------------------------
+
+There is QtSssSircBot/doc/updateVersionTag.sh that parses project file for
+version number and asks git for current branch. It then updates the configuration
+files using template files.
+
+Run this after checking out a branch and before building documentation. You can
+add the script to build steps in QtCreator, or to git hooks.
+
