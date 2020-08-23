@@ -10,6 +10,7 @@ QtSssSircBot documentation
 
    general/buildAndInstall
    general/configuration
+   general/running
    general/backdoor
    general/extending
    cppApi/cppApiRoot

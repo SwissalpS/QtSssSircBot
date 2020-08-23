@@ -17,62 +17,62 @@ least 3 parts are ignored.
 
 Implemented Commands
 ---------------------
-- Channel Message = 'C'
+- Channel Message = 'C'::
 
-  ``"<sConnectionID> C <sChannel> <sMessage>"``
+  <sConnectionID> C <sChannel> <sMessage>
 
   send sMessage on sChannel of connection sConnectionID
-- Direct Message = 'D'
+- Direct Message = 'D'::
 
-  ``"<sConnectionID> D <sNick> <sMessage>"``
+  <sConnectionID> D <sNick> <sMessage>
 
   send sMessage to sNick of connection sConnectionID
-- Exit = 'e'
+- Exit = 'e'::
 
-  ``"- e -"``
+  - e -
 
   Terminate QtSssSircBot
-- Join = 'J'
+- Join = 'J'::
 
-  ``"<sConnectionID> J <sChannel>"``
+  <sConnectionID> J <sChannel>
 
   join sChannel on connection sConnectionID
-- NickList = 'N'
+- NickList = 'N'::
 
-  ``"<sConnectionID> N <sNewNick>"``
+  <sConnectionID> N <sNewNick>
 
   request to change nick to sNewNick on connection sConnectionID
-- Part = '-'
+- Part = '-'::
 
-  ``"<sConnectionID> - <sChannel(s)>[ <sMessage>]"``
+  <sConnectionID> - <sChannel(s)>[ <sMessage>]
 
   leave channel(s) of connection sConnectionID with optional sMessage
-- Quit = 'Q'
+- Quit = 'Q'::
 
-  ``"<sConnectionID"> Q <sMessage>"``
+  <sConnectionID> Q <sMessage>
 
   leave network of sConnectionID with sMessage
-- (Re)connected = 'c'
+- (Re)connected = 'c'::
 
-  ``"<sConnectionID"> c -"``
+  <sConnectionID> c -
 
   (re)connect connection of sConnectionID
-- Disconnect = 'd'
+- Disconnect = 'd'::
 
-  ``"<sConnectionID"> d -"``
+  <sConnectionID> d -
 
   disconnect connection of sConnectionID
-- Reload Connections = 'r'
+- Reload Connections = 'r'::
 
-  ``"- r -"``
+  - r -
 
   Reload all connections from config file. Disconnects any existing connections
   and rebuilds them according to config. This is same as re-launching
   QtSssSircBot but with benifit of keeping other parts of the application
   running.
-- Raw Out = '>' TODO: implement this functionality
+- Raw Out = '>' TODO: implement this functionality::
 
-  ``"<sConnectionID> > <sRawIRCline>"``
+  <sConnectionID> > <sRawIRCline>
 
   send sRawIRCline (adding termination crlf for you) to connection sConnectionID
 
