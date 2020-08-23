@@ -1,46 +1,50 @@
 Configuration
 ==============
 
-Command Line Arguments
+Settings.ini File
 -----------------------
-You may prefer to set certain settings from command line.
+Application level settings and defaults for connection.
+On first launch of QtSssSircBot, Settings.ini is created and populated with
+default values in `the workdir`_. You will need to either:
 
-If all you want is a bot that connects to a single network, you can pass all
-parameters on command line without needing to make a JSON configuration file.
+    - edit these in Settings.ini
+    - pass parameters on command line (only single connection)
+    - or make a JSON config file and pass it's path on command line or in Settings.ini
 
-For a list of supported arguments and brief description of them, do:
+Example Settings.ini:
 
-.. code-block:: sh
+.. code-block:: ini
 
-    ./QtSssSircBot -h
+    [General]
+    sIRCconfigPath=config/setB.json
+    sIRCremoteChannels="#SwissalpS,#home"
+    sIRCremoteHost=irc.bar.foo
+    sIRCremoteNicks="QtSwissalpSbot,QtSssSbot"
+    sIRCremotePassword=
+    sIRCremoteRealname="QtSwissalpSbot"
+    sPathFileBackdoor=backdoor
+    sPathFilePID=QtSssSircBot.pid
+    uiBackdoorIntervalMS=1800
+    uiIRCremotePort=6697
 
-Arguments passed on command line override values from Settings.ini.
+- **sIRCconfigPath** is overridden by ``--config``
+- **sIRCremoteChannels** is overridden by ``--channels``
+- **sIRCremoteHost** is overridden by ``--host``
+- **sIRCremoteNicks** is overridden by ``--nicks``
+- **sIRCremotePassword** is overridden by ``--pass``
+- **sIRCremoteRealname** is overridden by ``--realname``
+- **sPathFileBackdoor** is overridden by ``--backdoor``
+- **sPathFilePID** QtSssSircBot's PID is written into this file
+- **uiBackdoorIntervalMS** defaults to 3 minutes, how often backdoor file is checked
+- **uiIRCremotePort** is overridden by ``--port`` Defaults to 6697
 
-- --backdoor </path/to/backdoor>
-    Defaults to 'backdoor' in :ref:`the workdir`
-    Commands can be written to this file `read more... <backdoor.html>`_
-- --channels <commaListOfChannels>
-    Example: #home,#help,#dev
-- --config </path/to/config.json>
-    Defaults to none -> uses settings passed by other arguments and falls back
-    to whatever is in Settings.ini
-    Options (channels, host, nicks, pass, port, realname) SHOULD not be used in
-    combination with --config option. The idea is to use either config OR the
-    mentioned options.
-- --host <host>
-    Remote host to use. Example: irc.freenode.net
-- --nicks <nicks>
-    Example: MyFav,MyAlt,MyOhWell
-    QtSssSircBot will attempt to login is 'MyFav', if that is not available, it
-    will try 'MyAlt', then 'MyOhWell' and if that fails it will append
-    underscores: 'MyOhWell\_', 'MyOhWell\_\_', ...
-- --pass <password>
-    Network password to use.
-- --port <port>
-    Remote port to use for secure connection (SSL/TLS)
-- --realname <realname>
-    Realname to use
+Comma separated lists must be in double quotes and should not contain spaces.
 
+Realname may be set without quotes if it does not contain anything but alpha numerics.
+
+Details about :ref:`CLArguments`
+
+.. _`JSONConfigFile`:
 
 JSON Config File
 -----------------------
@@ -100,42 +104,47 @@ You can save your config.json files anywhere. Suggested place is in :ref:`the wo
 Example: ~/Documents/QtSssSircBot/config/botC.json.
 Prefer absolute paths. Relatvie paths start at `the workdir`_.
 
-Settings.ini File
+.. _`CLArguments`:
+
+Command Line Arguments
 -----------------------
-Application level settings and defaults for connection.
-On first launch of QtSssSircBot, Settings.ini is created and populated with
-default values in `the workdir`_. You will need to either:
+You may prefer to set certain settings from command line.
 
-    - edit these in Settings.ini
-    - pass parameters on command line
-    - or make a JSON config file and pass it's path on command line or in Settings.ini
+If all you want is a bot that connects to a single network, you can pass all
+parameters on command line without needing to make a JSON configuration file.
 
-Example Settings.ini:
+For a list of supported arguments and brief description of them, do:
 
-.. code-block:: ini
+.. code-block:: sh
 
-    [General]
-    sIRCconfigPath=config/setB.json
-    sIRCremoteChannels="#SwissalpS,#home"
-    sIRCremoteHost=irc.freenode.net
-    sIRCremoteNicks="QtSwissalpSbot,QtSssSbot"
-    sIRCremotePassword=
-    sIRCremoteRealname=QtSwissalpSbot
-    sPathFileBackdoor=backdoor
-    sPathFilePID=QtSssSircBot.pid
-    uiBackdoorIntervalMS=1800
-    uiIRCremotePort=6697
+    ./QtSssSircBot -h
 
-- **sIRCconfigPath** is overridden by ``--config``
-- **sIRCremoteChannels** is overridden by ``--channels``
-- **sIRCremoteHost** is overridden by ``--host``
-- **sIRCremoteNicks** is overridden by ``--nicks``
-- **sIRCremotePassword** is overridden by ``--pass``
-- **sIRCremoteRealname** is overridden by ``--realname``
-- **sPathFileBackdoor** is overridden by ``--backdoor``
-- **sPathFilePID** QtSssSircBot's PID is written into this file
-- **uiBackdoorIntervalMS** defaults to 3 minutes, how often backdoor file is checked
-- **uiIRCremotePort** is overridden by ``--port`` Defaults to 6697
+Arguments passed on command line override values from Settings.ini.
+
+- --backdoor </path/to/backdoor>
+    Defaults to 'backdoor' in :ref:`the workdir`
+    Commands can be written to this file `read more... <backdoor.html>`_
+- --channels <commaListOfChannels>
+    Example: #home,#help,#dev
+- --config </path/to/config.json>
+    Defaults to none -> uses settings passed by other arguments and falls back
+    to whatever is in Settings.ini
+    Options (channels, host, nicks, pass, port, realname) SHOULD not be used in
+    combination with --config option. The idea is to use either config OR the
+    mentioned options.
+- --host <host>
+    Remote host to use. Example: irc.freenode.net
+- --nicks <nicks>
+    Example: MyFav,MyAlt,MyOhWell
+    QtSssSircBot will attempt to login is 'MyFav', if that is not available, it
+    will try 'MyAlt', then 'MyOhWell' and if that fails it will append
+    underscores: 'MyOhWell\_', 'MyOhWell\_\_', ...
+- --pass <password>
+    Network password to use.
+- --port <port>
+    Remote port to use for secure connection (SSL/TLS)
+- --realname <realname>
+    Realname to use
 
 .. _`the workdir`:
 
