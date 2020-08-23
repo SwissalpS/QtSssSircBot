@@ -70,8 +70,8 @@ exhale_args = {
         # sometimes we just want all for valid reasons
         EXTRACT_ALL = NO
         # Allow for rst directives and advanced functions e.g. grid tables
-        ALIASES += "rst=\verbatim embed:rst:leading-asterisk"
-        ALIASES += "endrst=\endverbatim"
+        ALIASES += "rst=\\verbatim embed:rst:leading-asterisk"
+        ALIASES += "endrst=\\endverbatim"
     ''')
 }
 
