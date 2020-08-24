@@ -38,5 +38,14 @@ sed -i "s/{{VERSION}}/${sVersion}/g" $sPW;
 sed -i "s/{{BRANCH}}/${sBranch}/g" $sPW;
 mv $sPW $sPO;
 
+## LDoc standalone
+sLT=LDoc/config.ld.template;
+sLW=LDoc/config.ld.wrk;
+sLO=LDoc/config.ld;
+cp $sLT $sLW;
+sed -i "s/{{VERSION}}/${sVersion}/g" $sLW;
+sed -i "s/{{BRANCH}}/${sBranch}/g" $sLW;
+mv $sLW $sLO;
+
 echo "Done, have a nice day.";
 

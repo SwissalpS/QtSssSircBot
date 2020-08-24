@@ -8,6 +8,8 @@
 /doc/Doxygen/rst/
 # ignore not working rst2web.py
 /doc/Doxygen/r2w.ini
+# ignore built LDoc output
+/doc/LDoc/html/
 
 # sphinx output
 /doc/SphinxBreatheExhaleDocutils/build/
