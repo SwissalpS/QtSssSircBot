@@ -64,4 +64,3 @@ void IRCeventPool::onEvent(const QStringList &aEvent) {
 
 
 }	} // namespace SwissalpS::QtSssSircBot
-

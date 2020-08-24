@@ -1,6 +1,22 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+# project generated files
+# When building doxygen straight to html
+/doc/Doxygen/html/
+# does not work, so let's ignore
+/doc/Doxygen/rst/
+# ignore not working rst2web.py
+/doc/Doxygen/r2w.ini
+
+# sphinx output
+/doc/SphinxBreatheExhaleDocutils/build/
+# exhale output
+/doc/SphinxBreatheExhaleDocutils/source/cppApi/
+# breathe output
+/doc/SphinxBreatheExhaleDocutils/source/tmp_doxyoutput/
+
+# general temporary files
 *~
 *.autosave
 *.a
@@ -24,6 +40,7 @@ tags
 .directory
 *.debug
 Makefile*
+!/doc/SphinxBreatheExhaleDocutils/Makefile
 *.prl
 *.app
 moc_*.cpp
