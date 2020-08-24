@@ -38,6 +38,7 @@ core
 tags
 .DS_Store
 .directory
+.lite_workspace.lua
 *.debug
 Makefile*
 !/doc/SphinxBreatheExhaleDocutils/Makefile
