@@ -19,6 +19,7 @@
 namespace SwissalpS { namespace QtSssSircBot {
 
 
+/// holds pointer to shared instance
 AppController *AppController::pSingelton = 0;
 
 AppController::AppController(QObject *pParent) :
@@ -37,6 +38,7 @@ AppController::~AppController() {
 } // dealloc
 
 
+/// called to destroy singleton instance
 void AppController::drop() {
 
 	static QMutex oMutex;
@@ -51,6 +53,8 @@ void AppController::drop() {
 } // drop
 
 
+/// \brief use this to get pointer to singleton instance
+/// Hold on to the pointer to keep your app snappy
 AppController *AppController::pAppController() {
 
 	///
