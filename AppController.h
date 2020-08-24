@@ -20,6 +20,7 @@ class AppController : public QObject {
 
 	Q_OBJECT
 
+private:
 	static AppController *pSingelton;
 	// keep this private as we want only one instance
 	// read; http://www.qtcentre.org/wiki/index.php?title=Singleton_pattern
@@ -30,8 +31,6 @@ class AppController : public QObject {
 	// we leave just the declarations, so the compiler will warn us
 	// if we try to use those two functions by accident
 	AppController& operator=(const AppController &other);
-
-private:
 
 protected:
 	AppSettings *pAS;
