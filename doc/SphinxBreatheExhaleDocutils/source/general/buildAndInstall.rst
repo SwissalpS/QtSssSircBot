@@ -22,6 +22,8 @@ and work from that, or better use command line to clone repository:
 .. code-block:: sh
 
     $ git clone https://github.com/SwissalpS/QtSssSircBot.git
+    $ cd QtSssSircBot
+    $ git checkout master
 
 Build QtSssSircBot
 -------------------
