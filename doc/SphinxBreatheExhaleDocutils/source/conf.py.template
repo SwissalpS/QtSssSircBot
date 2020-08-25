@@ -60,6 +60,7 @@ exhale_args = {
     "exhaleDoxygenStdin": textwrap.dedent('''
         INPUT = ../../../
         EXCLUDE = ../../../doc
+        EXCLUDE += ../../../foreign/lua52
         EXCLUDE += ../../../lua/.lite_workspace.lua
         # Using `=` instead of `+=` overrides
         RECURSIVE = YES
