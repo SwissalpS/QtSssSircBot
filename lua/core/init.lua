@@ -243,15 +243,15 @@ end -- core.temp_filename
 -- called at quit but also when Lua environment is being re-loaded
 -- assume that connections stay active or are dead already (when exiting app)
 -- save state if needed using override or notification
-function core.abort(iRes)
 -- int: iNumber
 --              0 < iNumber means reload Lua in iNumber milliseconds.
 --              0 >= iNumber means shutdown Lua session.
+function core.abort(iNumber)
   -- cleanup
-  core.oNotificationManager:post('core.abort', iRes)
+  core.oNotificationManager:post('core.abort', iNumber)
   delete_temp_files()
   -- signal that we are ready for re-load
-  IRC.abort(iRes)
+  IRC.abort(iNumber)
 end -- core.abort
 
 --- disconnect all connections.
