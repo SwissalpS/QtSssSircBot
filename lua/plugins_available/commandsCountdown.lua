@@ -25,7 +25,7 @@ config.CountdownCommand2ConnectionIDrxs = { '.*' }
 --- If none of these Regular expressions matches nick, drop request (admin).
 config.Countdown2NickRxs = { '^[&@](.*)$' }
 
-local sendDM = IRC.send_direct_message
+local sendDM = irc.send_direct_message
 
 local function countdownAction(tData)
 

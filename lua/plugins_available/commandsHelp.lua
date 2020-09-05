@@ -14,7 +14,7 @@ local config = require 'core.config'
 
 -- change these in your user/init.lua
 
-local sendDM = IRC.send_direct_message
+local sendDM = irc.send_direct_message
 local oTM = core.oTriggerManager
 
 local function checkTrigger(oTrigger, sConnectionID, sChannel, sNick, bIncludeAll)

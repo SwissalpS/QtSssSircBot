@@ -10,7 +10,7 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI {
 
 static const luaL_Reg libs[] = {
 	{ "system", System::luaopen },
-	{ "IRC", IRC::luaopen },
+	{ "irc", IRC::luaopen },
 	{ NULL, NULL }
 };
 

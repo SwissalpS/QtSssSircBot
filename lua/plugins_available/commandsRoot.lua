@@ -31,7 +31,7 @@ config.RootCommandsNickRxs = { '^[&@](.*)$' }
 -- Change in your user/init.lua.
 config.RootCommandsRateLimit = { iRequests = 12, iDuring = 3600 }
 
-local sendDM = IRC.send_direct_message
+local sendDM = irc.send_direct_message
 
 local function rootCommands(tP)
   local sSubCommand = tP.sMatch
@@ -44,19 +44,19 @@ local function rootCommands(tP)
     local sConnectionID = string.match(tP.sMessage, '^&[cd]%s%S*%s(%S*)')
     if 'd' == sSubCommand then
       sendDM(tP.sConnectionID, tP.sNick, 'OK:disconnecting ' .. sConnectionID)
-      IRC.send_quit(sConnectionID, config.CoreQuitMessage or 'GoodBye :D')
-      IRC.disconnect(sConnectionID)
+      irc.send_quit(sConnectionID, config.CoreQuitMessage or 'GoodBye :D')
+      irc.disconnect(sConnectionID)
     else -- 'c'
       sendDM(tP.sConnectionID, tP.sNick, 'OK:re-connecting ' .. sConnectionID)
-      IRC.send_quit(sConnectionID, config.CoreQuitMessageReconnect or 'brb')
-      IRC.reconnect(sConnectionID)
+      irc.send_quit(sConnectionID, config.CoreQuitMessageReconnect or 'brb')
+      irc.reconnect(sConnectionID)
     end
   elseif 'a' == sSubCommand then
     sendDM(tP.sConnectionID, tP.sNick, 'OK:re-loading lua')
     core.abort(1)
   elseif 'r' == sSubCommand then
     sendDM(tP.sConnectionID, tP.sNick, 'OK:re-loading connections')
-    IRC.reload_connections()
+    irc.reload_connections()
   else -- 'x'
     sendDM(tP.sConnectionID, tP.sNick, 'OK:terminating ' .. EXEFILE)
     core.quit()
@@ -69,7 +69,7 @@ local function rootCommands2(tP)
     --sendDM(tP.sConnectionID, tP.sNick, 'KO:password missmatch')
     return
   end
-  IRC.send_line(sConnectionID, sMessage)
+  irc.send_line(sConnectionID, sMessage)
   sendDM(tP.sConnectionID, tP.sNick, 'OK:sent line')
 end -- rootCommands2
 

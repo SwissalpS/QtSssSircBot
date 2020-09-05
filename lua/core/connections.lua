@@ -36,7 +36,7 @@ end -- connections.dummyConnectionTable
 -- treturn: ?nil|true
 function connections.addConnection(tConfig)
 
-  local lConnectionIDs = IRC.connection_ids()
+  local lConnectionIDs = irc.connection_ids()
 
   for _, sConnectionID in ipairs(lConnectionIDs) do
     if sConnectionID == tConfig.sConnectionID then
@@ -51,7 +51,7 @@ function connections.addConnection(tConfig)
     return nil
   end
 
-  local bRes, sErr = IRC.add_connection(mRes)
+  local bRes, sErr = irc.add_connection(mRes)
   if bRes then return true end
 
   core.error('json error when attempting to add new connection: ' .. sErr)
