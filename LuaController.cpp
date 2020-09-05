@@ -1,6 +1,6 @@
 #include "LuaController.h"
 
-#include "luaAPI/IRC.h"
+#include "luaAPI/irc.h"
 #include "luaAPI/system.h"
 
 #if !defined(DOXYGEN_SHOULD_SKIP_THIS)

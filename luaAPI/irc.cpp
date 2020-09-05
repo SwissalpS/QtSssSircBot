@@ -1,4 +1,4 @@
-﻿#include "IRC.h"
+﻿#include "irc.h"
 #include "AppController.h"
 #include "CommandEventCodes.h"
 
