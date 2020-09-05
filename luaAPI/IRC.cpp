@@ -6,13 +6,35 @@
 #include <QJsonObject>
 
 
+
 namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace IRC {
 
 
 
+/// static pointer to shared AppController instance
 static AppController *pAC = AppController::pAppController();
 
+// Python versions render different results!
+// Note: '**i...**' causes ... to be invisible in docs!
+//   '** ...**' causes ... to be displayed as link
+//   '**ii...**' works but then it becomes 'iirc.abort'
+//   '**as ...**' hides 'irc.abort' too!
+//   '**.irc.abort**' becomes '**.irc.abort**'!
+//    same with \irc... and _irc...
+//   '`irc.abort`' becomes '`irc.abort`'
+//   '``irc.abort``' becomes ''!
+//   'irc.abort(iNumber)' becomes a link to cppApi/irc.abort(iNumber)
+//    same with '<...>'
+// that is why we are using "irc.xyz(abc)" for this file
 
+/// Used from Lua by **core.abort**(iNumber) as "irc.abort(iNumber)"
+/// \param int iNumber
+///    - 0 < iNumber means reload Lua in iNumber milliseconds
+///    - 0 >= iNumber means shutdown Lua session. Probably application terminating.
+/// \returns void nothing
+/// \rst
+/// See `core.abort() Lua documentation <../_static/LDoc/modules/core.init.html#core.abort>`_
+/// \endrst
 static int abortLua(lua_State *L) {
 	Q_UNUSED(L)
 
@@ -28,6 +50,9 @@ static int abortLua(lua_State *L) {
 } // abortLua
 
 
+/// call from Lua as "irc.add_connection(sJSON)"
+/// \param string sJSON the connection configuration as JSON document string.
+/// \returns nil or true if sJSON passes JSON syntax test.
 static int addConnection(lua_State *L) {
 
 	const QJsonDocument oJdoc = QJsonDocument::fromJson(luaL_checkstring(L, 1));
@@ -45,6 +70,11 @@ static int addConnection(lua_State *L) {
 } // addConnection
 
 
+/// call from Lua as "irc.disconnect(sID)"
+///
+/// Disconnects socket of connection sID
+/// \param string sID the connection ID to disconnect
+/// \returns void
 static int disconnectSocket(lua_State *L) {
 
 	QStringList aEvent;
@@ -59,6 +89,14 @@ static int disconnectSocket(lua_State *L) {
 } // disconnectSocket
 
 
+/// Used from Lua by **core.quit**() as "irc.exit(iCode)"
+///
+/// Terminate application with exit code iCode
+/// \param int iCode the exit code
+/// \returns void
+/// \rst
+/// See `core.quit() Lua documentation <../_static/LDoc/modules/core.init.html#core.quit>`_
+/// \endrst
 static int exitApp(lua_State *L) {
 
 	QStringList aEvent;
@@ -73,6 +111,8 @@ static int exitApp(lua_State *L) {
 } // exitApp
 
 
+/// call from Lua as "irc.connection_ids()"
+/// \returns list of all connection ID strings
 static int getConnectionIDs(lua_State *L) {
 
 	QStringList aList = pAC->getConnectionIDs();
@@ -95,6 +135,13 @@ static int getConnectionIDs(lua_State *L) {
 } // getConnectionIDs
 
 
+/// Used from Lua by **core.poll_event**() as "irc.poll_event()"
+///
+/// handled by LuaController::onIRCevent() and **core.poll_event**()
+/// \rst
+/// See `core.poll_event() Lua documentation <../_static/LDoc/modules/core.init.html#core.poll_event>`_
+/// \endrst
+/// \returns nil or event list describing next event
 static int getEvent(lua_State *L) {
 
 	IRCeventPool *pEP = pAC->getIRCeventPool();
@@ -123,6 +170,11 @@ static int getEvent(lua_State *L) {
 } // getEvent
 
 
+/// call from Lua as "irc.reconnect(sID)"
+///
+/// Reconnects socket of sID using cached parameters (disconnects if connected).
+/// \param string sID the connection ID to (re)connect
+/// \returns void
 static int reconnectSocket(lua_State *L) {
 
 	QStringList aEvent;
@@ -137,6 +189,12 @@ static int reconnectSocket(lua_State *L) {
 } // reconnectSocket
 
 
+/// call from Lua as "irc.reload_connections()"
+///
+/// Reads connection config file and reconnects all.
+/// Either the config set in Settings.ini is used, or, if present, the one
+/// passed as --config command line argument.
+/// \returns void
 static int reloadConnections(lua_State *L) {
 	Q_UNUSED(L)
 
@@ -151,6 +209,11 @@ static int reloadConnections(lua_State *L) {
 } // reloadConnections
 
 
+/// call from Lua as "irc.send_channel_message(sID, sChannel, sMessage)"
+/// \param string sID the connection ID to use
+/// \param string sChannel the channel to post on
+/// \param string sMessage the message to post on sChannel using connection sID
+/// \returns void
 static int sendChannelMessage(lua_State *L) {
 
 	QStringList aEvent;
@@ -166,6 +229,11 @@ static int sendChannelMessage(lua_State *L) {
 } // sendChannelMessage
 
 
+/// call from Lua as "irc.send_direct_message(sID, sChannel, sMessage)"
+/// \param string sID the connection ID to use
+/// \param string sNick the nick to post to
+/// \param string sMessage the message to post to sNick using connection sID
+/// \returns void
 static int sendDirectMessage(lua_State *L) {
 
 	QStringList aEvent;
@@ -181,6 +249,11 @@ static int sendDirectMessage(lua_State *L) {
 } // sendDirectMessage
 
 
+/// call from Lua as "irc.send_join(sID, sChannel)"
+/// \param string sID the connection ID to use
+/// \param string sChannel the channel to join. Depending on server, this
+///   can be a comma separated list of channels
+/// \returns void
 static int sendJoin(lua_State *L) {
 
 	// fetch connection-id-string and channel
@@ -197,6 +270,10 @@ static int sendJoin(lua_State *L) {
 } // sendJoin
 
 
+/// call from Lua as "irc.send_line(sID, sLine)"
+/// \param string sID the connection ID to use
+/// \param string sLine the raw IRC line to send on connection sID
+/// \returns void
 static int sendLine(lua_State *L) {
 
 	// fetch connection-id-string and message
@@ -213,6 +290,10 @@ static int sendLine(lua_State *L) {
 } // sendLine
 
 
+/// call from Lua as "irc.send_nick_change_request(sID, sNewNick)"
+/// \param string sID the connection ID to use
+/// \param string sNewNick the new nick you want bot to be known as
+/// \returns void
 static int sendNickChangeRequest(lua_State *L) {
 
 	// fetch connection-id-string and nick
@@ -229,6 +310,13 @@ static int sendNickChangeRequest(lua_State *L) {
 } // sendNickChangeRequest
 
 
+/// call from Lua as "irc.send_part(sID, sChannels, sMessage = '')"
+///
+/// Leaves channels.
+/// \param string sID the connection ID to use
+/// \param string sChannels is a comma separated list of channel names to leave
+/// \param string sMessage optional message to post in leave-message
+/// \returns void
 static int sendPart(lua_State *L) {
 
 	// fetch connection-id-string and channels as comma separated list
@@ -246,6 +334,13 @@ static int sendPart(lua_State *L) {
 } // sendPart
 
 
+/// call from Lua as "irc.send_quit(sID, sMessage = '')"
+///
+/// Quits a connection. Usually the server will drop the connection after
+/// receiving this command.
+/// \param string sID the connection ID to use
+/// \param string sMessage optional message to post in quit-message
+/// \returns void
 static int sendQuit(lua_State *L) {
 
 	// fetch connection-id-string and message
@@ -262,6 +357,7 @@ static int sendQuit(lua_State *L) {
 } // sendLine
 
 
+/// Translation map Lua => C++ for irc library.
 static const luaL_Reg lib[] = {
 	{ "abort", abortLua },
 	{ "add_connection", addConnection },
@@ -282,6 +378,8 @@ static const luaL_Reg lib[] = {
 };
 
 
+/// Loads IRC library into Lua environment.
+/// Handled by LuaController::initLua() via luaAPI::loadLibs()
 int luaopen(lua_State *L) {
 
 	luaL_newlib(L, lib);

@@ -44,10 +44,13 @@ private:
 protected:
 	/// holds pointer to shared QtSssSircBot::AppSettings instance.
 	AppSettings *pAS;
+	/// holds pointer to IRCeventPool instance
 	IRCeventPool *pEP;
 	/// holds pointer to backdoor handler
 	FileCommandInterface *pFCI;
+	/// holds pointer to LuaController instance
 	LuaController *pLC;
+	/// holds connections by ID
 	QHash<QString, IRCclientController *> hConnections;
 	/// not currently used. Designed to connect error signals. Makes sense for
 	/// some projects to use this.
@@ -56,6 +59,7 @@ protected:
 	void initConnections();
 	/// initialize and start the backdoor handler
 	void initFileCommandInterface();
+	/// initialize and start the Lua environment
 	void initLuaController();
 	/// initialize settings, prepare work directory and parse command line arguments
 	void initSettings();
@@ -74,13 +78,16 @@ public:
 	/// get a list with all the connection IDs
 	inline QStringList getConnectionIDs() { return this->hConnections.keys(); }
 
+	/// get pointer to event pool
 	inline IRCeventPool *getIRCeventPool() { return this->pEP; }
 
+	/// get pointer to LuaController
 	inline LuaController *getLuaController() { return this->pLC; }
 
 public slots:
 	/// add a connection and start it
 	virtual void addConnection(const QJsonObject oConfig);
+	/// add a delayed call back
 	virtual void addDelayedCallback(const QString sID, const int iDuration);
 	/// signal a message for debugging TODO: rename to onDebugMessage for consistancy.
 	///

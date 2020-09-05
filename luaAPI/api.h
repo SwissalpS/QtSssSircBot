@@ -15,6 +15,8 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI {
 
 
 
+/// Loads irc and system libraries into Lua environment.
+/// Handled by LuaController::initLua()
 void loadLibs(lua_State *L);
 
 

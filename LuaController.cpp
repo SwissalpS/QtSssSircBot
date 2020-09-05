@@ -3,6 +3,8 @@
 #include "luaAPI/IRC.h"
 #include "luaAPI/system.h"
 
+#if !defined(DOXYGEN_SHOULD_SKIP_THIS)
+
 // based on info from https://wiki.qt.io/Technical_FAQ#How_can_I_convert_a_QString_to_char.2A_and_vice_versa.3F
 // does not seem to work like this as function
 const char *qstringToConstCharPointer(QString sQS) {
@@ -15,6 +17,7 @@ const char *qstringToConstCharPointer(QString sQS) {
 
 } // qstringToConstCharPointer
 
+#endif // DOXYGEN_SHOULD_SKIP_THIS
 
 
 namespace SwissalpS { namespace QtSssSircBot {

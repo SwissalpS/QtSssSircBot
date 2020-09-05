@@ -19,13 +19,20 @@ namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace Syst
 
 
 
-// calling mutex is costly, so we hold on to a pointer
+/// calling mutex is costly, so we hold on to a pointer to shared AppController instance
 static AppController *pAC = AppController::pAppController();
 
 
 // all the functions starting with 'f_' are taken from github.com/rxi/lite
 // only a few changes were needed to make them compile as Cpp code.
 
+/// Used from Lua by **core.call_later**() as **system.delayed_callback**(sID, iDuration)
+/// \param string sID identifier that will be sent back when iDuration has passed
+/// \param int iDuration milliseconds to wait
+/// \returns void nothing
+/// \rst
+/// See `core.call_later() Lua documentation <../_static/LDoc/modules/core.init.html#core.call_later>`_
+/// \endrst
 static int delayedCallback(lua_State *L) {
 
 	QString sID(luaL_checkstring(L, 1));
@@ -38,6 +45,11 @@ static int delayedCallback(lua_State *L) {
 } // delayedCallback
 
 
+/// call from Lua as **system.chdir**(sPath)
+///
+/// changes working directory to sPath
+/// \param string: sPath path to change to
+/// \returns void nothing but raises error if encountered
 static int f_chdir(lua_State *L) {
 
 	const char *path = luaL_checkstring(L, 1);
@@ -49,6 +61,12 @@ static int f_chdir(lua_State *L) {
 } // f_chdir
 
 
+/// call from Lua as **system.list_dir**(sPath)
+///
+/// \returns
+///    - list of visible file and folder names in sPath
+///    - nil, string on fail to open sPath
+/// \param string sPath path to list
 static int f_list_dir(lua_State *L) {
 
 	const char *path = luaL_checkstring(L, 1);
@@ -82,6 +100,10 @@ static int f_list_dir(lua_State *L) {
 #define realpath(x, y) _fullpath(y, x, MAX_PATH)
 #endif
 
+/// call from Lua as **system.absolute_path**(sPath)
+///
+/// \returns absolute path to sPath
+/// \param string sPath path to translate
 static int f_absolute_path(lua_State *L) {
 
 	const char *path = luaL_checkstring(L, 1);
@@ -97,6 +119,10 @@ static int f_absolute_path(lua_State *L) {
 } // f_absolute_path
 
 
+/// call from Lua as **system.get_file_info**(sPath)
+///
+/// \returns a hash-table with information on sPath
+/// \param string sPath path to inspect
 static int f_get_file_info(lua_State *L) {
 
 	const char *path = luaL_checkstring(L, 1);
@@ -130,6 +156,9 @@ static int f_get_file_info(lua_State *L) {
 } // f_get_file_info
 
 
+/// call from Lua as **system.init_rand**()
+///
+/// initializes the pseudo random number generator with current time stamp
 static int initRand(lua_State *L) {
 	Q_UNUSED(L)
 
@@ -141,6 +170,9 @@ static int initRand(lua_State *L) {
 } // initRand
 
 
+/// call from Lua as **system.get_rand**()
+///
+/// \returns int the next pseudo random number
 static int getRand(lua_State *L) {
 
 	int n = rand();
@@ -151,6 +183,11 @@ static int getRand(lua_State *L) {
 } // getRand
 
 
+/// call from Lua as **system.exec**(sCommand)
+///
+/// executes a system command in the background
+/// \param string sCommand
+/// \return void
 static int f_exec(lua_State *L) {
 
 	size_t len;
@@ -172,6 +209,12 @@ static int f_exec(lua_State *L) {
 } // f_exec
 
 
+/// call from Lua as **system.split_string**(sHaystack, sNeedle, bIncludeEmpty = 0, bCaseSensitive = 1)
+///
+/// \param string sHaystack the string to split
+/// \param string SNeedle the delimiter to use
+/// \param int bIncludeEmpty optional flag to include empty parts
+/// \param int bCaseSensitive optional flag for case sensitivity
 static int splitString(lua_State *L) {
 
 	const char *pIn = luaL_checkstring(L, 1);
@@ -208,6 +251,7 @@ static int splitString(lua_State *L) {
 } // luaAPIcpp_system_splitString
 
 
+/// Translation map Lua => C++ for system library.
 static const luaL_Reg lib[] = {
 	{ "absolute_path", f_absolute_path },
 	{ "chdir", f_chdir },
@@ -222,6 +266,8 @@ static const luaL_Reg lib[] = {
 };
 
 
+/// Loads system library into Lua environment.
+/// Handled by LuaController::initLua() via luaAPI::loadLibs()
 int luaopen(lua_State *L) {
 
 	luaL_newlib(L, lib);
