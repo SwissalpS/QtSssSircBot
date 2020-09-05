@@ -7,7 +7,7 @@
 
 
 
-namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace IRC {
+namespace SwissalpS { namespace QtSssSircBot { namespace LuaAPI { namespace IRC {
 
 
 
@@ -379,7 +379,7 @@ static const luaL_Reg lib[] = {
 
 
 /// Loads IRC library into Lua environment.
-/// Handled by LuaController::initLua() via luaAPI::loadLibs()
+/// Handled by LuaController::initLua() via LuaAPI::loadLibs()
 int luaopen(lua_State *L) {
 
 	luaL_newlib(L, lib);
@@ -390,5 +390,5 @@ int luaopen(lua_State *L) {
 
 
 
-} } } } // namespace SwissalpS::QtSssSircBot::luaAPI::IRC
+} } } } // namespace SwissalpS::QtSssSircBot::LuaAPI::IRC
 

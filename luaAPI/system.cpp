@@ -15,7 +15,7 @@
 
 
 
-namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace System {
+namespace SwissalpS { namespace QtSssSircBot { namespace LuaAPI { namespace System {
 
 
 
@@ -273,7 +273,7 @@ static const luaL_Reg lib[] = {
 
 
 /// Loads system library into Lua environment.
-/// Handled by LuaController::initLua() via luaAPI::loadLibs()
+/// Handled by LuaController::initLua() via LuaAPI::loadLibs()
 int luaopen(lua_State *L) {
 
 	luaL_newlib(L, lib);
@@ -284,4 +284,4 @@ int luaopen(lua_State *L) {
 
 
 
-} } } } // namespace SwissalpS::QtSssSircBot::luaAPI::system
+} } } } // namespace SwissalpS::QtSssSircBot::LuaAPI::system

@@ -1,5 +1,5 @@
-#ifndef SwissalpS_QtSssSircBot_luaAPI_API_H
-#define SwissalpS_QtSssSircBot_luaAPI_API_H
+#ifndef SwissalpS_QtSssSircBot_LuaAPI_API_H
+#define SwissalpS_QtSssSircBot_LuaAPI_API_H
 
 extern "C" {
 
@@ -11,7 +11,7 @@ extern "C" {
 
 
 
-namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI {
+namespace SwissalpS { namespace QtSssSircBot { namespace LuaAPI {
 
 
 
@@ -21,8 +21,8 @@ void loadLibs(lua_State *L);
 
 
 
-} } } // namespace SwissalpS::QtSssSircBot::luaAPI
+} } } // namespace SwissalpS::QtSssSircBot::LuaAPI
 
 
 
-#endif // SwissalpS_QtSssSircBot_luaAPI_API_H
+#endif // SwissalpS_QtSssSircBot_LuaAPI_API_H

@@ -4,7 +4,7 @@
 
 
 
-namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI {
+namespace SwissalpS { namespace QtSssSircBot { namespace LuaAPI {
 
 
 
@@ -27,4 +27,4 @@ void loadLibs(lua_State *L) {
 
 
 
-} } } // namespace SwissalpS::QtSssSircBot::luaAPI
+} } } // namespace SwissalpS::QtSssSircBot::LuaAPI

@@ -1,10 +1,10 @@
-#ifndef SwissalpS_QtSssSircBot_luaAPI_IRC_H
-#define SwissalpS_QtSssSircBot_luaAPI_IRC_H
+#ifndef SwissalpS_QtSssSircBot_LuaAPI_IRC_H
+#define SwissalpS_QtSssSircBot_LuaAPI_IRC_H
 #include "api.h"
 
 
 
-namespace SwissalpS { namespace QtSssSircBot { namespace luaAPI { namespace IRC {
+namespace SwissalpS { namespace QtSssSircBot { namespace LuaAPI { namespace IRC {
 
 
 
@@ -13,8 +13,8 @@ int luaopen(lua_State *L);
 
 
 
-} } } } // namespace SwissalpS::QtSssSircBot::luaAPI::IRC
+} } } } // namespace SwissalpS::QtSssSircBot::LuaAPI::IRC
 
 
 
-#endif // SwissalpS_QtSssSircBot_luaAPI_IRC_H
+#endif // SwissalpS_QtSssSircBot_LuaAPI_IRC_H

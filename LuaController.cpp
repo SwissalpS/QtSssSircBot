@@ -99,7 +99,7 @@ void LuaController::initLua() {
 
 	// load libraries
 	luaL_openlibs(L);
-	luaAPI::loadLibs(L);
+	LuaAPI::loadLibs(L);
 
 	// pass cli-arguments, possibly some more,
 	// to lua global space
