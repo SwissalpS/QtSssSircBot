@@ -219,9 +219,15 @@ static int splitString(lua_State *L) {
 
 	const char *pIn = luaL_checkstring(L, 1);
 	const char *pDelim = luaL_checkstring(L, 2);
+	const bool bIncludeEmpty = 1 == luaL_optinteger(L, 3, 0);
+	const bool bCaseSensitive = 1 == luaL_optinteger(L, 4, 1);
+
 	const QString sIn(pIn);
 	const QString sDelim(pDelim);
-	const QStringList aOut = sIn.split(sDelim, QString::SkipEmptyParts, Qt::CaseSensitive);
+	auto iEmpty = bIncludeEmpty ? QString::KeepEmptyParts : QString::SkipEmptyParts;
+	auto iCase = bCaseSensitive ? Qt::CaseInsensitive : Qt::CaseInsensitive;
+
+	const QStringList aOut = sIn.split(sDelim, iEmpty, iCase);
 
 	lua_newtable(L);
 
