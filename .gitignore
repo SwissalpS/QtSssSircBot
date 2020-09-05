@@ -10,6 +10,8 @@
 /doc/Doxygen/r2w.ini
 # ignore built LDoc output
 /doc/LDoc/html/
+# also when copied/linked in Sphinx _static
+/doc/SphinxBreatheExhaleDocutils/source/_static/LDoc
 
 # sphinx output
 /doc/SphinxBreatheExhaleDocutils/build/
