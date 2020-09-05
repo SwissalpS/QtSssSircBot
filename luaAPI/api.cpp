@@ -1,5 +1,5 @@
 //#include "api.h"
-#include "IRC.h"
+#include "irc.h"
 #include "system.h"
 
 
