@@ -13,7 +13,6 @@
 
 --do return false end
 -- [[
-local core = require 'core'
 local config = require 'core.config'
 
 -- change these in your user/init.lua.
