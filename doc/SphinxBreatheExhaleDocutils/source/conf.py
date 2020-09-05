@@ -81,12 +81,12 @@ exhale_args = {
         # does not work
         #EXTENSION_MAPPING += lua=/usr/local/bin/lua2dox
         # works somewhat, requires EXTENSION_MAPPING lua=c
-        #FILTER_PATTERNS += *.lua=/home/user/lua2dox/lua2dox_filter
+        #FILTER_PATTERNS += *.lua=../lua2dox/lua2dox_filter
         #EXTENSION_MAPPING += lua=c
         # works somewhat better with my patched version, but is far from
         # sufficient and a basic problem with terms remains. Artificially
         # making classes and namespaces brings too much confusion.
-        FILTER_PATTERNS += *.lua=/home/user/lua2dox_modified/lua2dox_filter
+        FILTER_PATTERNS += *.lua=../lua2dox_modified/lua2dox_filter
         EXTENSION_MAPPING += lua=C++
         FILE_PATTERNS += *.lua
         # Allow for rst directives and advanced functions e.g. grid tables
