@@ -31,7 +31,7 @@ end
 -- just set up and be ready for either core.run to take
 -- over or C/Cpp side to call hooks defined in core.events
 function core.init()
-  print('core.init', EXEDIR)
+  --print('core.init', EXEDIR)
 
   -- load trigger code
   local tT = require 'core.triggers'
@@ -62,7 +62,7 @@ end -- core.init
 --- Lua based run-loop. This is meant for applications that run Lua on
 -- separate thread in it's own run-loop.
 function core.run()
-  print('core.run')
+  --print('core.run')
   -- loop
 	core.poll_event()
 	--sleep
