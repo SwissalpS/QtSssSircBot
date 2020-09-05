@@ -21,7 +21,7 @@ local function repost(tD)
 
   local sOut = tD.sConnectionID .. ':' .. tD.sChannel .. ':' .. sFrom .. tD.sMessage
   oLogger:log(sOut)
-  IRC.send_channel_message(sPostToCID, sPostToChannel, sOut)
+  irc.send_channel_message(sPostToCID, sPostToChannel, sOut)
 
   end -- repost
 

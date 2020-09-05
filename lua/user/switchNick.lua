@@ -12,7 +12,7 @@
 local function nickSwitch(tP)
 	local sPassword, sConnectionID, sNewNick = tP.sMatch:match('(%S*)%s(%S*)%s(%S*)')
 	if sPassword ~= config.RootCommandsPassword then return end
-	IRC.send_nick_change_request(sConnectionID, sNewNick)
+	irc.send_nick_change_request(sConnectionID, sNewNick)
 	sendDM(tP.sConnectionID, tP.sNick, 'OK:sent nick change request')
 end -- nickSwitch
 

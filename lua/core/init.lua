@@ -113,7 +113,7 @@ end -- core.call_delayed_callback
 -- There should not be any need to call this manually, but there is also no
 -- harm done in doing so.
 function core.poll_event()
-  local aEvent = IRC.poll_event()
+  local aEvent = irc.poll_event()
   if aEvent then
     core.handleEvent(aEvent)
   end
@@ -129,7 +129,7 @@ function core.poll_events()
   local aEvent
   local bContinue = true
   while bContinue do
-	  aEvent = IRC.poll_event()
+	  aEvent = irc.poll_event()
 	  if nil == aEvent then
 	    bContinue = false
 	  else
@@ -251,17 +251,17 @@ function core.abort(iNumber)
   core.oNotificationManager:post('core.abort', iNumber)
   delete_temp_files()
   -- signal that we are ready for re-load
-  IRC.abort(iNumber)
+  irc.abort(iNumber)
 end -- core.abort
 
 --- disconnect all connections.
 -- Will attempt graceful disconnect with QUIT message on each connection.
 function core.disconnectAll()
-  local lIDs = IRC.connection_ids()
+  local lIDs = irc.connection_ids()
   for _, sConnectionID in ipairs(lIDs) do
     core.log('Disconnecting connection: ' .. sConnectionID)
-    IRC.send_quit(sConnectionID, config.CoreQuitMessage or 'goodbye :D')
-    IRC.disconnect(sConnectionID)
+    irc.send_quit(sConnectionID, config.CoreQuitMessage or 'goodbye :D')
+    irc.disconnect(sConnectionID)
   end
 end -- core.disconnectAll
 
@@ -271,7 +271,7 @@ function core.quit()
   core.disconnectAll()
   core.abort(0)
   core.oNotificationManager:post('core.quit', 0)
-  IRC.exit(0)
+  irc.exit(0)
 end -- core.quit
 
 
