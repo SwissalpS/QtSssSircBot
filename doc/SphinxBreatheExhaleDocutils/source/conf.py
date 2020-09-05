@@ -62,6 +62,7 @@ exhale_args = {
         EXCLUDE = ../../../doc
         EXCLUDE += ../../../foreign/lua52
         EXCLUDE += ../../../lua/.lite_workspace.lua
+        EXCLUDE += ../../../lua
         # Using `=` instead of `+=` overrides
         RECURSIVE = YES
         FULL_PATH_NAMES = YES
