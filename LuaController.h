@@ -46,6 +46,7 @@ public:
 	int callLua(const QString sCall);
 
 	/// initialize object and start Lua environment
+	/// TODO: add more description about aArgs
 	void init(QStringList aArgs);
 
 	/// get pointer of Lua Environment
