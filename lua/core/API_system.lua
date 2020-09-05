@@ -2,6 +2,11 @@
 	lua/core/API_system.lua
 	symbols in system-API, mainly for lite to autocomplete correctly
 --]]
+---
+-- symbols in system-API, mainly for lite to autocomplete correctly.
+-- This file has currently no functional part in running QtSssSircBot.
+-- module: doc.API_system
+
 return { "absolute_path", -- (sPath) return absolute-/ realpath
 	"chdir", -- (sPath) change current working directory
 	"delayed_callback", -- (sID, iDuration) use core.call_later(iInterval, fCallback, mData)

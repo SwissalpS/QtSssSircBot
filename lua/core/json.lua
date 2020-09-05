@@ -1,4 +1,12 @@
+--[[
+  lua/core/json.lua
+  copied from https://github.com/rxi/json.lua
+--]]
+---
+-- Lua JSON library by rxi.
 -- copied from https://github.com/rxi/json.lua
+-- module: core.json
+
 --
 -- json.lua
 --
@@ -131,7 +139,9 @@ encode = function(val, stack)
   error("unexpected type '" .. t .. "'")
 end
 
-
+---
+-- get JSON document string representation of given value
+-- ?bool|int|number|string|table: val value to convert to JSON string
 function json.encode(val)
   return ( encode(val) )
 end
@@ -373,6 +383,9 @@ parse = function(str, idx)
 end
 
 
+---
+-- get Lua value of parsed JSON document string
+-- string: str JSON document string
 function json.decode(str)
   if type(str) ~= "string" then
     error("expected argument of type string, got " .. type(str))

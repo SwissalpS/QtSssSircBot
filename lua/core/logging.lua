@@ -2,16 +2,38 @@
 	lua/core/logging.lua
 	class to use for logging to files that get rotated
 --]]
+--- Class to use for logging to files that get rotated.
+-- Usage; local oLog = Logger(tParams) oLog:log('test')
+-- module: core.logging
+
 local Object = require 'core.object'
 local config = require 'core.config'
 
+--- How many archives to make (7)
 config.LoggerDefaultMaxArchives = 7
+--- Maximum file size (3145728)
 config.LoggerDefaultMaxFileSize = 3145728
+--- Time stamp format ('%Y%m%d_%H%M%S')
 config.LoggerFormatTimeStamp = '%Y%m%d_%H%M%S'
+--- Line format ('%timeStamp %level %message\n')
 config.LoggerFormatLine = '%timeStamp %level %message\n'
 
+--- Class to manage a log file and writing to it.
 local Logger = Object:extend()
 
+--- initial paramaters for Logger.
+-- Valid fields in table tParams are:
+--    - int: iMaxArchives defaults to config.LoggerDefaultMaxArchives
+--    - int: iMaxBytes defaults to config.LoggerDefaultMaxFileSize
+--    - string: sFormatLine defaults to config.LoggerFormatLine
+--    - string: sFormatTimeStamp defaults to config.LoggerFormatTimeStamp
+--    - string: sPathFile defaults to core.temp_filename('.log')
+-- table: tParams
+
+--- Create a Logger instance.
+-- 'public function'
+-- Can be used like this; ``local oLog = Logger(tParams)``
+-- ?tParams: tParams control parameters
 function Logger:new(tParams)
 	self:reset()
 	if 'table' ~= type(tParams) then
@@ -38,6 +60,9 @@ function Logger:new(tParams)
 end -- Logger:new
 
 
+--- reset to default values.
+-- 'protected function'
+-- Caution is advised.
 function Logger:reset()
 	self.iMaxArchives = config.LoggerDefaultMaxArchives
 	self.iMaxBytes = config.LoggerDefaultMaxFileSize
@@ -48,11 +73,21 @@ function Logger:reset()
 end -- Logger:reset
 
 
+--- get current systems time stamp formated.
+-- 'public function'
+-- ?int: iTime UNIX time stamp
+-- treturn: string formated time stamp
 function Logger:currentTimeStamp(iTime)
 	return os.date(self.sFormatTimeStamp, iTime)
 end -- Logger:currentTimeStamp
 
 
+--- log a message.
+-- 'public function'
+-- Append a log message to log file.
+-- string: sMessage the message
+-- ?string: sLevel one character to indicate seriousness.
+-- Can be longer, should not be.
 function Logger:log(sMessage, sLevel)
 	sLevel = sLevel or ' '
 	local sOut = self:prepareLine(nil, self:currentTimeStamp(), sLevel, sMessage)
@@ -60,6 +95,11 @@ function Logger:log(sMessage, sLevel)
 end -- Logger:log
 
 
+--- log a message.
+-- 'public function'
+-- Same as Logger:log but details are passed in hItem hash-table. calls to
+-- core.log(), core.error() and core.log_quiet() all post a notification
+-- with an hItem table to 'core.log'.
 function Logger:logItem(hItem)
 	local sMessage = hItem.sText
 	if '!' == hItem.sIcon then sMessage = sMessage .. ' at:' .. hItem.sAt end
@@ -69,6 +109,9 @@ function Logger:logItem(hItem)
 end -- Logger:logItem
 
 
+--- open file for apending.
+-- 'protected function'
+-- treturn: ?nil|number nil on fail and file handle resource id on success
 function Logger:openLogFile()
 	self.rFileHandle = io.open(self.sPathFile, 'ab')
 	if nil ~= self.rFileHandle then return self.rFileHandle end
@@ -77,6 +120,11 @@ function Logger:openLogFile()
 end -- Logger:openLogFile
 
 
+--- open file for apending, checking size.
+-- 'protected function'
+-- If size limit is reached, file is closed and archived rolling over any
+-- existing archives up to set number of archives.
+-- treturn: ?nil|number nil on fail and file handle resource id on success
 function Logger:openRollover()
 	if nil == self.rFileHandle then
 		return self:openLogFile()
@@ -107,6 +155,13 @@ function Logger:openRollover()
 end -- Logger:openRollover
 
 
+--- prepare line for log.
+-- 'protected function'
+-- string: sPattern the pattern to use to compose the line
+-- string: sTimeStamp the formated time stamp
+-- string: sLevel the level indicator
+-- string: sMessage the actual message.
+-- treturn: line formated according to object's paramaters.
 function Logger:prepareLine(sPattern, sTimeStamp, sLevel, sMessage)
 	sLevel = sLevel or ''
 	local sOut = sPattern or self.sFormatLine
@@ -118,6 +173,11 @@ function Logger:prepareLine(sPattern, sTimeStamp, sLevel, sMessage)
 end -- Logger:prepareLine
 
 
+--- Append line to log file.
+-- 'protected function'
+-- string: sLine the line to add. Strictly speaking it's a 'string to append'
+-- as it is only a line if it includes cr and or lf. That being said, it can be
+-- multiple lines.
 function Logger:write(sLine)
 	local rH = self:openRollover()
 	if nil == rH then return nil end

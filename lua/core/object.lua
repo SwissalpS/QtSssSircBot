@@ -1,17 +1,29 @@
 --[[
   lua/core/object.lua
   base object structure
-  may be useful for some plugins or other mechanics
-  taken as is from github.com/rxi/lite.git adding this disclaimer
+  useful for some plugins and other mechanics
+  taken as is from github.com/rxi/lite.git adding this disclaimer and the
+  LDoc module description below and some other LDoc comments.
 --]]
+--- Base class object structure.
+-- Useful for some plugins and other mechanics.
+-- Taken as is from github.com/rxi/lite.git adding this disclaimer and this
+-- LDoc module description and some other LDoc comments.
+-- Usage examples are core.notifications and core.logging.
+-- module: core.object
+
 local Object = {}
 Object.__index = Object
 
 
+--- make new instance of Object.
+-- Use; ``local o = Object()``
 function Object:new()
 end
 
 
+--- extend Object aka sub-class.
+-- Use; ``local MyObject = Object:extend()``
 function Object:extend()
   local cls = {}
   for k, v in pairs(self) do
@@ -62,3 +74,4 @@ end
 
 
 return Object
+

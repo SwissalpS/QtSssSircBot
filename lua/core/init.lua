@@ -3,6 +3,9 @@
   main lua entrance - loads the lua files
   used github.com/rxi/lite.git as guide
 --]]
+--- Main Lua environment
+-- module: core.init
+--
 require 'core.strict'
 local config = require 'core.config'
 
@@ -12,7 +15,9 @@ local core = {}
 -- keep hash table of { sID = { f = fCallback, m = mData } }
 local hDelayedCallbacks = { c = { f = function() end, m = nil } }
 
--- maintenance tasks that get done at intervals
+--- Maintenance tasks that get done at intervals.
+-- Calls itself again after given interval has passed.
+-- int: iInterval should be greater than 0
 local function repeater(iInterval)
   -- TriggerManager keeps track of requests that users make
   -- need to clean that history from time to time
@@ -22,7 +27,7 @@ local function repeater(iInterval)
   core.call_later(iInterval, repeater, iInterval)
 end
 
--- init lua state, do not call any IRC-api methods yet
+--- Initialize Lua state. Do not call any IRC-api methods yet
 -- just set up and be ready for either core.run to take
 -- over or C/Cpp side to call hooks defined in core.events
 function core.init()
@@ -54,8 +59,8 @@ function core.init()
 end -- core.init
 
 
--- this is meant for applications that run lua on seperate thread in it's own
--- run-loop
+--- Lua based run-loop. This is meant for applications that run Lua on
+-- separate thread in it's own run-loop.
 function core.run()
   print('core.run')
   -- loop
@@ -65,7 +70,11 @@ function core.run()
 end -- core.run
 
 
--- iInterval in milliseconds -> 1000 ms = 1 second
+--- ask for delayed callback.
+-- int: iInterval interval in milliseconds -> 1000 ms = 1 second.
+-- func: fCallback the function to execute when interval has passed
+-- ?bool|int|nil|number|string|table: mData param to pass to fCallback
+-- when executing.
 function core.call_later(iInterval, fCallback, mData)
   if 0 > iInterval then
     core.error('interval must be 0 or greater')
@@ -85,7 +94,9 @@ function core.call_later(iInterval, fCallback, mData)
 end -- core.call_later
 
 
--- called by LuaController when a timed callback times-out
+--- Executes a delayed callback function.
+-- Called by LuaController when a timed callback times-out.
+-- There should not be any need to call this manually.
 function core.call_delayed_callback(sID)
   local hCallback = hDelayedCallbacks[sID]
   if nil == hCallback then
@@ -97,6 +108,10 @@ function core.call_delayed_callback(sID)
 end -- core.call_delayed_callback
 
 
+--- Check for an IRC event and handle it.
+-- Called by LuaController when an event is added to event pool.
+-- There should not be any need to call this manually, but there is also no
+-- harm done in doing so.
 function core.poll_event()
   local aEvent = IRC.poll_event()
   if aEvent then
@@ -105,6 +120,11 @@ function core.poll_event()
 end -- core.poll_event
 
 
+--- Alternative to core.poll_event() should that be insuficient.
+-- This one would check for all events and handle all. As long as single
+-- method works, we should use that.
+-- There should not be any need to call this manually, but there is also no
+-- harm done in doing so.
 function core.poll_events()
   local aEvent
   local bContinue = true
@@ -137,21 +157,36 @@ local function log(sIcon, icon_color, sFormat, ...)
 end -- log
 
 
+--- log a message at 'info' level.
+-- string: sFormat format or output string
+-- ?mixed: optional arguments for string.format(sFormat, ...)
+-- see: core.log_quiet, core.error
 function core.log(...)
   return log("i", nil, ...) --style.text, ...)
 end
 
 
+--- log a message at 'quiet' level
+-- string: sFormat format or output string
+-- ?mixed: optional arguments for string.format(sFormat, ...)
+-- see: core.log, core.error
 function core.log_quiet(...)
   return log(nil, nil, ...)
 end
 
 
+--- log a message at 'error' level
+-- string: sFormat format or output string
+-- ?mixed: optional arguments for string.format(sFormat, ...)
+-- see: core.log_quiet, core.log
 function core.error(...)
   return log("!", nil, ...) --style.accent, ...)
 end
 
 
+--- wrap a call in xpcall() for safe execution with debug info.
+-- !function: fn what to execute
+-- ?mixed: optional arguments to be passed to fn
 function core.try(fn, ...)
   local err
   local ok, res = xpcall(fn, function(msg)
@@ -166,6 +201,9 @@ function core.try(fn, ...)
 end -- core.try
 
 
+--- error handler.
+-- There should be no need for manually calling this.
+-- Maybe you want to override or modify it though.
 function core.on_error(err)
   -- write error to file
   local fp = io.open(EXEDIR .. "/lua_error.txt", "wb")
@@ -192,6 +230,8 @@ local function delete_temp_files()
 end -- delete_temp_files
 
 
+--- get path to a unique temporary file.
+-- ?string: ext extension to use: e.g. '.tmp'
 function core.temp_filename(ext)
   temp_file_counter = temp_file_counter + 1
   return EXEDIR .. PATHSEP .. temp_file_prefix
@@ -199,10 +239,14 @@ function core.temp_filename(ext)
 end -- core.temp_filename
 
 
--- called at quit but also when lua env is being re-loaded
+--- shut down Lua environment
+-- called at quit but also when Lua environment is being re-loaded
 -- assume that connections stay active or are dead already (when exiting app)
 -- save state if needed using override or notification
 function core.abort(iRes)
+-- int: iNumber
+--              0 < iNumber means reload Lua in iNumber milliseconds.
+--              0 >= iNumber means shutdown Lua session.
   -- cleanup
   core.oNotificationManager:post('core.abort', iRes)
   delete_temp_files()
@@ -210,6 +254,8 @@ function core.abort(iRes)
   IRC.abort(iRes)
 end -- core.abort
 
+--- disconnect all connections.
+-- Will attempt graceful disconnect with QUIT message on each connection.
 function core.disconnectAll()
   local lIDs = IRC.connection_ids()
   for _, sConnectionID in ipairs(lIDs) do
@@ -219,6 +265,8 @@ function core.disconnectAll()
   end
 end -- core.disconnectAll
 
+--- terminate Lua environment and quit the application.
+-- Attempts graceful disconnect and state saving exit.
 function core.quit()
   core.disconnectAll()
   core.abort(0)
@@ -227,6 +275,9 @@ function core.quit()
 end -- core.quit
 
 
+--- load active plugins.
+-- This is called by core.run() there should be no need to manually called.
+-- Results can be disapointing when called manually.
 function core.load_plugins()
   local bNoErrors = true
   local lFiles = system.list_dir(EXEDIR .. '/lua/plugins')
@@ -247,11 +298,19 @@ function core.load_plugins()
 end -- core.load_plugins
 
 
+--- clean given nick.
+-- Removes any op-symbol from nick
+-- string: sNick nick to clean
+-- treturn: string cleaned nick
 function core.cleanNick(sNick)
   return sNick:gsub('^[~&@%+]', '')
 end
 
 
+--- handle IRC event.
+-- can also be used to inject events for simulations and other reasons.
+-- !list: aEvent list of event strings.
+-- <sConnectionID> <sInterfaceCommand> <sParam0>[ ...<sParamN>]
 function core.handleEvent(aEvent)
 
   local iEvent = #aEvent
@@ -314,17 +373,33 @@ function core.handleEvent(aEvent)
 end -- core.handleEvent
 
 
--- events are designed to be overridden by plugins
--- alternatively you can use the notification system
+--- core.events.
+-- Events are designed to be overridden by plugins.
+-- Alternatively you can use the notification system, as each of the event
+-- functions post a notification with all the information.
 core.events = {}
 
+--- abort.
+-- Posts notification '**core.events.abort**', { sConnectionID, iCode }.
+-- This signal is issued mainly by socket errors.
+--
+-- Not to be confused with @{core.abort}(iNumber) (although they may get related down
+-- the line, since command file interface currently causes immediate shutdown
+-- of Lua environment)
+-- string: sConnectionID
+-- int: iCode
 function core.events.abort(sConnectionID, iCode)
-  -- this signal is issued mainly by socket errors
   core.oNotificationManager:post('core.events.abort', {
     sConnectionID = sConnectionID, iCode = iCode
   })
 end
--- private message to channel on which bot is part of was received
+--- private message to channel on which bot is part of was received.
+-- Posts notification '**core.events.channelMessage**', { sConnectionID, sChannel,
+-- sFromNick, sMessage }.
+-- string: sConnectionID
+-- string: sChannel
+-- string: sFromNick
+-- string: sMessage
 function core.events.channelMessage(sConnectionID, sChannel, sFromNick, sMessage)
   core.oTriggerManager:checkTriggers(sConnectionID, sChannel, sFromNick, sMessage)
   core.oNotificationManager:post('core.events.channelMessage', {
@@ -332,68 +407,107 @@ function core.events.channelMessage(sConnectionID, sChannel, sFromNick, sMessage
     sFromNick = sFromNick, sMessage = sMessage
   })
 end
--- private message to bot received
+--- private message to bot received.
+-- Posts notification 'core.events.directMessage', { sConnectionID, sFromNick,
+-- sMessage }.
+-- string: sConnectionID
+-- string: sNick
+-- string: sMessage
 function core.events.directMessage(sConnectionID, sNick, sMessage)
   core.oTriggerManager:checkTriggers(sConnectionID, nil, sNick, sMessage)
   core.oNotificationManager:post('core.events.directMessage', {
     sConnectionID = sConnectionID, sFromNick = sNick, sMessage = sMessage
   })
 end
-
+--- an IRC command event has occured.
+-- Posts notification 'core.events.IRCcommand', { sConnectionID, sCommand,
+-- lParams }.
+-- string: sConnectionID
+-- string: sCommand
+-- !list: lParams
 function core.events.IRCcommand(sConnectionID, sCommand, lParams)
   core.oNotificationManager:post('core.events.IRCcommand', {
     sConnectionID = sConnectionID, sCommand = sCommand, lParams = lParams
   })
 end
--- a user has joined a channel
+--- a user has joined a channel.
+-- Posts notification 'core.events.joined', { sConnectionID, sNick, sChannel }.
+-- string: sConnectionID
+-- string: sNick
+-- string: sChannel
 function core.events.joined(sConnectionID, sNick, sChannel)
   core.oNotificationManager:post('core.events.', {
     sConnectionID = sConnectionID, sNick = sNick, sChannel = sChannel
   })
 end
--- bot has logged in
+--- bot has logged in.
+-- Posts notification 'core.events.loggedIn', { sConnectionID, sNick }.
+-- string: sConnectionID
+-- string: sNick the nick bot is using
 function core.events.loggedIn(sConnectionID, sNick)
   core.oNotificationManager:post('core.events.loggedIn', {
     sConnectionID = sConnectionID, sNick = sNick
   })
 end
--- list of nicks in channel received
+--- list of nicks in channel received.
+-- Posts notification 'core.events.nickList', { sConnectionID, sChannel, lNicks }.
+-- string: sConnectionID
+-- string: sChannel
+-- !list: lNicks
 function core.events.nickList(sConnectionID, sChannel, lNicks)
   core.oNotificationManager:post('core.events.nickList', {
     sConnectionID = sConnectionID, sChannel = sChannel, lNicks = lNicks
   })
 end
--- ping received (pong has already been sent back)
+--- ping received (pong has already been sent back).
+-- Posts notification 'core.events.ping', { sConnectionID, sMessage }.
+-- string: sConnectionID
+-- string: sMessage
 function core.events.ping(sConnectionID, sMessage)
   core.oNotificationManager:post('core.events.ping', {
     sConnectionID = sConnectionID, sMessage = sMessage
   })
 end
--- a user has quit
+--- a user has quit.
+-- Posts notification 'core.events.quit', { sConnectionID, sNick, sMessage }.
+-- string: sConnectionID
+-- string: sNick
+-- string: sMessage
 function core.events.quit(sConnectionID, sNick, sMessage)
   core.oNotificationManager:post('core.events.quit', {
     sConnectionID = sConnectionID, sNick = sNick, sMessage = sMessage
   })
 end
--- socket is connected
+--- socket is connected.
+-- Posts notification 'core.events.connected', { sConnectionID, sIP }.
+-- string: sConnectionID
+-- string: sIP
 function core.events.connected(sConnectionID, sIP)
   core.oNotificationManager:post('core.events.connected', {
     sConnectionID = sConnectionID, sIP
   })
 end
--- socket has disconnected
+--- socket has disconnected.
+-- Posts notification 'core.events.disconnected', { sConnectionID }.
+-- string: sConnectionID
 function core.events.disconnected(sConnectionID)
   core.oNotificationManager:post('core.events.disconnected', {
     sConnectionID = sConnectionID
   })
 end
--- raw line received
+--- raw line received.
+-- Posts notification 'core.events.rawIn', { sConnectionID, sLine }.
+-- string: sConnectionID
+-- string: sLine
 function core.events.rawIn(sConnectionID, sLine)
   core.oNotificationManager:post('core.events.rawIn', {
     sConnectionID = sConnectionID, sLine = sLine
   })
 end
--- raw output bot has sent
+--- raw output bot has sent.
+-- Posts notification 'core.events.rawOut', { sConnectionID, sLine }.
+-- string: sConnectionID
+-- string: sLine
 function core.events.rawOut(sConnectionID, sLine)
   core.oNotificationManager:post('core.events.rawOut', {
     sConnectionID = sConnectionID, sLine = sLine

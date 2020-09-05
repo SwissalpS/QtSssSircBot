@@ -3,6 +3,10 @@
   scan messages and repost some on #SwissalpS.mix on freenode
   also keep a log of all those messages
 --]]
+---
+-- module: user.SwissalpS.mix
+--
+
 -- [[
 local Logger = require 'core.logging'
 local oLogger = Logger({ sPathFile = EXEDIR .. 'logs/SssS_mix.log',

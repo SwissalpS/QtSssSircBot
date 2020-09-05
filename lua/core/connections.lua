@@ -2,10 +2,17 @@
   lua/core/connections.lua
   helper methods to create new connections
 --]]
+---
+-- helper methods to create new connections.
+-- module: core.connections
+
 local json = require 'core.json'
 
 local connections = {}
 
+---
+-- get a dummy table with all available fields set.
+-- You need to change values for it to be of any use.
 function connections.dummyConnectionTable()
 
   return {
@@ -22,6 +29,11 @@ function connections.dummyConnectionTable()
 
 end -- connections.dummyConnectionTable
 
+---
+-- add a new connection and connect to it.
+-- Calls AppController::addConnection() via IRC API IRC.add_connection()
+-- !table: tConfig configuration table for the connection.
+-- treturn: ?nil|true
 function connections.addConnection(tConfig)
 
   local lConnectionIDs = IRC.connection_ids()

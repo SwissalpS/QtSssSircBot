@@ -2,6 +2,17 @@
   lua/plugins/debugIRCcommand.lua
   prints received IRC commands to standard out
 --]]
+--- prints received IRC commands to standard out.
+-- Plugin that demonstrates how core methods can be overriden by plugin and
+-- user modules.
+--
+-- The same functionality of this plugin could be achieved more transparently
+-- by using the notification system.
+--
+-- See the log plugins for examples of that.
+-- module: plugins.debugIRCcommand
+--
+
 -- [[
 local parent = core.events.IRCcommand
 function core.events.IRCcommand(sConnectionID, sCommand, lParams)
@@ -11,3 +22,4 @@ function core.events.IRCcommand(sConnectionID, sCommand, lParams)
   parent(sConnectionID, sCommand, lParams)
 end
 --]]
+

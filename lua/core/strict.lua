@@ -1,8 +1,21 @@
 --[[
   lua/core/strict.lua
   use strict global handling
-  taken as is from github.com/rxi/lite.git adding this disclaimer
+  taken as is from github.com/rxi/lite.git adding this disclaimer and the
+  LDoc module description below.
 --]]
+---
+-- use strict global handling.
+-- taken as is from github.com/rxi/lite.git adding this disclaimer and this
+-- LDoc module description.
+--
+-- Makes it harder to set global variables that have not been declared by
+-- LuaController. In other words; Set global variables you want to use, before
+-- including this file. After loading this file, you will get warnings for
+-- attempting to declare a new global. This is a great help when developing
+-- plugins and other modules.
+-- module: core.strict
+
 local strict = {}
 strict.defined = {}
 
@@ -29,3 +42,4 @@ end
 
 
 setmetatable(_G, strict)
+

@@ -2,6 +2,10 @@
 	lua/plugins/logRawIRC.lua
 	plugin that demonstrates how logging mechanism can be used
 --]]
+--- plugin that demonstrates how logging mechanism can be used to log all
+-- 'core.events.rawIn' and 'core.events.rawOut' notifications.
+-- module: plugins.logRawIRC
+--
 local Logger = require 'core.logging'
 
 -- change path to wherever suits you and add other options

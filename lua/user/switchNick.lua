@@ -4,6 +4,10 @@
 	Probably just confusing when using as a bot too. The idea was, use bot
 	as proxy for a moment for manual posting to channels as some user.
 --]]
+---
+-- module: user.switchNick
+--
+
 -- [[
 local function nickSwitch(tP)
 	local sPassword, sConnectionID, sNewNick = tP.sMatch:match('(%S*)%s(%S*)%s(%S*)')

@@ -2,6 +2,12 @@
   lua/plugins/commandsHelp.lua
   provides commands to display help
 --]]
+--- provides commands to display help.
+-- Demonstrates how notifications can be used to run code only after everything
+-- is loaded. Also shows how triggers can be used.
+-- module: plugins.commandsHelp
+--
+
 --do return false end
 -- [[
 local core = require 'core'

@@ -1,17 +1,34 @@
 --[[
   lua/plugins/commandsRoot.lua
-  provides commands to restart connections/lua and quit
+  provides commands to restart connections/Lua and quit
   possibly other maintenance duties will be added here too
 --]]
+--- provides commands to restart connections/Lua and quit.
+-- Demonstrates how notifications can be used to run code only after everything
+-- is loaded. Also shows how triggers can be used.
+--
+-- namespace: SwissalpS::QtSssSircBot::Lua
+-- module: plugins.commandsRoot
+--
+
 --do return false end
 -- [[
 local core = require 'core'
 local config = require 'core.config'
 
--- change these in your user/init.lua
+-- change these in your user/init.lua.
+
+--- Password to use.
+-- Change in your user/init.lua.
 config.RootCommandsPassword = 'foo'
+--- If none of these Regular expressions matches connection ID, drop request.
+-- Change in your user/init.lua.
 config.RootCommandsConnectionIDrxs = { '.*' }
+--- If none of these Regular expressions matches nick, drop request.
+-- Change in your user/init.lua.
 config.RootCommandsNickRxs = { '^[&@](.*)$' }
+--- If rate limit is exceeded, drop request.
+-- Change in your user/init.lua.
 config.RootCommandsRateLimit = { iRequests = 12, iDuring = 3600 }
 
 local sendDM = IRC.send_direct_message

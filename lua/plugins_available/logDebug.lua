@@ -2,6 +2,11 @@
 	lua/plugins/logDebug.lua
 	plugin that demonstrates how logging mechanism can be used
 --]]
+--- plugin that demonstrates how logging mechanism can be used to log all
+-- 'core.log' notifications.
+-- module: plugins.logDebug
+--
+
 -- [[
 local Logger = require 'core.logging'
 

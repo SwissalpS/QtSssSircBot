@@ -2,15 +2,27 @@
   lua/plugins/commandsCountdown.lua
   provides command to start a countdown
 --]]
+--- provides command to start a countdown.
+-- Demonstrates how notifications can be used to run code only after everything
+-- is loaded. Also shows how triggers can be used.
+-- module: plugins.commandsCountdown
+--
+
 --do return false end
 -- [[
 local config = require 'core.config'
 
 -- change these in your user/init.lua
+
+--- If none of these Regular expressions matches connection ID, drop request.
 config.CountdownCommandsConnectionIDrxs = { '.*' }
+--- If none of these Regular expressions matches nick, drop request.
 config.CountdownNickRxs = { '^[~&@%+]?(.*)$' }
+--- If not a direct message, drop request.
 config.CountdownDMonly = true
+--- If none of these Regular expressions matches connection ID, drop request (admin).
 config.CountdownCommand2ConnectionIDrxs = { '.*' }
+--- If none of these Regular expressions matches nick, drop request (admin).
 config.Countdown2NickRxs = { '^[&@](.*)$' }
 
 local sendDM = IRC.send_direct_message

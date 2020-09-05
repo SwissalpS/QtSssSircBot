@@ -7,31 +7,79 @@
    Hint: use convenience methods to make direct message only or channel message
 	only or mixed mode.
   Manager:
-	TODO: add logic that removes stale entries in hRequests
 --]]
+--- infrastructure to define and maintain trigger sequences.
+-- Trigger; mandatory params for new instance are;
+--
+--  lTriggerRxs; minimum one regular expression that matches in message
+--
+--  fCallback; function that will be called if any in lTriggerRxs match
+--
+-- Hint; use convenience methods to make direct message only or channel message
+-- only or mixed mode.
+--
+-- Manager; ```
+--   local oM = Manager()
+--   oM:addTrigger(oT)
+-- ```
+-- Loading this module returns a list { Trigger, Manager }.
+--
+-- Instead of doing;
+-- '''
+-- local lT = require 'core.triggers'
+-- ```
+-- use the references in global core;
+-- '''
+-- local oTrigger = core.Trigger(tParams)
+-- core.oTriggerManager:addTrigger(oTrigger)
+-- ```
+--
+-- module: core.triggers
+--
 local Object = require 'core.object'
 local config = require 'core.config'
 
--- n requests within x seconds
+--- n requests within x seconds
 config.TriggerDefaultRequestRateLimit = { iRequests = 180, iDuring = 3600 }
--- trigger also reacts to DMs if set to true
+--- trigger also reacts to DMs if set to true
 config.TriggerDefaultDirectMessagesAlso = false
--- trigger only reacts to DMs if set to true
+--- trigger only reacts to DMs if set to true
 config.TriggerDefaultDirectMessagesOnly = false
--- if true, description is used in help listings
+--- if true, description is used in help listings
 config.TriggerDefaultIncludeInHelp = false
--- trigger only reacts if connectionID matches any of these
+--- trigger only reacts if connectionID matches any of these
 config.TriggerDefaultConnectionIDrxs = { '.*' }
--- trigger only reacts if channel matches any of these
+--- trigger only reacts if channel matches any of these
 config.TriggerDefaultChannelRxs = { '.*' }
--- trigger only reacts if nick matches any of these
+--- trigger only reacts if nick matches any of these
 config.TriggerDefaultNickRxs = { '^[~&@%+]?(.*)' }
 -- TODO: may be handled differently depending on how it goes
--- trigger only reacts if nick has any of these permission sets
+--- trigger only reacts if nick has any of these permission sets.
+-- experimental, still being debated how to implement authentications.
 config.TriggerDefaultPermissions = { }
 
+--- Class to describe a trigger event.
 local Trigger = Object:extend()
 
+--- initial paramaters for Trigger.
+-- Valid fields in table tParams are:
+--    - bool: bDirectMessagesAlso defaults to config.TriggerDefaultDirectMessagesAlso
+--    - bool: bDirectMessagesOnly defaults to config.TriggerDefaultDirectMessagesOnly
+--    - bool: bIncludeInHelp defaults to config.TriggerDefaultIncludeInHelp
+--    - !function: fCallback defaults to nil
+--    - !hash: hRateLimit defaults to config.TriggerDefaultRequestRateLimit
+--    - !list: lConnectionIDrxs defaults to config.TriggerDefaultConnectionIDrxs
+--    - !list: lChannelRxs defaults to config.TriggerDefaultChannelRxs
+--    - !list: lNickRxs defaults to config.TriggerDefaultNickRxs
+--    - !list: lPermissions defaults to config.TriggerDefaultPermissions
+--    - !list: lTriggerRxs defaults to {}
+--    - string: sDescription defaults to ''
+-- table: tParams
+
+--- Create a Trigger instance.
+-- 'public function'
+-- Can be used like this; ``local oT = Trigger(tParams)``
+-- ?tParams: tParams control parameters
 function Trigger:new(tParams)
 	self:reset()
 	if 'table' ~= type(tParams) then
@@ -64,6 +112,9 @@ function Trigger:new(tParams)
 end -- Trigger:new
 
 
+--- reset to default values.
+-- 'protected function'
+-- Caution is advised.
 function Trigger:reset()
 	self.bDirectMessagesAlso = config.TriggerDefaultDirectMessagesAlso
 	self.bDirectMessagesOnly = config.TriggerDefaultDirectMessagesOnly
@@ -79,18 +130,24 @@ function Trigger:reset()
 end -- Trigger:reset
 
 
+--- convenience method; react to channel messages only.
+-- 'public function'
 function Trigger:makeCMonly()
 	self.bDirectMessagesAlso = false
 	self.bDirectMessagesOnly = false
 end -- Trigger:makeCMonly
 
 
+--- convenience method; react to channel and direct messages.
+-- 'public function'
 function Trigger:makeCMandDM()
 	self.bDirectMessagesAlso = true
 	self.bDirectMessagesOnly = false
 end -- Trigger:makeCMandDM
 
 
+--- convenience method; react to direct messages only.
+-- 'public function'
 function Trigger:makeDMonly()
 	self.bDirectMessagesAlso = true
 	self.bDirectMessagesOnly = true
@@ -98,25 +155,39 @@ end -- Trigger:makeDMonly
 
 --------------------------------------------------------------------------
 
+--- Class to manage triggers.
 local Manager = Object:extend()
 
+--- Create a Manager instance.
+-- 'public function'
+-- Can be used like this; ``local oM = Manager()``
 function Manager:new()
 	self:reset()
 end -- Manager:new
 
 
+--- reset to default values.
+-- 'protected function'
+-- Caution is advised.
 function Manager:reset()
 	self.hRequests = {}
 	self.lTriggers = {}
 end -- Manager:reset
 
 
+--- Add a trigger to use.
+-- 'public function'
+-- !Trigger: oTrigger reference to a valid trigger instance.
 function Manager:addTrigger(oTrigger)
 	-- TODO: check that valid trigger object
 	table.insert(self.lTriggers, oTrigger)
-
 end -- Manager:addTrigger
 
+--- check if any of the given regular expressions matches channel.
+-- 'protected function'
+-- string: sChannel the channel
+-- !list: lChannelRxs the regular expressions
+-- treturn: bool
 function Manager:hasChannelMatch(sChannel, lChannelRxs)
 	for _, sRegX in ipairs(lChannelRxs) do
 		if string.match(sChannel, sRegX) then return true end
@@ -124,6 +195,11 @@ function Manager:hasChannelMatch(sChannel, lChannelRxs)
 	return false
 end -- Manager:hasChannelMatch
 
+--- check if any of the given regular expressions matches connection ID.
+-- 'protected function'
+-- string: sConnectionID the connection ID
+-- !list: lConnectionIDrxs the regular expressions
+-- treturn: bool
 function Manager:hasConnectionIDmatch(sConnectionID, lConnectionIDrxs)
 	for _, sRegX in ipairs(lConnectionIDrxs) do
 		if string.match(sConnectionID, sRegX) then return true end
@@ -132,6 +208,11 @@ function Manager:hasConnectionIDmatch(sConnectionID, lConnectionIDrxs)
 end -- Manager:hasConnectionIDmatch
 
 
+--- check if any of the given regular expressions matches nick.
+-- 'protected function'
+-- string: sNick the nick
+-- !list: lNickRxs the regular expressions
+-- treturn: bool
 function Manager:hasNickMatch(sNick, lNickRxs)
 	for _, sRegX in ipairs(lNickRxs) do
 		if string.match(sNick, sRegX) then return true end
@@ -139,13 +220,24 @@ function Manager:hasNickMatch(sNick, lNickRxs)
 	return false
 end -- Manager:hasNickMatch
 
-
+--- check if nick has permission on given connection.
+-- 'protected function'
+--
+-- Experimental, this is not yet implemented.
+-- string: sConnectionID the connection ID
+-- string: sNick the nick
+-- !list: lPermissions the permissions required
+-- treturn: bool
 function Manager:hasPermissions(sConnectionID, sNick, lPermissions)
 	-- TODO: actually implement an auth system
 	return true
 end -- Manager:hasPermissions
 
-
+--- check if any of the given regular expressions matches message.
+-- 'protected function'
+-- string: sMessage the message
+-- !list: lTriggerRxs the regular expressions
+-- treturn: bool
 function Manager:hasTriggerMatch(sMessage, lTriggerRxs)
 	local sMatch
 	for _, sRegX in ipairs(lTriggerRxs) do
@@ -156,6 +248,11 @@ function Manager:hasTriggerMatch(sMessage, lTriggerRxs)
 end -- Manager:hasTriggerMatch
 
 
+--- check if any of the given nick is in usage limits.
+-- 'protected function'
+-- string: sNick the nick
+-- !hash: hRateLimit the rate settings
+-- treturn: bool
 function Manager:isInRequestLimit(sNick, hRateLimit)
 	local sN = core.cleanNick(sNick)
 	local tNick = self.hRequests[sN]
@@ -175,6 +272,8 @@ function Manager:isInRequestLimit(sNick, hRateLimit)
 end -- Manager:isInRequestLimit
 
 
+--- Clean up stale request entries.
+-- 'protected function'
 -- call this from time to time to clean out stale entries
 function Manager:purgeRequestsBefore(iLast)
   local lNew
@@ -194,6 +293,9 @@ function Manager:purgeRequestsBefore(iLast)
 end -- Manager:purgeRequestsBefore
 
 
+--- Add a request entry for nick.
+-- 'protected function'
+-- string: sNick the nick that requested something
 function Manager:recordRequest(sNick)
 	local sN = core.cleanNick(sNick)
 	if nil == self.hRequests[sN] then self.hRequests[sN] = {} end
@@ -201,6 +303,13 @@ function Manager:recordRequest(sNick)
 end -- Manager:recordRequest
 
 
+--- Do checks on trigger.
+-- 'protected function'
+-- !Trigger: oTrigger the trigger definition
+-- string: sConnectionID
+-- string: sChannel
+-- string: sNick
+-- string: sMessage
 function Manager:checkTrigger(oTrigger, sConnectionID, sChannel, sNick, sMessage)
 	local isDM = nil == sChannel
 	if isDM and (not oTrigger.bDirectMessagesAlso) then return end
@@ -233,6 +342,12 @@ function Manager:checkTrigger(oTrigger, sConnectionID, sChannel, sNick, sMessage
 end -- Manager:checkTrigger
 
 
+--- Do checks on triggers.
+-- 'protected function'
+-- string: sConnectionID
+-- string: sChannel
+-- string: sNick
+-- string: sMessage
 function Manager:checkTriggers(sConnectionID, sChannel, sNick, sMessage)
 	for _, oTrigger in ipairs(self.lTriggers) do
 		self:checkTrigger(oTrigger, sConnectionID, sChannel, sNick, sMessage)
