@@ -126,10 +126,13 @@ end -- Logger:openLogFile
 -- existing archives up to set number of archives.
 -- treturn: ?nil|number nil on fail and file handle resource id on success
 function Logger:openRollover()
-	if nil == self.rFileHandle then
-		return self:openLogFile()
-	end -- if not yet open
+	-- if not yet open, try to open
+	self.rFileHandle = self.rFileHandle or self:openLogFile()
+	-- if still not open, there is a problem
+	-- we don't post log messages here in case of causing recurences
+	if nil == self.rFileHandle then return nil end
 
+	-- check file size
 	local iSize = self.rFileHandle:seek('end', 0)
 	if (iSize < self.iMaxBytes) then
 		return self.rFileHandle

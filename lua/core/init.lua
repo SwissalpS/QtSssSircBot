@@ -259,7 +259,7 @@ end -- core.abort
 function core.disconnectAll()
   local lIDs = IRC.connection_ids()
   for _, sConnectionID in ipairs(lIDs) do
-    print(sConnectionID)
+    core.log('Disconnecting connection: ' .. sConnectionID)
     IRC.send_quit(sConnectionID, config.CoreQuitMessage or 'goodbye :D')
     IRC.disconnect(sConnectionID)
   end
@@ -436,7 +436,7 @@ end
 -- string: sNick
 -- string: sChannel
 function core.events.joined(sConnectionID, sNick, sChannel)
-  core.oNotificationManager:post('core.events.', {
+  core.oNotificationManager:post('core.events.joined', {
     sConnectionID = sConnectionID, sNick = sNick, sChannel = sChannel
   })
 end
@@ -484,7 +484,7 @@ end
 -- string: sIP
 function core.events.connected(sConnectionID, sIP)
   core.oNotificationManager:post('core.events.connected', {
-    sConnectionID = sConnectionID, sIP
+    sConnectionID = sConnectionID, sIP = sIP
   })
 end
 --- socket has disconnected.
