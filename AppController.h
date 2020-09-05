@@ -114,7 +114,6 @@ signals:
 	void done();
 	/// emitted when a message was dropped in debugMessage()
 	void debugMessageReceived(const QString &sMessage);
-	void luaEvent(const QStringList &aEvent);
 
 }; // AppControler
 
