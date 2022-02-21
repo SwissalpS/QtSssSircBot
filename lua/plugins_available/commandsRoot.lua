@@ -7,7 +7,6 @@
 -- Demonstrates how notifications can be used to run code only after everything
 -- is loaded. Also shows how triggers can be used.
 --
--- namespace: SwissalpS::QtSssSircBot::Lua
 -- module: plugins.commandsRoot
 --
 

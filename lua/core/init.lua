@@ -187,6 +187,8 @@ end
 --- wrap a call in xpcall() for safe execution with debug info.
 -- !function: fn what to execute
 -- ?mixed: optional arguments to be passed to fn
+-- returns: true and result on success. false and error message on failure.
+-- On failure the message is sent to logging system.
 function core.try(fn, ...)
   local err
   local ok, res = xpcall(fn, function(msg)
@@ -204,6 +206,8 @@ end -- core.try
 --- error handler.
 -- There should be no need for manually calling this.
 -- Maybe you want to override or modify it though.
+-- Writes error message and debug traceback int lua_error.txt in the work
+-- directory.
 function core.on_error(err)
   -- write error to file
   local fp = io.open(EXEDIR .. "/lua_error.txt", "wb")
