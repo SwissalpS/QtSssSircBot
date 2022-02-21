@@ -61,7 +61,6 @@ exhale_args = {
         INPUT = ../../../
         EXCLUDE = ../../../doc
         EXCLUDE += ../../../foreign/lua52
-        EXCLUDE += ../../../lua/.lite_workspace.lua
         EXCLUDE += ../../../lua
         # Using `=` instead of `+=` overrides
         RECURSIVE = YES
@@ -72,11 +71,6 @@ exhale_args = {
         WARN_IF_UNDOCUMENTED = YES
         # sometimes we just want all for valid reasons
         EXTRACT_ALL = NO
-        #FILTER_PATTERNS += *.lua=lua2dox_filter
-        FILTER_PATTERNS += *.lua=/usr/local/bin/lua2dox
-        # EXTENSION_MAPPING += lua=lua2dox_filter
-        EXTENSION_MAPPING += lua=/usr/local/bin/lua2dox
-        FILE_PATTERNS += *.lua
         # Allow for rst directives and advanced functions e.g. grid tables
         ALIASES += "rst=\\verbatim embed:rst:leading-asterisk"
         ALIASES += "endrst=\\endverbatim"
