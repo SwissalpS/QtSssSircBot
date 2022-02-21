@@ -243,16 +243,6 @@ void AppController::onCommandEvent(const QStringList &aEvent) {
 } // onCommandEvent
 
 
-// depricated
-void AppController::onLuaEvent(const QStringList &aEvent) {
-
-	this->debugMessage("OO:depricated call to onLuaEvent!");
-
-	return this->onCommandEvent(aEvent);
-
-} // onLuaEvent
-
-
 void AppController::quit() {
 
 	AppSettings::pAppSettings()->getSettings()->sync();

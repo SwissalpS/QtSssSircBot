@@ -97,8 +97,6 @@ public slots:
 	virtual void debugMessage(const QString &sMessage);
 	/// interfaces like FileCommandInterface send signals here.
 	virtual void onCommandEvent(const QStringList &aEvent);
-	/// depricated, use onCommandEvent()
-	Q_DECL_DEPRECATED virtual void onLuaEvent(const QStringList &aEvent);
 	/// terminate the application
 	virtual void quit();
 	/// re-read connection data from config and reconnect

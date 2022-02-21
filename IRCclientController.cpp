@@ -323,17 +323,6 @@ void IRCclientController::onLoggedIn(const QString &sNick) {
 } // onLoggedIn
 
 
-/// signal from lua via irc-api and AppController
-/// depricated: use onCommandEvent() instead
-void IRCclientController::onLuaEvent(const QStringList &aEvent) {
-
-	this->onDebugMessage("OO:depricated call to onLuaEvent!");
-
-	return this->onCommandEvent(aEvent);
-
-} // onLuaEvent
-
-
 /// signal from IRCclient
 void IRCclientController::onNicklist(const QString &sChannel,
 									 const QStringList &aNicks) {
