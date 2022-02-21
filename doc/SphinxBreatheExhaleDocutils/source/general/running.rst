@@ -26,7 +26,9 @@ Single Connection
 
 .. code-block:: sh
 
-    $ QtSssSircBot --pass 1239 --nicks bot,botA,botB,botABC \
-        --host irc.foo.bar --realname "Samson the Slow" \
+    $ QtSssSircBot --pass 1239 \
+        --host irc.foo.bar \
+        --nicks bot,botA,botB,botABC \
+        --realname "Samson the Slow" \
         --channels #home,#sweet,#help
 

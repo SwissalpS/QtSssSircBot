@@ -182,6 +182,7 @@ void LuaController::shutdown() {
 QString LuaController::wrapLuaCall(const QString sCall) {
 
 	QString sOut =
+// [markerWrapCall]
 			"xpcall(function()\n" +	sCall + "\n"
 			"end, function(err)\n"
 			"  print('Error: ' .. tostring(err))\n"
@@ -190,6 +191,7 @@ QString LuaController::wrapLuaCall(const QString sCall) {
 			"    pcall(core.on_error, err)\n"
 			"  end\n"
 			"end)";
+// [markerWrapCall]
 
 	return sOut;
 

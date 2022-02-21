@@ -23,7 +23,7 @@ and work from that, or better use command line to clone repository:
 
     $ git clone https://github.com/SwissalpS/QtSssSircBot.git
     $ cd QtSssSircBot
-    $ git checkout master
+    $ git checkout lua
 
 Build QtSssSircBot
 -------------------

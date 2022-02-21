@@ -56,11 +56,11 @@ public:
 	/// This is triggered by a delayed callback timer running out.
 	/// \see DelayedCallback
 	int callDelayedCallback(const QString &sID);
-	/// execute given Lua-call aftre wrapping it into an xpcall(...)
+	/// execute given Lua-call after wrapping it in an xpcall(...)
 	/// with wrapLuaCall()
 	int callLuaWrapped(const QString sCall);
 
-	/// wrap given Lua-call into an xpcall(...)
+	/// wrap given Lua-call in an xpcall(...)
 	static QString wrapLuaCall(const QString sCall);
 
 signals:

@@ -13,6 +13,7 @@ QtSssSircBot documentation
    general/running
    general/backdoor
    general/extending
+   luaApi/index
    cppApi/cppApiRoot
    general/buildDocs
 

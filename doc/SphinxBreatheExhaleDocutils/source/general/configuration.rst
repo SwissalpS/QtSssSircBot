@@ -167,3 +167,21 @@ The code-block bellow shows where and how the work directory is determined.
     :end-before: markerInitPaths
     :emphasize-lines: 7,8
 
+Following directory structure is created:
+
+.. code-block::
+
+    QtSssSircBot+
+                + bin
+                + config
+                + lua +
+                      + core
+                      + plugins
+                      + plugins_available
+                      + user
+
+- **bin** populate with scripts that are available for bot to run.
+- **config** populate with variations of connection config JSON files and
+  other configuration files your scripts in bin may need.
+- **lua** holds the Lua files for Lua environment. :ref:`Lua Directory Structure`
+
