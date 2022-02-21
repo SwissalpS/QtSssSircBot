@@ -37,5 +37,4 @@ SphinxBreatheExhaleDocutils/build.sh;
 echo "output is in QtSssSircBot/doc/SphinxBreatheExhaleDocutils/build/html";
 
 # move result to staging
-echo `pwd`;
 #mv SphinxBreatheExhaleDocutils/build/html ../../SwissalpS.github.io/QtSssSircBot/branch${branch}/${version}
